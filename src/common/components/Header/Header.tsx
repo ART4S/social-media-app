@@ -6,14 +6,20 @@ import {
   createStyles,
   Typography,
   Container,
+  IconButton,
 } from "@material-ui/core";
-
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     grow: {
       flexGrow: 1,
+    },
+    icon: {
+      width: theme.spacing(5),
+      height: theme.spacing(5),
+      fill: theme.palette.common.white,
     },
   })
 );
@@ -30,8 +36,16 @@ export default function Header(): JSX.Element {
       <Container maxWidth="md">
         <Toolbar>
           <Logo />
+
           <div className={classes.grow} />
-          <AccountCircle />
+
+          <IconButton>
+            <AccountCircle className={classes.icon} />
+          </IconButton>
+
+          <IconButton>
+            <ExitToAppIcon className={classes.icon} />
+          </IconButton>
         </Toolbar>
       </Container>
     </AppBar>
