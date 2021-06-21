@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { PhotoCameraOutlined } from "@material-ui/icons";
+import { Formik } from "formik";
 
 import IPost from "model/Post";
 import moment from "moment";
@@ -50,19 +51,53 @@ export default function Post({ data }: PostProps): JSX.Element {
       </Typography>
 
       <div className={classes.footer}>
-        <form className={classes.commentForm}>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Avatar>
-              <PhotoCameraOutlined />
-            </Avatar>
+        <Formik
+          initialValues={{
+            comment: "",
+          }}
+          onSubmit={(values, formik) => {
+            formik.setSubmitting(false);
+          }}
+        >
+          {(formik) => (
+            <form
+              className={classes.commentForm}
+              onSubmit={formik.handleSubmit}
+            >
+              <Box display="flex" justifyContent="center">
+                <Avatar>
+                  <PhotoCameraOutlined />
+                </Avatar>
 
-            <TextField id="comment" label="Comment" value="" fullWidth />
-          </div>
+                <TextField
+                  id="comment"
+                  label="Comment"
+                  value={formik.values.comment}
+                  onChange={(e) =>
+                    formik.setFieldValue("comment", e.currentTarget.value)
+                  }
+                  fullWidth
+                />
+              </Box>
 
-          <Collapse in style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button>Add</Button>
-          </Collapse>
-        </form>
+              <Box mt={1}>
+                <Collapse
+                  in={Boolean(formik.values.comment.trim())}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    disabled={formik.isSubmitting}
+                  >
+                    Add
+                  </Button>
+                </Collapse>
+              </Box>
+            </form>
+          )}
+        </Formik>
       </div>
     </Paper>
   );
