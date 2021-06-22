@@ -1,4 +1,5 @@
 export default interface IPost {
+  id: string;
   authorId: string;
   authorName: string;
   authorAvatarUrl: string;

@@ -3,12 +3,10 @@ import { Grid, GridSpacing } from "@material-ui/core";
 import postAPI from "api/postAPI";
 import Post from "../Post/Post";
 import IPost from "model/Post";
-import useStyles from "./useStyles";
 
 const SPACING: GridSpacing = 2;
 
 export default function Posts() {
-  const classes = useStyles();
   const [data, setData] = React.useState<IPost[]>([]);
 
   React.useEffect(() => {

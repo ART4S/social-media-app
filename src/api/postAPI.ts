@@ -1,20 +1,10 @@
-import faker from "faker";
+import posts from "mock/posts";
 import IPost from "model/Post";
 
-function getAll() {
+function getAll(): Promise<IPost[]> {
   return new Promise<IPost[]>((resolve) =>
     setTimeout(() => {
-      resolve(
-        Array.from(Array(4)).map(() => ({
-          authorId: faker.datatype.uuid(),
-          authorName: faker.name.firstName() + " " + faker.name.lastName(),
-          authorAvatarUrl: faker.internet.avatar(),
-          body: faker.lorem.text(),
-          createdAt: faker.date.recent(),
-          commentCount: 0,
-          likeCount: 0,
-        }))
-      );
+      resolve(posts);
     }, 500)
   );
 }

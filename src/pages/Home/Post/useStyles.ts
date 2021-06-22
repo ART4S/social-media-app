@@ -22,8 +22,14 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(2),
     },
     footer: {
-      padding: theme.spacing(2),
+      padding: theme.spacing(1, 3),
       backgroundColor: theme.palette.action.focus,
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "start",
+      "& > *": {
+        marginTop: theme.spacing(2),
+      },
     },
     commentForm: {
       width: "100%",
