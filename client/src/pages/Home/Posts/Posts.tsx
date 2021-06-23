@@ -2,7 +2,7 @@ import React from "react";
 import { Grid, GridSpacing } from "@material-ui/core";
 import postAPI from "api/postAPI";
 import Post from "../Post/Post";
-import IPost from "model/Post";
+import type IPost from "model/Post";
 
 const SPACING: GridSpacing = 2;
 

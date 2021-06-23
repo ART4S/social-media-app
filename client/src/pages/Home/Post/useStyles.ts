@@ -1,4 +1,5 @@
 import { makeStyles, createStyles, Theme } from "@material-ui/core";
+import { red, green } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,6 +34,28 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     commentForm: {
       width: "100%",
+    },
+    likeBadge: {
+      color: theme.palette.background.paper,
+      backgroundColor: red[500],
+      border: `2px solid ${theme.palette.background.paper}`,
+      padding: "0 4px",
+    },
+    likeIcon: {
+      color: red[500],
+    },
+    commentBadge: {
+      color: theme.palette.background.paper,
+      backgroundColor: green[500],
+      border: `2px solid ${theme.palette.background.paper}`,
+      padding: "0 4px",
+    },
+    commentIcon: {
+      color: green[500],
+    },
+    collapse: {
+      display: "flex",
+      justifyContent: "flex-end",
     },
   })
 );
