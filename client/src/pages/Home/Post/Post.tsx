@@ -1,47 +1,28 @@
 import React from "react";
 import { Typography, Link } from "@material-ui/core";
-import {
-  Paper,
-  IconButton,
-  Avatar,
-  Box,
-  TextField,
-  Button,
-  Badge,
-  Collapse,
-} from "@material-ui/core";
+import { Paper, IconButton, Avatar, Box, Badge } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { PhotoCameraOutlined, Favorite, Chat } from "@material-ui/icons";
-import { Formik } from "formik";
 import moment from "moment";
 
-import commentAPI from "api/commentAPI";
+import { getUserName } from "utils/userUtils";
 import useStyles from "./useStyles";
 import Comment from "../Comment/Comment";
+import CommentForm from "../CommentForm/CommentForm";
 
 import type IPost from "model/Post";
-import type IComment from "model/Comment";
+
+import comments from "mock/comments";
 
 type PostProps = { data: IPost };
 
 export default function Post({ data }: PostProps): JSX.Element {
   const classes = useStyles();
-  const [comments, setComments] = React.useState<IComment[]>([]);
 
-  React.useEffect(() => {
-    let active = true;
-
-    (async () => {
-      const loadedComments: IComment[] = await commentAPI.getAll(data.id);
-      if (active) {
-        setComments(loadedComments);
-      }
-    })();
-
-    return () => {
-      active = false;
-    };
-  });
+  const user = {
+    firstName: data.authorFirstName,
+    lastName: data.authorLastName,
+  };
 
   return (
     <Paper elevation={3}>
@@ -53,7 +34,7 @@ export default function Post({ data }: PostProps): JSX.Element {
 
           <Box display="flex" flexDirection="column" ml={2}>
             <Link>
-              <Typography>{data.authorName}</Typography>
+              <Typography>{getUserName(user)}</Typography>
             </Link>
 
             <Typography variant="subtitle2">
@@ -84,55 +65,7 @@ export default function Post({ data }: PostProps): JSX.Element {
       </Box>
 
       <div className={classes.footer}>
-        <Formik
-          initialValues={{
-            comment: "",
-          }}
-          onSubmit={(values, formik) => {
-            formik.setSubmitting(false);
-          }}
-        >
-          {(formik) => (
-            <form
-              className={classes.commentForm}
-              onSubmit={formik.handleSubmit}
-            >
-              <Box display="flex" justifyContent="center">
-                <Avatar>
-                  <PhotoCameraOutlined />
-                </Avatar>
-
-                <Box ml={2} width="100%">
-                  <TextField
-                    id="comment"
-                    placeholder="Comment..."
-                    value={formik.values.comment}
-                    onChange={(e) =>
-                      formik.setFieldValue("comment", e.currentTarget.value)
-                    }
-                    fullWidth
-                  />
-                </Box>
-              </Box>
-
-              <Box mt={1}>
-                <Collapse
-                  className={classes.collapse}
-                  in={Boolean(formik.values.comment.trim())}
-                >
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    disabled={formik.isSubmitting}
-                  >
-                    Add
-                  </Button>
-                </Collapse>
-              </Box>
-            </form>
-          )}
-        </Formik>
+        <CommentForm />
 
         {comments.map((x) => (
           <Comment data={x} />

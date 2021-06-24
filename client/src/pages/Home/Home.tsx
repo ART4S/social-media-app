@@ -1,8 +1,9 @@
 import React from "react";
-import { Grid, Box, useTheme } from "@material-ui/core";
+import { Grid, Box } from "@material-ui/core";
 import Header from "common/components/Header/Header";
 import Posts from "./Posts/Posts";
 import PostForm from "./PostForm/PostForm";
+import UserSearch from "./UserSearch/UserSearch";
 
 export default function Home(): JSX.Element {
   return (
@@ -10,7 +11,7 @@ export default function Home(): JSX.Element {
       <Header />
 
       <Box padding={10}>
-        <Grid container spacing={4}>
+        <Grid container spacing={10}>
           <Grid item container xs={6} spacing={2} direction="column">
             <Grid item xs>
               <PostForm />
@@ -22,7 +23,7 @@ export default function Home(): JSX.Element {
           </Grid>
 
           <Grid item xs={6}>
-            {""}
+            <UserSearch />
           </Grid>
         </Grid>
       </Box>

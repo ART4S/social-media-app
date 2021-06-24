@@ -2,7 +2,8 @@ export default interface IComment {
   id: string;
   postId: string;
   authorId: string;
-  authorName: string;
+  authorFirstName: string;
+  authorLastName: string;
   avatarUrl: string;
   createdAt: Date;
   body: string;
