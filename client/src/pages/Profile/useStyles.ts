@@ -3,10 +3,7 @@ import { grey } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    header: {
-      display: "flex",
-      justifyContent: "center",
-    },
+    header: {},
     body: {
       marginTop: theme.spacing(12),
     },
