@@ -3,9 +3,11 @@ import {
   Container,
   Box,
   Paper,
+  Grid,
   Button,
   Avatar,
   Divider,
+  Link,
   InputAdornment,
   IconButton,
   FormControlLabel,
@@ -15,13 +17,13 @@ import {
   Collapse,
   Tabs,
   Tab,
+  GridSpacing,
 } from "@material-ui/core";
 import { LockOutlined, Visibility, VisibilityOff } from "@material-ui/icons";
 import moment from "moment";
 import { Formik, Form } from "formik";
 
-import Links from "./Links/Links";
-import Copyright from "../../common/components/Copyright/Copyright";
+import Copyright from "common/components/Copyright/Copyright";
 import Header from "common/components/Header/Header";
 import TabPanel from "common/components/TabPanel/TabPanel";
 import PostList from "common/components/PostList/PostList";
@@ -31,7 +33,9 @@ import PasswordField from "common/components/PasswordField/PasswordField";
 import { getUserName } from "utils/userUtils";
 import useStyles from "./useStyles";
 
-export default function Login(): JSX.Element {
+const SPACING: GridSpacing = 2;
+
+export default function Registration(): JSX.Element {
   const classes = useStyles();
 
   const [showPassword, setShowPassword] = React.useState(false);
@@ -47,27 +51,53 @@ export default function Login(): JSX.Element {
 
         <Box display="flex" justifyContent="center" mt={2}>
           <Typography className={classes.header} variant="h5">
-            sign in
+            sign up
           </Typography>
         </Box>
 
         <Box mt={2}>
           <Formik
-            initialValues={{ email: "", password: "" }}
+            initialValues={{
+              firstName: "",
+              lastName: "",
+              email: "",
+              password: "",
+              passwordRepeat: "",
+            }}
             onSubmit={(values, formik) => {
               formik.setSubmitting(false);
             }}
           >
             {(formik) => (
               <Form>
-                <TextField
-                  id="email"
-                  label="Email"
-                  variant="outlined"
-                  fullWidth
-                />
+                <Grid container spacing={SPACING}>
+                  <Grid item xs>
+                    <TextField
+                      id="firstName"
+                      label="First name"
+                      variant="outlined"
+                    />
+                  </Grid>
 
-                <Box mt={2}>
+                  <Grid item xs>
+                    <TextField
+                      id="lastName"
+                      label="Last name"
+                      variant="outlined"
+                    />
+                  </Grid>
+                </Grid>
+
+                <Box mt={SPACING}>
+                  <TextField
+                    id="email"
+                    label="Email"
+                    variant="outlined"
+                    fullWidth
+                  />
+                </Box>
+
+                <Box mt={SPACING}>
                   <PasswordField
                     id="password"
                     label="Password"
@@ -76,21 +106,23 @@ export default function Login(): JSX.Element {
                   />
                 </Box>
 
-                <Box mt={2}>
-                  <FormControlLabel
-                    label="Remember me"
-                    control={<Checkbox />}
+                <Box mt={SPACING}>
+                  <PasswordField
+                    id="passwordRepeat"
+                    label="Repeat password"
+                    variant="outlined"
+                    fullWidth
                   />
                 </Box>
 
-                <Box mt={2}>
+                <Box mt={SPACING}>
                   <Button
                     type="submit"
                     variant="contained"
                     color="primary"
                     fullWidth
                   >
-                    sign in
+                    sign up
                   </Button>
                 </Box>
               </Form>
@@ -98,8 +130,12 @@ export default function Login(): JSX.Element {
           </Formik>
         </Box>
 
-        <Box mt={2}>
-          <Links />
+        <Box display="flex" justifyContent="flex-end" mt={2}>
+          <Link className={classes.link}>
+            <Typography variant="body2">
+              Already have an account? Sign in
+            </Typography>
+          </Link>
         </Box>
 
         <Box display="flex" justifyContent="center" mt={6}>

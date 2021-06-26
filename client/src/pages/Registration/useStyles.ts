@@ -14,6 +14,11 @@ const useStyles = makeStyles((theme: Theme) =>
     icon: {
       color: theme.palette.common.white,
     },
+    link: {
+      "&:hover": {
+        cursor: "pointer",
+      },
+    },
   }),
 );
 

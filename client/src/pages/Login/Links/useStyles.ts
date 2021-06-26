@@ -7,9 +7,6 @@ const useStyles = makeStyles((theme: Theme) =>
         cursor: "pointer",
       },
     },
-    typo: {
-      textTransform: "capitalize",
-    },
   }),
 );
 

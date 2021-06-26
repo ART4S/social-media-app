@@ -22,8 +22,9 @@ import useStyles from "./useStyles";
 export default function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary">
-      {`© Copyright ${new Date().getFullYear()} `}
+      {"Copyright © "}
       <Link color="inherit">Social Media App</Link>
+      {` ${new Date().getFullYear()}.`}
     </Typography>
   );
 }

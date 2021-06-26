@@ -8,11 +8,11 @@ export default function Links() {
   return (
     <Box display="flex" justifyContent="space-between">
       <Link className={classes.link}>
-        <Typography>Forgot password?</Typography>
+        <Typography variant="body2">Forgot password?</Typography>
       </Link>
 
       <Link className={classes.link}>
-        <Typography className={classes.typo}>sign up</Typography>
+        <Typography variant="body2">Sign up</Typography>
       </Link>
     </Box>
   );
