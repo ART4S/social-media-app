@@ -1,11 +1,14 @@
 import { makeStyles, createStyles, Theme } from "@material-ui/core";
+import { blue, green } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    icon: {
-      width: theme.spacing(5),
-      height: theme.spacing(5),
-      fill: theme.palette.common.white,
+    form: {
+      width: "100%",
+    },
+    collapse: {
+      display: "flex",
+      justifyContent: "flex-end",
     },
   }),
 );

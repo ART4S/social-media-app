@@ -6,6 +6,7 @@ export default interface IPost {
   authorAvatarUrl: string;
   createdAt: Date;
   body: string;
+  liked: boolean;
   likeCount: number;
   commentCount: number;
 }

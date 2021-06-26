@@ -4,5 +4,6 @@ export default interface IUserProfile {
   lastName: string;
   avatarUrl: string;
   email: string;
+  status: string;
   joined: Date;
 }

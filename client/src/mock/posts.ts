@@ -9,6 +9,7 @@ const posts: IPost[] = Array.from(Array(4)).map(() => ({
   authorAvatarUrl: faker.internet.avatar(),
   body: faker.lorem.paragraphs(),
   createdAt: faker.date.recent(),
+  liked: faker.datatype.boolean(),
   commentCount: 0,
   likeCount: 0,
 }));

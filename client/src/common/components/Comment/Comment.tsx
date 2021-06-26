@@ -1,9 +1,9 @@
 import type IComment from "model/Comment";
-import { IconButton, Typography, Avatar, Box, Link } from "@material-ui/core";
+import { IconButton, Typography, Box, Link } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { PhotoCameraOutlined } from "@material-ui/icons";
 
 import moment from "moment";
+import Avatar from "../Avatar/Avatar";
 
 import { getUserName } from "utils/userUtils";
 
@@ -13,15 +13,14 @@ type CommentProps = {
 
 export default function Comment({ data }: CommentProps): JSX.Element {
   const user = {
+    id: data.authorId,
     firstName: data.authorFirstName,
     lastName: data.authorLastName,
   };
 
   return (
     <Box display="flex">
-      <Avatar src={data.avatarUrl}>
-        <PhotoCameraOutlined />
-      </Avatar>
+      <Avatar src={data.avatarUrl} />
 
       <Box display="flex" flexDirection="column" ml={2}>
         <Link>{getUserName(user)}</Link>
@@ -30,7 +29,7 @@ export default function Comment({ data }: CommentProps): JSX.Element {
 
         <Box display="flex" alignItems="center">
           <Typography variant="caption">
-            {moment(data.createdAt).toISOString()}
+            {moment(data.createdAt).fromNow()}
           </Typography>
 
           <IconButton size="small">

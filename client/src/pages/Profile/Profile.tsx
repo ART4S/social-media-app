@@ -3,110 +3,161 @@ import {
   Container,
   Box,
   Paper,
+  Button,
   Avatar,
   Divider,
   IconButton,
   Typography,
+  Collapse,
   Tabs,
   Tab,
-  TabPanel,
 } from "@material-ui/core";
-import { Edit, Delete } from "@material-ui/icons";
+import { Edit, Delete, KeyboardArrowDown } from "@material-ui/icons";
+import moment from "moment";
 
 import Header from "common/components/Header/Header";
-import profiles from "mock/userProfiles";
+import TabPanel from "common/components/TabPanel/TabPanel";
+import PostList from "common/components/PostList/PostList";
+import FollowList from "common/components/FollowList/FollowList";
 
 import { getUserName } from "utils/userUtils";
 import useStyles from "./useStyles";
+import posts from "mock/posts";
+import profiles from "mock/userProfiles";
+import users from "mock/users";
 
-export default function UserProfile(): JSX.Element {
+export default function Profile(): JSX.Element {
   const classes = useStyles();
   const profile = profiles[0];
   const [currentTab, setCurrentTab] = React.useState(0);
+  const [showInfo, setShowInfo] = React.useState(false);
 
   return (
     <div>
       <Header />
 
-      <Container className={classes.body} maxWidth="md">
-        <Paper>
-          <Box display="flex" justifyContent="center" color="primary" p={6}>
-            <Typography className={classes.header} variant="h4" color="primary">
-              Profile
-            </Typography>
-          </Box>
+      <Box mt={12}>
+        <Container maxWidth="sm">
+          <Paper>
+            <Box display="flex" justifyContent="center" color="primary" p={6}>
+              <Typography
+                className={classes.header}
+                variant="h4"
+                color="primary"
+              >
+                PROFILE
+              </Typography>
+            </Box>
 
-          <Box display="flex" flexDirection="column" mx={3}>
-            <Box display="flex">
+            <Box display="flex" flexDirection="column" mx={3}>
               <Box display="flex">
-                <Avatar className={classes.avatar} src={profile.avatarUrl} />
+                <Box display="flex">
+                  <Avatar className={classes.avatar} src={profile.avatarUrl} />
 
-                <Box display="flex" flexDirection="column" ml={2}>
-                  <Typography className={classes.userName} variant="h6">
-                    {getUserName(profile)}
-                  </Typography>
+                  <Box display="flex" flexDirection="column" ml={2}>
+                    <Typography className={classes.userName} variant="h6">
+                      {getUserName(profile)}
+                    </Typography>
 
-                  <Typography className={classes.userEmail} variant="body2">
-                    {profile.email}
-                  </Typography>
+                    <Typography className={classes.userEmail} variant="body2">
+                      {profile.email}
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <Box flexGrow="1" />
+
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="flex-start"
+                >
+                  <div>
+                    <IconButton color="secondary">
+                      <Edit />
+                    </IconButton>
+
+                    <IconButton color="secondary">
+                      <Delete />
+                    </IconButton>
+                  </div>
                 </Box>
               </Box>
 
-              <Box flexGrow="1" />
+              <Box mt={2}>
+                <Divider />
+              </Box>
+
+              <Box display="flex">
+                <Box display="flex" alignItems="center">
+                  <Typography>{profile.status}</Typography>
+                </Box>
+
+                <IconButton color="secondary">
+                  <Edit />
+                </IconButton>
+              </Box>
+
+              <Box>
+                <Button
+                  color="primary"
+                  startIcon={<KeyboardArrowDown />}
+                  style={{ textTransform: "lowercase" }}
+                  onClick={() => setShowInfo(!showInfo)}
+                >
+                  see more information
+                </Button>
+
+                <Collapse in={showInfo}>
+                  <Typography className={classes.joinDate}>
+                    {`Joined: ${moment(profile.joined)
+                      .format("LL")
+                      .toLocaleLowerCase()}`}
+                  </Typography>
+                </Collapse>
+              </Box>
 
               <Box
                 display="flex"
                 flexDirection="column"
-                justifyContent="flex-start"
+                alignItems="center"
+                mt={2}
               >
-                <div>
-                  <IconButton color="secondary">
-                    <Edit />
-                  </IconButton>
+                <Paper style={{ width: "100%" }}>
+                  <Tabs
+                    className={classes.tabs}
+                    value={currentTab}
+                    onChange={(_, newValue: number) => setCurrentTab(newValue)}
+                    centered
+                  >
+                    {["posts", "following", "followers"].map((x) => (
+                      <Tab label={x.toUpperCase()} />
+                    ))}
+                  </Tabs>
+                </Paper>
 
-                  <IconButton color="secondary">
-                    <Delete />
-                  </IconButton>
-                </div>
+                <TabPanel value={currentTab} index={0}>
+                  <Box py={2}>
+                    <PostList data={posts} />
+                  </Box>
+                </TabPanel>
+
+                <TabPanel value={currentTab} index={1}>
+                  <Box py={2}>
+                    <FollowList data={users} />
+                  </Box>
+                </TabPanel>
+
+                <TabPanel value={currentTab} index={2}>
+                  <Box py={2}>
+                    <FollowList data={users} />
+                  </Box>
+                </TabPanel>
               </Box>
             </Box>
-
-            <Box my={2}>
-              <Divider />
-            </Box>
-
-            <Typography className={classes.joinDate}>
-              {`Joined: ${profile.joined.toISOString()}`}
-            </Typography>
-          </Box>
-
-          <Box display="flex" justifyContent="center" mt={2}>
-            <Paper>
-              <Tabs
-                value={currentTab}
-                onChange={(e, newValue) => setCurrentTab(newValue)}
-                centred
-              >
-                <Tab label="POSTS"></Tab>
-                <Tab label="FOLLOWING"></Tab>
-                <Tab label="FOLLOWERS"></Tab>
-              </Tabs>
-            </Paper>
-
-            <TabPanel value={value} index={0}>
-              POSTS
-            </TabPanel>
-
-            <TabPanel value={value} index={1}>
-              FOLLOWING
-            </TabPanel>
-
-            <TabPanel value={value} index={1}>
-              FOLLOWERS
-            </TabPanel>
-          </Box>
-        </Paper>
-      </Container>
+          </Paper>
+        </Container>
+      </Box>
     </div>
   );
 }

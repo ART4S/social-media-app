@@ -5,7 +5,7 @@ function getAll(): Promise<IPost[]> {
   return new Promise<IPost[]>((resolve) =>
     setTimeout(() => {
       resolve(posts);
-    }, 500)
+    }, 500),
   );
 }
 

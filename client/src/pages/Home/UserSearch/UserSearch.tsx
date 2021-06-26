@@ -1,12 +1,8 @@
 import React from "react";
-import { Typography, Link } from "@material-ui/core";
 import {
   Paper,
-  IconButton,
   Avatar,
   Box,
-  Grid,
-  Badge,
   TextField,
   List,
   ListItem,
@@ -14,13 +10,10 @@ import {
   ListItemText,
 } from "@material-ui/core";
 import { PhotoCameraOutlined } from "@material-ui/icons";
-import { debounce } from "lodash";
 
 import users from "mock/users";
-import useStyles from "./useStyles";
 
 export default function UserSearch(): JSX.Element {
-  const classes = useStyles();
   const [searchText, setSearchText] = React.useState("");
 
   return (
@@ -37,7 +30,7 @@ export default function UserSearch(): JSX.Element {
 
         <List>
           {users.map((x) => (
-            <ListItem button>
+            <ListItem key={x.id} button>
               <ListItemIcon>
                 <Avatar src={x.avatarUrl}>
                   <PhotoCameraOutlined />

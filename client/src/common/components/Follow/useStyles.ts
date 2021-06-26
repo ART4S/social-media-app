@@ -1,11 +1,7 @@
 import { makeStyles, createStyles, Theme } from "@material-ui/core";
-import { grey } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    header: {
-      textTransform: "uppercase",
-    },
     avatar: {
       width: theme.spacing(10),
       height: theme.spacing(10),
@@ -13,14 +9,18 @@ const useStyles = makeStyles((theme: Theme) =>
     userName: {
       fontWeight: "bold",
     },
-    userEmail: {
-      color: grey[500],
+    deleteButton: {
+      width: theme.spacing(4),
+      height: theme.spacing(4),
+      opacity: 0,
+      transition: "opacity 0.2s ease-in",
+      "&:hover": {
+        opacity: 1,
+      },
     },
-    joinDate: {
-      color: grey[500],
-    },
-    tabs: {
-      width: "100%",
+    deleteIcon: {
+      width: theme.spacing(3),
+      height: theme.spacing(3),
     },
   }),
 );

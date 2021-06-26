@@ -1,16 +1,16 @@
 import { makeStyles, createStyles, Theme } from "@material-ui/core";
-import { blue, green } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    form: {
-      width: "100%",
+    link: {
+      "&:hover": {
+        cursor: "pointer",
+      },
     },
-    collapse: {
-      display: "flex",
-      justifyContent: "flex-end",
+    typo: {
+      textTransform: "capitalize",
     },
-  })
+  }),
 );
 
 export default useStyles;

@@ -1,9 +1,11 @@
 import React from "react";
 import { Grid, Box } from "@material-ui/core";
 import Header from "common/components/Header/Header";
-import Posts from "./Posts/Posts";
-import PostForm from "./PostForm/PostForm";
+import PostList from "common/components/PostList/PostList";
+import PostForm from "common/components/Forms/PostForm/PostForm";
 import UserSearch from "./UserSearch/UserSearch";
+
+import posts from "mock/posts";
 
 export default function Home(): JSX.Element {
   return (
@@ -18,7 +20,7 @@ export default function Home(): JSX.Element {
             </Grid>
 
             <Grid item xs>
-              <Posts />
+              <PostList data={posts} />
             </Grid>
           </Grid>
 

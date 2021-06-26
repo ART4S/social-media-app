@@ -9,6 +9,6 @@ function capitalizeFirstLetter(value: string): string {
 
 export function getUserName(user: User): string {
   return `${capitalizeFirstLetter(user.firstName)} ${capitalizeFirstLetter(
-    user.lastName
+    user.lastName,
   )}`;
 }

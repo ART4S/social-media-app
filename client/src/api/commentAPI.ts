@@ -5,7 +5,7 @@ function getAll(postId: string): Promise<IComment[]> {
   return new Promise<IComment[]>((resolve) =>
     setTimeout(() => {
       resolve(comments.filter((x) => x.postId === postId));
-    }, 500)
+    }, 500),
   );
 }
 

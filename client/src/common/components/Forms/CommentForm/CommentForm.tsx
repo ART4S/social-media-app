@@ -1,8 +1,8 @@
 import React from "react";
-import { Avatar, Box, TextField, Button, Collapse } from "@material-ui/core";
-import { PhotoCameraOutlined } from "@material-ui/icons";
+import { Box, TextField, Button, Collapse } from "@material-ui/core";
 import { Formik } from "formik";
 
+import Avatar from "common/components/Avatar/Avatar";
 import useStyles from "./useStyles";
 
 export default function CommentForm(): JSX.Element {
@@ -20,9 +20,7 @@ export default function CommentForm(): JSX.Element {
       {(formik) => (
         <form className={classes.form} onSubmit={formik.handleSubmit}>
           <Box display="flex" justifyContent="center">
-            <Avatar>
-              <PhotoCameraOutlined />
-            </Avatar>
+            <Avatar />
 
             <Box ml={2} width="100%">
               <TextField

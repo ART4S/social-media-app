@@ -1,14 +1,9 @@
-import {
-  Paper,
-  Avatar,
-  Box,
-  TextField,
-  Button,
-  IconButton,
-} from "@material-ui/core";
+import { Paper, Box, TextField, Button, IconButton } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
-import { PhotoCameraOutlined, AddAPhoto, QueueMusic } from "@material-ui/icons";
+import { AddAPhoto, QueueMusic } from "@material-ui/icons";
 import { Formik } from "formik";
+
+import Avatar from "common/components/Avatar/Avatar";
 import useStyles from "./useStyles";
 
 export default function PostForm(): JSX.Element {
@@ -17,12 +12,12 @@ export default function PostForm(): JSX.Element {
   return (
     <Paper elevation={4}>
       <div className={classes.header}>
-        <Avatar>
-          <PhotoCameraOutlined />
-        </Avatar>
+        <Box display="flex" px={2} py={1}>
+          <Avatar />
 
-        <Box ml={2}>
-          <Typography variant="h6">User</Typography>
+          <Box ml={2}>
+            <Typography variant="h6">User</Typography>
+          </Box>
         </Box>
       </div>
 
@@ -37,7 +32,7 @@ export default function PostForm(): JSX.Element {
         {({ values, handleBlur, handleChange, handleSubmit, isSubmitting }) => (
           <form onSubmit={handleSubmit}>
             <div className={classes.body}>
-              <Box paddingX={3} paddingTop={3}>
+              <Box px={3} pt={3}>
                 <TextField
                   id="body"
                   name="body"
@@ -54,7 +49,7 @@ export default function PostForm(): JSX.Element {
                 />
               </Box>
 
-              <div className={classes.actions}>
+              <Box display="flex" justifyContent="flex-start" p={2}>
                 <IconButton>
                   <AddAPhoto color="secondary" />
                 </IconButton>
@@ -62,18 +57,20 @@ export default function PostForm(): JSX.Element {
                 <IconButton>
                   <QueueMusic color="secondary" />
                 </IconButton>
-              </div>
+              </Box>
             </div>
 
             <div className={classes.footer}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                disabled={isSubmitting}
-              >
-                Post
-              </Button>
+              <Box display="flex" justifyContent="flex-end" p={2}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  disabled={isSubmitting}
+                >
+                  Post
+                </Button>
+              </Box>
             </div>
           </form>
         )}
