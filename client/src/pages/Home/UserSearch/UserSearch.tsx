@@ -36,6 +36,7 @@ export default function UserSearch(): JSX.Element {
                   <PhotoCameraOutlined />
                 </Avatar>
               </ListItemIcon>
+              
               <ListItemText primary={`${x.firstName} ${x.lastName}`} />
             </ListItem>
           ))}

@@ -3,7 +3,7 @@ import faker from "faker";
 import type IComment from "model/Comment";
 import posts from "./posts";
 
-const comments: IComment[] = Array.from(Array(4)).map(() => ({
+const comments: IComment[] = Array.from(Array(10)).map(() => ({
   id: faker.datatype.uuid(),
   postId: faker.random.arrayElement(posts).id,
   authorId: faker.datatype.uuid(),

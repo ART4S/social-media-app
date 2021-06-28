@@ -1,6 +1,6 @@
-export default interface IUser {
+export default interface User {
   id: string;
   firstName: string;
   lastName: string;
-  avatarUrl: string;
+  avatarUrl?: string;
 }

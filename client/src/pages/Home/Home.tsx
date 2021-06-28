@@ -14,7 +14,7 @@ export default function Home(): JSX.Element {
 
       <Box padding={10}>
         <Grid container spacing={10}>
-          <Grid item container xs={6} spacing={2} direction="column">
+          <Grid item container direction="column" xs={6} spacing={2}>
             <Grid item xs>
               <PostForm />
             </Grid>

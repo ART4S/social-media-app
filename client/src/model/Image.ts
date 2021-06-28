@@ -1,13 +1,12 @@
-export default interface Post {
+export default interface IImage {
   id: string;
+  url: string;
   authorId: string;
   authorFirstName: string;
   authorLastName: string;
-  authorAvatarUrl?: string;
+  authorAvatarUrl: string;
   createDate: Date;
-  body: string;
   liked: boolean;
   likeCount: number;
-  commentCount: number;
-  images: string[];
+  shareCount: number;
 }

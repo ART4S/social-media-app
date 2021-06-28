@@ -6,16 +6,39 @@ import Profile from "pages/Profile/Profile";
 import ProfileEditor from "pages/ProfileEditor/ProfileEditor";
 import Login from "pages/Login/Login";
 import Registration from "pages/Registration/Registration";
+import ImageViewer from "common/components/ImageViewer/ImageViewer";
+import IImage from "model/Image";
+import faker from "faker";
+
+const images: IImage[] = Array.from(Array(10)).map(() => ({
+  id: faker.datatype.uuid(),
+  authorId: faker.datatype.uuid(),
+  authorAvatarUrl: faker.internet.avatar(),
+  authorFirstName: faker.name.firstName(),
+  authorLastName: faker.name.lastName(),
+  createDate: faker.date.recent(),
+  likeCount: 2,
+  shareCount: 3,
+  liked: faker.datatype.boolean(),
+  url: faker.image.image(),
+}));
 
 function App(): JSX.Element {
   return (
     <div>
       <CssBaseline />
-      <Registration />
+      {/* <Registration />
       <Login />
       <Profile />
-      <ProfileEditor />
-      <Home />
+      <ProfileEditor /> */}
+      {/* <Home /> */}
+      {/* <Profile /> */}
+      <ImageViewer
+        initialImage={images[0]}
+        images={images}
+        open
+        onClose={() => {}}
+      />
     </div>
   );
 }

@@ -8,10 +8,13 @@ const posts: IPost[] = Array.from(Array(4)).map(() => ({
   authorLastName: faker.name.lastName(),
   authorAvatarUrl: faker.internet.avatar(),
   body: faker.lorem.paragraphs(),
-  createdAt: faker.date.recent(),
+  createDate: faker.date.recent(),
   liked: faker.datatype.boolean(),
   commentCount: 0,
   likeCount: 0,
+  images: Array.from(Array(faker.datatype.number(10))).map(() =>
+    faker.image.image(),
+  ),
 }));
 
 export default posts;

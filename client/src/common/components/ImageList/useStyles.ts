@@ -1,10 +1,13 @@
 import { makeStyles, createStyles, Theme } from "@material-ui/core";
-import { blue, green } from "@material-ui/core/colors";
+import { red, teal, grey } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    form: {
+    image: {
       width: "100%",
+      height: "100%",
+      objectFit: "cover",
+      cursor: "pointer",
     },
   }),
 );

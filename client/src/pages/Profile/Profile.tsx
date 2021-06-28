@@ -45,7 +45,7 @@ export default function Profile(): JSX.Element {
                 variant="h4"
                 color="primary"
               >
-                PROFILE
+                profile
               </Typography>
             </Box>
 
@@ -125,9 +125,9 @@ export default function Profile(): JSX.Element {
               >
                 <Paper style={{ width: "100%" }}>
                   <Tabs
-                    className={classes.tabs}
                     value={currentTab}
                     onChange={(_, newValue: number) => setCurrentTab(newValue)}
+                    variant="fullWidth"
                     centered
                   >
                     {["posts", "following", "followers"].map((x) => (

@@ -2,8 +2,9 @@ import { makeStyles, createStyles, Theme } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      display: "flex",
+    content: {
+      width: theme.breakpoints.values.md,
+      backgroundColor: theme.palette.background.paper,
     },
   }),
 );

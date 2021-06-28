@@ -1,7 +1,7 @@
 import { Paper, Box, TextField, Button, IconButton } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
-import { AddAPhoto, QueueMusic } from "@material-ui/icons";
-import { Formik } from "formik";
+import { AddAPhoto, PlayCircleOutline } from "@material-ui/icons";
+import { Formik, Form } from "formik";
 
 import Avatar from "common/components/Avatar/Avatar";
 import useStyles from "./useStyles";
@@ -29,8 +29,8 @@ export default function PostForm(): JSX.Element {
           formik.setSubmitting(false);
         }}
       >
-        {({ values, handleBlur, handleChange, handleSubmit, isSubmitting }) => (
-          <form onSubmit={handleSubmit}>
+        {({ values, handleBlur, handleChange, isSubmitting }) => (
+          <Form autoComplete="off">
             <div className={classes.body}>
               <Box px={3} pt={3}>
                 <TextField
@@ -55,7 +55,7 @@ export default function PostForm(): JSX.Element {
                 </IconButton>
 
                 <IconButton>
-                  <QueueMusic color="secondary" />
+                  <PlayCircleOutline color="secondary" />
                 </IconButton>
               </Box>
             </div>
@@ -68,11 +68,11 @@ export default function PostForm(): JSX.Element {
                   color="primary"
                   disabled={isSubmitting}
                 >
-                  Post
+                  post
                 </Button>
               </Box>
             </div>
-          </form>
+          </Form>
         )}
       </Formik>
     </Paper>
