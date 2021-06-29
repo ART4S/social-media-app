@@ -9,7 +9,7 @@ type FollowListProps = {
 
 export default function FollowList({ data }: FollowListProps): JSX.Element {
   return (
-    <Grid container direction="column" spacing={2}>
+    <Grid container direction="column" spacing={5}>
       {data.map((x) => (
         <Grid key={x.id} item xs>
           <Follow data={x} />

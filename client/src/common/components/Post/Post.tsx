@@ -81,7 +81,7 @@ export default function Post({ data }: PostProps): JSX.Element {
           py={2}
           px={3}
         >
-          <Box mt={2}>
+          <Box my={2}>
             <CommentForm />
           </Box>
 

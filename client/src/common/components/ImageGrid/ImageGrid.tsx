@@ -54,7 +54,7 @@ export default function ImageGrid({ images }: ImageGridProps): JSX.Element {
               <img
                 className={classes.image}
                 src={image.url}
-                onClick={() => handleImageClick(index)}
+                onClick={() => handleImageClick(index + 1)}
               />
             </Grid>
           ))}
@@ -79,7 +79,7 @@ export default function ImageGrid({ images }: ImageGridProps): JSX.Element {
             <img
               className={classes.image}
               src={image.url}
-              onClick={() => handleImageClick(index)}
+              onClick={() => handleImageClick(index + 2)}
             />
           </Grid>
         )),
@@ -103,7 +103,7 @@ export default function ImageGrid({ images }: ImageGridProps): JSX.Element {
             <img
               className={classes.image}
               src={image.url}
-              onClick={() => handleImageClick(index)}
+              onClick={() => handleImageClick(index + 1)}
             />
           </Grid>
         )),
@@ -139,7 +139,7 @@ export default function ImageGrid({ images }: ImageGridProps): JSX.Element {
             <img
               className={classes.image}
               src={image.url}
-              onClick={() => handleImageClick(index)}
+              onClick={() => handleImageClick(index + 2)}
             />
           </Grid>
         )),

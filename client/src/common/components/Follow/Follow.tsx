@@ -27,12 +27,12 @@ export default function Follow({ data }: FollowProps): JSX.Element {
   const classes = useStyles();
 
   return (
-    <Grid container spacing={2}>
-      <Grid item>
+    <Box display="flex">
+      <Box display="flex" justifyContent="center">
         <Avatar className={classes.avatar} src={data.avatarUrl} />
-      </Grid>
+      </Box>
 
-      <Grid item>
+      <Box ml={4}>
         <Grid container direction="column" spacing={1}>
           <Grid item xs>
             <Link>{getUserName(data)}</Link>
@@ -41,8 +41,6 @@ export default function Follow({ data }: FollowProps): JSX.Element {
           <Grid item xs>
             <Typography variant="body2">{faker.lorem.words()}</Typography>
           </Grid>
-
-          <Grid item xs></Grid>
 
           <Grid item xs>
             <Button
@@ -54,8 +52,8 @@ export default function Follow({ data }: FollowProps): JSX.Element {
             </Button>
           </Grid>
         </Grid>
-      </Grid>
-    </Grid>
+      </Box>
+    </Box>
   );
 }
 
@@ -70,4 +68,29 @@ export default function Follow({ data }: FollowProps): JSX.Element {
           <Button style={{ textTransform: "none" }}>Follow</Button>
         </Box>
       </Box> */
+}
+
+{
+  //   <Grid container>
+  //   <Grid item xs={2}>
+  //     <Avatar className={classes.avatar} src={data.avatarUrl} />
+  //   </Grid>
+  //   <Grid container direction="column" xs={9} spacing={1}>
+  //     <Grid item xs>
+  //       <Link>{getUserName(data)}</Link>
+  //     </Grid>
+  //     <Grid item xs>
+  //       <Typography variant="body2">{faker.lorem.words()}</Typography>
+  //     </Grid>
+  //     <Grid item xs>
+  //       <Button
+  //         variant="contained"
+  //         color="primary"
+  //         style={{ textTransform: "none" }}
+  //       >
+  //         Follow
+  //       </Button>
+  //     </Grid>
+  //   </Grid>
+  // </Grid>
 }

@@ -39,7 +39,15 @@ export default function ImageViewer({
   const [selectedImageIndex, setSelectedImageIndex] =
     React.useState<number>(initialImageIndex);
 
-  const selectedImage: IImage = images[selectedImageIndex];
+  const [selectedImage, setSelectedImage] = React.useState({} as IImage);
+
+  React.useEffect(() => {
+    setSelectedImageIndex(initialImageIndex);
+  }, [initialImageIndex]);
+
+  React.useEffect(() => {
+    setSelectedImage(images[selectedImageIndex]);
+  }, [selectedImageIndex]);
 
   return (
     <Modal

@@ -10,8 +10,8 @@ const profiles: IUserProfile[] = Array.from(Array(10)).map((x) => ({
   avatarUrl: faker.internet.avatar(),
   email: faker.internet.email(),
   status: faker.lorem.words(),
-  joined: faker.date.past(),
-  about: faker.random.arrayElement(about),
+  dateOfBirth: faker.date.past(),
+  about: faker.lorem.paragraph(),
 }));
 
 export default profiles;

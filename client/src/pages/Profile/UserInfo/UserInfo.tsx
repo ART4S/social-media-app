@@ -41,24 +41,24 @@ export default function UserInfo({ profile }: UserInfoProps) {
 
   return (
     <Grid container spacing={SPACING}>
-      <Grid item container spacing={SPACING}>
-        <Grid item>
-          <Typography className={classes.typo}>Joined:</Typography>
+      <Grid container item spacing={SPACING}>
+        <Grid item xs={3}>
+          <Typography className={classes.typo}>Date of birth:</Typography>
         </Grid>
 
-        <Grid item>
+        <Grid item xs={9}>
           <Typography variant="body2">
-            {moment(profile.joined).format("LL").toLocaleLowerCase()}
+            {moment(profile.dateOfBirth).format("LL").toLocaleLowerCase()}
           </Typography>
         </Grid>
       </Grid>
 
-      <Grid item container spacing={SPACING}>
-        <Grid item>
+      <Grid container item spacing={SPACING}>
+        <Grid item xs={3}>
           <Typography className={classes.typo}>About:</Typography>
         </Grid>
 
-        <Grid item>
+        <Grid item xs={9}>
           <Typography variant="body2">{profile.about}</Typography>
         </Grid>
       </Grid>

@@ -28,6 +28,10 @@ export default function Slider({
     onChangeIndex(prepareIndex(selectedImageIndex + 1));
   }
 
+  function handleChangeIndex(index: number) {
+    onChangeIndex(prepareIndex(index));
+  }
+
   function slideRenderer({ index, key }: { index: number; key: number }) {
     index = prepareIndex(index);
     return <img key={key} className={classes.image} src={images[index].url} />;
@@ -54,7 +58,7 @@ export default function Slider({
       <VirtualizeSwipeableViews
         className={classes.imageBox}
         index={selectedImageIndex}
-        onChangeIndex={() => {}}
+        onChangeIndex={handleChangeIndex}
         slideRenderer={slideRenderer}
       />
     </div>

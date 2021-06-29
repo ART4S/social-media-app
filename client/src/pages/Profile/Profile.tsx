@@ -28,12 +28,15 @@ import posts from "mock/posts";
 import profiles from "mock/userProfiles";
 import users from "mock/users";
 import UserInfo from "./UserInfo/UserInfo";
+import SearchBar from "./SearchBar/SearchBar";
 
 export default function Profile(): JSX.Element {
   const classes = useStyles();
   const profile = profiles[0];
   const [currentTab, setCurrentTab] = React.useState(0);
   const [showInfo, setShowInfo] = React.useState(false);
+  const [followingSearchText, setFollowingSearchText] = React.useState("");
+  const [followerSearchText, setFollowerSearchText] = React.useState("");
 
   return (
     <div>
@@ -139,14 +142,34 @@ export default function Profile(): JSX.Element {
                 </TabPanel>
 
                 <TabPanel value={currentTab} index={1}>
-                  <Box py={2} display="flex">
-                    <FollowList data={users} />
+                  <Box display="flex" flexDirection="column" py={2}>
+                    <SearchBar
+                      placeholder="Search by followings..."
+                      searchText={followingSearchText}
+                      onSearchTextChange={(text: string) =>
+                        setFollowingSearchText(text)
+                      }
+                    />
+
+                    <Box mt={2}>
+                      <FollowList data={users} />
+                    </Box>
                   </Box>
                 </TabPanel>
 
                 <TabPanel value={currentTab} index={2}>
-                  <Box py={2}>
-                    <FollowList data={users} />
+                  <Box display="flex" flexDirection="column" py={2}>
+                    <SearchBar
+                      placeholder="Search by followers..."
+                      searchText={followerSearchText}
+                      onSearchTextChange={(text: string) =>
+                        setFollowerSearchText(text)
+                      }
+                    />
+
+                    <Box mt={2}>
+                      <FollowList data={users} />
+                    </Box>
                   </Box>
                 </TabPanel>
               </Box>
