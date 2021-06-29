@@ -1,7 +1,18 @@
 import React from "react";
-import { Box, Avatar, Typography, Paper, IconButton } from "@material-ui/core";
+import {
+  Box,
+  Avatar,
+  Typography,
+  Paper,
+  IconButton,
+  Grid,
+  Link,
+  Button,
+} from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
 import cn from "classnames";
+
+import faker from "faker";
 
 import type IUser from "model/User";
 import { getUserName } from "utils/userUtils";
@@ -12,37 +23,51 @@ type FollowProps = {
   data: IUser;
 };
 
-export default function Follow({ className, data }: FollowProps): JSX.Element {
+export default function Follow({ data }: FollowProps): JSX.Element {
   const classes = useStyles();
 
   return (
-    <Paper className={cn(className)} elevation={4}>
-      <Box
-        position="relative"
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        px={1}
-        py={3}
-      >
-        <Box position="absolute" top={3} right={3}>
-          <IconButton className={classes.deleteButton} color="secondary">
-            <Delete className={classes.deleteIcon} />
-          </IconButton>
-        </Box>
-
+    <Grid container spacing={2}>
+      <Grid item>
         <Avatar className={classes.avatar} src={data.avatarUrl} />
+      </Grid>
 
-        <Box display="flex" justifyContent="center" mt={2}>
-          <Typography
-            className={classes.userName}
-            variant="body2"
-            align="center"
-          >
-            {getUserName(data)}
-          </Typography>
-        </Box>
-      </Box>
-    </Paper>
+      <Grid item>
+        <Grid container direction="column" spacing={1}>
+          <Grid item xs>
+            <Link>{getUserName(data)}</Link>
+          </Grid>
+
+          <Grid item xs>
+            <Typography variant="body2">{faker.lorem.words()}</Typography>
+          </Grid>
+
+          <Grid item xs></Grid>
+
+          <Grid item xs>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ textTransform: "none" }}
+            >
+              Follow
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
   );
+}
+
+{
+  /* <Box display="flex" flexDirection="column">
+        <Box display="flex" flexDirection="column" height="66%">
+          <Link>{getUserName(data)}</Link>
+          <Typography variant="body2">{faker.lorem.words()}</Typography>
+        </Box>
+
+        <Box height="34%">
+          <Button style={{ textTransform: "none" }}>Follow</Button>
+        </Box>
+      </Box> */
 }

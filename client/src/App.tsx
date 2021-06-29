@@ -28,17 +28,10 @@ function App(): JSX.Element {
     <div>
       <CssBaseline />
       {/* <Registration />
-      <Login />
+      <Login /> */}
       <Profile />
-      <ProfileEditor /> */}
-      {/* <Home /> */}
-      {/* <Profile /> */}
-      <ImageViewer
-        initialImage={images[0]}
-        images={images}
-        open
-        onClose={() => {}}
-      />
+      {/* <ProfileEditor />
+      <Home /> */}
     </div>
   );
 }

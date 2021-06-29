@@ -1,6 +1,8 @@
 import faker from "faker";
 import type IUserProfile from "model/UserProfile";
 
+const about = [faker.lorem.text(), faker.lorem.words(), ""];
+
 const profiles: IUserProfile[] = Array.from(Array(10)).map((x) => ({
   id: faker.datatype.uuid(),
   firstName: faker.name.firstName(),
@@ -9,6 +11,7 @@ const profiles: IUserProfile[] = Array.from(Array(10)).map((x) => ({
   email: faker.internet.email(),
   status: faker.lorem.words(),
   joined: faker.date.past(),
+  about: faker.random.arrayElement(about),
 }));
 
 export default profiles;

@@ -11,7 +11,7 @@ export default function PostList({ data }: PostListProps): JSX.Element {
   return (
     <Grid container spacing={2} direction="column">
       {data.map((x) => (
-        <Grid item>
+        <Grid key={x.id} item>
           <Post key={x.id} data={x} />
         </Grid>
       ))}

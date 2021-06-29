@@ -7,8 +7,8 @@ const useStyles = makeStyles((theme: Theme) =>
       textTransform: "uppercase",
     },
     avatar: {
-      width: theme.spacing(10),
-      height: theme.spacing(10),
+      width: theme.spacing(15),
+      height: theme.spacing(15),
     },
     userName: {
       fontWeight: "bold",

@@ -9,10 +9,12 @@ import useStyles from "./useStyles";
 import Comment from "../Comment/Comment";
 import CommentForm from "../Forms/CommentForm/CommentForm";
 import Avatar from "../Avatar/Avatar";
-import ImageList from "../ImageList/ImageList";
+import ImageGrid from "../ImageGrid/ImageGrid";
 import LikeButton from "../Buttons/LikeButton/LikeButton";
 import ShareButton from "../Buttons/ShareButton/ShareButton";
 import PostInfo from "./PostInfo/PostInfo";
+import faker from "faker";
+import IImage from "model/Image";
 
 import type IPost from "model/Post";
 
@@ -22,6 +24,21 @@ type PostProps = { data: IPost };
 
 export default function Post({ data }: PostProps): JSX.Element {
   const classes = useStyles();
+
+  const images: IImage[] = Array.from(Array(faker.datatype.number(10))).map(
+    (x) => ({
+      id: faker.datatype.uuid(),
+      url: faker.image.image(),
+      authorId: faker.datatype.uuid(),
+      authorFirstName: faker.name.firstName(),
+      authorLastName: faker.name.lastName(),
+      authorAvatarUrl: faker.internet.avatar(),
+      createDate: faker.date.recent(),
+      liked: faker.datatype.boolean(),
+      likeCount: faker.datatype.number(),
+      shareCount: faker.datatype.number(),
+    }),
+  );
 
   const author = {
     firstName: data.authorFirstName,
@@ -44,9 +61,11 @@ export default function Post({ data }: PostProps): JSX.Element {
         {data.body}
       </Typography>
 
-      <Box px={2}>
-        <ImageList images={data.images} />
-      </Box>
+      {images.length > 0 && (
+        <Box px={2}>
+          <ImageGrid images={images} />
+        </Box>
+      )}
 
       <Box display="flex" p={2}>
         <LikeButton active={data.liked} />
@@ -67,7 +86,7 @@ export default function Post({ data }: PostProps): JSX.Element {
           </Box>
 
           {comments.map((x) => (
-            <Box mt={2}>
+            <Box key={x.id} mt={2}>
               <Comment data={x} />
             </Box>
           ))}

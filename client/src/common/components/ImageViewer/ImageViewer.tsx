@@ -2,10 +2,12 @@ import React from "react";
 import {
   Grid,
   Box,
-  Link,
   Paper,
   Typography,
   Divider,
+  Button,
+  Modal,
+  Link,
   GridSpacing,
 } from "@material-ui/core";
 import useStyles from "./useStyles";
@@ -15,31 +17,37 @@ import comments from "mock/comments";
 import ImageInfo from "./ImageInfo/ImageInfo";
 import Activities from "./Activities/Activities";
 import IImage from "model/Image";
-import Backdrop from "../Backdrop/Backdrop";
+// import Backdrop from "../Backdrop/Backdrop";
 import { ChevronLeftRounded, ChevronRightRounded } from "@material-ui/icons";
-import ImageSlider from "./ImageSlider/ImageSlider";
+import ImageSlider from "./Slider/Slider";
 
 type ImageViewerProps = {
   open: boolean;
-  initialImage: IImage;
+  initialImageIndex: number;
   images: IImage[];
   onClose: () => void;
 };
 
 export default function ImageViewer({
   open,
-  initialImage,
+  initialImageIndex,
   images,
   onClose,
 }: ImageViewerProps): JSX.Element {
   const classes = useStyles();
 
-  const [selectedImageIndex, setSelectedImageIndex] = React.useState<number>(0);
+  const [selectedImageIndex, setSelectedImageIndex] =
+    React.useState<number>(initialImageIndex);
 
   const selectedImage: IImage = images[selectedImageIndex];
 
   return (
-    <Backdrop onClose={onClose}>
+    <Modal
+      className={classes.modal}
+      open={open}
+      onClose={onClose}
+      disablePortal
+    >
       <div className={classes.content}>
         <Box display="flex" justifyContent="center" height="80vh">
           <Box width="66%">
@@ -73,6 +81,14 @@ export default function ImageViewer({
                   </Box>
                 </Grid>
 
+                <Grid item xs>
+                  <Divider />
+
+                  <Box display="flex" justifyContent="center" my={1}>
+                    <Link>Show previous comments</Link>
+                  </Box>
+                </Grid>
+
                 {comments.map((x) => (
                   <Grid key={x.id} item xs="auto">
                     <Divider />
@@ -95,6 +111,6 @@ export default function ImageViewer({
           </Box>
         </Box>
       </div>
-    </Backdrop>
+    </Modal>
   );
 }

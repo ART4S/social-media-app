@@ -1,5 +1,4 @@
 import { makeStyles, createStyles, Theme } from "@material-ui/core";
-import { grey } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,6 +14,8 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
     },
     leftArrowBox: {
+      position: "relative",
+      zIndex: 2,
       width: "34%",
       display: "flex",
       justifyContent: "flex-start",
@@ -26,6 +27,8 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     rightArrowBox: {
+      position: "relative",
+      zIndex: 2,
       width: "66%",
       display: "flex",
       justifyContent: "flex-end",
@@ -42,12 +45,14 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.common.white,
     },
     imageBox: {
+      position: "relative",
+      zIndex: 1,
       width: "100%",
       height: "100%",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: grey[800],
+      backgroundColor: "rgba(0, 0, 0, 0.9)",
     },
     image: {
       maxWidth: "100%",

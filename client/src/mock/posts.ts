@@ -12,9 +12,6 @@ const posts: IPost[] = Array.from(Array(4)).map(() => ({
   liked: faker.datatype.boolean(),
   commentCount: 0,
   likeCount: 0,
-  images: Array.from(Array(faker.datatype.number(10))).map(() =>
-    faker.image.image(),
-  ),
 }));
 
 export default posts;

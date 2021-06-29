@@ -1,14 +1,16 @@
 import React from "react";
 import { Grid, GridSpacing } from "@material-ui/core";
 import useStyles from "./useStyles";
+import ImageViewer from "../ImageViewer/ImageViewer";
+import IImage from "model/Image";
 
 const SPACING: GridSpacing = 1;
 
-type ImageListProps = {
-  images: string[];
+type ImageGridProps = {
+  images: IImage[];
 };
 
-export default function ImageList({ images }: ImageListProps): JSX.Element {
+export default function ImageGrid({ images }: ImageGridProps): JSX.Element {
   const classes = useStyles();
 
   const [viewerOpen, setViewerOpen] = React.useState(false);
@@ -24,11 +26,11 @@ export default function ImageList({ images }: ImageListProps): JSX.Element {
   switch (images.length) {
     case 1:
     case 2:
-      elements = images.map((src, index) => (
-        <Grid item xs>
+      elements = images.map((image, index) => (
+        <Grid key={image.id} item xs>
           <img
             className={classes.image}
-            src={src}
+            src={image.url}
             onClick={() => handleImageClick(index)}
           />
         </Grid>
@@ -38,20 +40,20 @@ export default function ImageList({ images }: ImageListProps): JSX.Element {
     case 3:
     case 4:
       elements = [
-        <Grid item xs={8}>
+        <Grid key={images[0].id} item xs={8}>
           <img
             className={classes.image}
-            src={images[0]}
+            src={images[0].url}
             onClick={() => handleImageClick(0)}
           />
         </Grid>,
 
         <Grid item xs={4} container direction="column" spacing={SPACING}>
-          {images.slice(1).map((src, index) => (
-            <Grid item xs>
+          {images.slice(1).map((image, index) => (
+            <Grid key={image.id} item xs>
               <img
                 className={classes.image}
-                src={src}
+                src={image.url}
                 onClick={() => handleImageClick(index)}
               />
             </Grid>
@@ -62,21 +64,21 @@ export default function ImageList({ images }: ImageListProps): JSX.Element {
 
     case 5:
       elements = [
-        ...images.slice(0, 2).map((src, index) => (
-          <Grid item xs={6}>
+        ...images.slice(0, 2).map((image, index) => (
+          <Grid key={image.id} item xs={6}>
             <img
               className={classes.image}
-              src={src}
+              src={image.url}
               onClick={() => handleImageClick(index)}
             />
           </Grid>
         )),
 
-        ...images.slice(2).map((src, index) => (
-          <Grid item xs>
+        ...images.slice(2).map((image, index) => (
+          <Grid key={image.id} item xs>
             <img
               className={classes.image}
-              src={src}
+              src={image.url}
               onClick={() => handleImageClick(index)}
             />
           </Grid>
@@ -88,19 +90,19 @@ export default function ImageList({ images }: ImageListProps): JSX.Element {
     case 7:
     case 8:
       elements = [
-        <Grid item xs={12}>
+        <Grid key={images[0].id} item xs={12}>
           <img
             className={classes.image}
-            src={images[0]}
+            src={images[0].url}
             onClick={() => handleImageClick(0)}
           />
         </Grid>,
 
-        ...images.slice(1).map((src, index) => (
-          <Grid item xs>
+        ...images.slice(1).map((image, index) => (
+          <Grid key={image.id} item xs>
             <img
               className={classes.image}
-              src={src}
+              src={image.url}
               onClick={() => handleImageClick(index)}
             />
           </Grid>
@@ -109,11 +111,11 @@ export default function ImageList({ images }: ImageListProps): JSX.Element {
       break;
 
     case 9:
-      elements = images.map((src, index) => (
-        <Grid item xs={4}>
+      elements = images.map((image, index) => (
+        <Grid key={image.id} item xs={4}>
           <img
             className={classes.image}
-            src={src}
+            src={image.url}
             onClick={() => handleImageClick(index)}
           />
         </Grid>
@@ -122,21 +124,21 @@ export default function ImageList({ images }: ImageListProps): JSX.Element {
 
     case 10:
       elements = [
-        ...images.slice(0, 2).map((src, index) => (
-          <Grid item xs={6}>
+        ...images.slice(0, 2).map((image, index) => (
+          <Grid key={image.id} item xs={6}>
             <img
               className={classes.image}
-              src={src}
+              src={image.url}
               onClick={() => handleImageClick(index)}
             />
           </Grid>
         )),
 
-        ...images.slice(2).map((src, index) => (
-          <Grid item xs={3}>
+        ...images.slice(2).map((image, index) => (
+          <Grid key={image.id} item xs={3}>
             <img
               className={classes.image}
-              src={src}
+              src={image.url}
               onClick={() => handleImageClick(index)}
             />
           </Grid>
@@ -148,6 +150,15 @@ export default function ImageList({ images }: ImageListProps): JSX.Element {
   return (
     <Grid container spacing={SPACING}>
       {elements}
+
+      {images.length > 0 && (
+        <ImageViewer
+          open={viewerOpen}
+          initialImageIndex={imageIndex}
+          images={images}
+          onClose={() => setViewerOpen(false)}
+        />
+      )}
     </Grid>
   );
 }

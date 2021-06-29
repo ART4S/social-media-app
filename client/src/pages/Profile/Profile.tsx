@@ -8,6 +8,8 @@ import {
   Divider,
   IconButton,
   Typography,
+  Link,
+  Grid,
   Collapse,
   Tabs,
   Tab,
@@ -25,6 +27,7 @@ import useStyles from "./useStyles";
 import posts from "mock/posts";
 import profiles from "mock/userProfiles";
 import users from "mock/users";
+import UserInfo from "./UserInfo/UserInfo";
 
 export default function Profile(): JSX.Element {
   const classes = useStyles();
@@ -99,21 +102,14 @@ export default function Profile(): JSX.Element {
               </Box>
 
               <Box>
-                <Button
-                  color="primary"
-                  startIcon={<KeyboardArrowDown />}
-                  style={{ textTransform: "lowercase" }}
-                  onClick={() => setShowInfo(!showInfo)}
-                >
-                  see more information
-                </Button>
+                <Link onClick={() => setShowInfo(!showInfo)}>
+                  Show more information
+                </Link>
 
                 <Collapse in={showInfo}>
-                  <Typography className={classes.joinDate}>
-                    {`Joined: ${moment(profile.joined)
-                      .format("LL")
-                      .toLocaleLowerCase()}`}
-                  </Typography>
+                  <Box mt={1}>
+                    <UserInfo profile={profile} />
+                  </Box>
                 </Collapse>
               </Box>
 
@@ -131,7 +127,7 @@ export default function Profile(): JSX.Element {
                     centered
                   >
                     {["posts", "following", "followers"].map((x) => (
-                      <Tab label={x.toUpperCase()} />
+                      <Tab key={x} label={x.toUpperCase()} />
                     ))}
                   </Tabs>
                 </Paper>
@@ -143,7 +139,7 @@ export default function Profile(): JSX.Element {
                 </TabPanel>
 
                 <TabPanel value={currentTab} index={1}>
-                  <Box py={2}>
+                  <Box py={2} display="flex">
                     <FollowList data={users} />
                   </Box>
                 </TabPanel>

@@ -1,10 +1,10 @@
 import { makeStyles, createStyles, Theme } from "@material-ui/core";
+import { grey } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    follower: {
-      width: "100%",
-      height: "100%",
+    typo: {
+      color: grey[500],
     },
   }),
 );

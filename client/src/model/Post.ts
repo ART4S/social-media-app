@@ -9,5 +9,4 @@ export default interface Post {
   liked: boolean;
   likeCount: number;
   commentCount: number;
-  images: string[];
 }
