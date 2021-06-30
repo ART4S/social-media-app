@@ -1,5 +1,5 @@
 import comments from "mock/comments";
-import IComment from "model/Comment";
+import IComment from "model/CommentDto";
 
 function getAll(postId: string): Promise<IComment[]> {
   return new Promise<IComment[]>((resolve) =>

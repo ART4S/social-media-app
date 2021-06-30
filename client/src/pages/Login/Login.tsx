@@ -21,12 +21,12 @@ import moment from "moment";
 import { Formik, Form } from "formik";
 
 import Links from "./Links/Links";
-import Copyright from "../../common/components/Copyright/Copyright";
-import Header from "common/components/Header/Header";
-import TabPanel from "common/components/TabPanel/TabPanel";
-import PostList from "common/components/PostList/PostList";
-import FollowList from "common/components/FollowList/FollowList";
-import PasswordField from "common/components/PasswordField/PasswordField";
+import Copyright from "../../components/Copyright/Copyright";
+import Header from "components/Header/Header";
+import TabPanel from "components/TabPanel/TabPanel";
+import PostList from "components/PostList/PostList";
+import FollowList from "components/FollowList/FollowList";
+import PasswordField from "components/PasswordField/PasswordField";
 
 import { getUserName } from "utils/userUtils";
 import useStyles from "./useStyles";

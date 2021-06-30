@@ -1,5 +1,5 @@
 import faker from "faker";
-import type IUser from "model/User";
+import type IUser from "model/UserDto";
 
 const users: IUser[] = Array.from(Array(10)).map((x) => ({
   id: faker.datatype.uuid(),

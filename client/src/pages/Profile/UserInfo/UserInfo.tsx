@@ -18,17 +18,17 @@ import {
 import { Edit, Delete, KeyboardArrowDown } from "@material-ui/icons";
 import moment from "moment";
 
-import Header from "common/components/Header/Header";
-import TabPanel from "common/components/TabPanel/TabPanel";
-import PostList from "common/components/PostList/PostList";
-import FollowList from "common/components/FollowList/FollowList";
+import Header from "components/Header/Header";
+import TabPanel from "components/TabPanel/TabPanel";
+import PostList from "components/PostList/PostList";
+import FollowList from "components/FollowList/FollowList";
 
 import { getUserName } from "utils/userUtils";
 import useStyles from "./useStyles";
 import posts from "mock/posts";
 import profiles from "mock/userProfiles";
 import users from "mock/users";
-import IUserProfile from "model/UserProfile";
+import IUserProfile from "model/UserProfileDto";
 
 const SPACING: GridSpacing = 1;
 

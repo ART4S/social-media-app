@@ -1,5 +1,5 @@
 import faker from "faker";
-import type IUserProfile from "model/UserProfile";
+import type IUserProfile from "model/UserProfileDto";
 
 const about = [faker.lorem.text(), faker.lorem.words(), ""];
 

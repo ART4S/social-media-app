@@ -1,4 +1,4 @@
-import type IPost from "model/Post";
+import type IPost from "model/PostDto";
 import faker from "faker";
 
 const posts: IPost[] = Array.from(Array(4)).map(() => ({

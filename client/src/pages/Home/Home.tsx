@@ -1,8 +1,8 @@
 import React from "react";
 import { Grid, Box } from "@material-ui/core";
-import Header from "common/components/Header/Header";
-import PostList from "common/components/PostList/PostList";
-import PostForm from "common/components/Forms/PostForm/PostForm";
+import Header from "components/Header/Header";
+import PostList from "components/PostList/PostList";
+import PostForm from "components/Forms/PostForm/PostForm";
 import UserSearch from "./UserSearch/UserSearch";
 
 import posts from "mock/posts";

@@ -1,5 +1,5 @@
 import posts from "mock/posts";
-import IPost from "model/Post";
+import IPost from "model/PostDto";
 
 function getAll(): Promise<IPost[]> {
   return new Promise<IPost[]>((resolve) =>

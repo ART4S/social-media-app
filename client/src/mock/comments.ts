@@ -1,6 +1,6 @@
 import faker from "faker";
 
-import type IComment from "model/Comment";
+import type IComment from "model/CommentDto";
 import posts from "./posts";
 
 const comments: IComment[] = Array.from(Array(10)).map(() => ({

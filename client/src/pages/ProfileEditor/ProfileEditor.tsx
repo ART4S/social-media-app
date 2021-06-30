@@ -21,10 +21,10 @@ import {
 } from "@material-ui/icons";
 import moment from "moment";
 
-import Header from "common/components/Header/Header";
-import TabPanel from "common/components/TabPanel/TabPanel";
-import PostList from "common/components/PostList/PostList";
-import FollowList from "common/components/FollowList/FollowList";
+import Header from "components/Header/Header";
+import TabPanel from "components/TabPanel/TabPanel";
+import PostList from "components/PostList/PostList";
+import FollowList from "components/FollowList/FollowList";
 
 import { useFormik, Form } from "formik";
 
@@ -58,7 +58,7 @@ export default function ProfileEditor(): JSX.Element {
   });
 
   function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    const file: File | undefined = event.currentTarget.files?.[0];
+    const file: File | undefined = event.target.files?.[0];
     if (file) {
       formik.setFieldValue("avatar", {
         url: URL.createObjectURL(file),

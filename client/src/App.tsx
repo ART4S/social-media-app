@@ -6,8 +6,8 @@ import Profile from "pages/Profile/Profile";
 import ProfileEditor from "pages/ProfileEditor/ProfileEditor";
 import Login from "pages/Login/Login";
 import Registration from "pages/Registration/Registration";
-import ImageViewer from "common/components/ImageViewer/ImageViewer";
-import IImage from "model/Image";
+import ImageViewer from "components/ImageViewer/ImageViewer";
+import IImage from "model/ImageDto";
 import faker from "faker";
 
 const images: IImage[] = Array.from(Array(10)).map(() => ({
@@ -27,11 +27,11 @@ function App(): JSX.Element {
   return (
     <div>
       <CssBaseline />
-      {/* <Registration />
-      <Login /> */}
-      <Profile />
-      {/* <ProfileEditor />
-      <Home /> */}
+      {/* <Registration /> */}
+      {/* <Login /> */}
+      {/* <Profile /> */}
+      {/* <ProfileEditor /> */}
+      <Home />
     </div>
   );
 }
