@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
-import type { AppState } from "redux/store";
+import type { AppDispatch } from "redux/store";
 
 export default function useAppDispatch() {
-  return useDispatch<AppState>();
+  return useDispatch<AppDispatch>();
 }

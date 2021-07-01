@@ -4,9 +4,8 @@ export default interface ImageDto {
   authorId: string;
   authorFirstName: string;
   authorLastName: string;
-  authorAvatarUrl: string;
+  authorAvatarUrl?: string;
   createDate: Date;
   liked: boolean;
   likeCount: number;
-  shareCount: number;
 }

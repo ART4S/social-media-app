@@ -27,11 +27,11 @@ function App(): JSX.Element {
   return (
     <div>
       <CssBaseline />
-      {/* <Registration /> */}
-      {/* <Login /> */}
-      {/* <Profile /> */}
-      {/* <ProfileEditor /> */}
+      <Registration />
+      <Login />
       <Home />
+      <Profile />
+      <ProfileEditor />
     </div>
   );
 }
