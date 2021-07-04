@@ -19,7 +19,7 @@ import moment from "moment";
 
 import Header from "components/Header/Header";
 import TabPanel from "components/TabPanel/TabPanel";
-import PostList from "components/PostList/PostList";
+// import PostList from "components/PostList/PostList";
 import FollowList from "components/FollowList/FollowList";
 
 import { getUserName } from "utils/userUtils";
@@ -136,9 +136,7 @@ export default function Profile(): JSX.Element {
                 </Paper>
 
                 <TabPanel value={currentTab} index={0}>
-                  <Box py={2}>
-                    <PostList data={posts} />
-                  </Box>
+                  <Box py={2}>{/* <PostList data={posts} /> */}</Box>
                 </TabPanel>
 
                 <TabPanel value={currentTab} index={1}>

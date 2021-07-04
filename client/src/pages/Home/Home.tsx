@@ -1,11 +1,10 @@
 import React from "react";
 import { Grid, Box } from "@material-ui/core";
 import Header from "components/Header/Header";
-import PostList from "components/PostList/PostList";
-import PostForm from "components/Forms/PostForm/PostForm";
+import PostList from "./PostList/PostList";
+import PostForm from "./PostForm/PostForm";
 import UserSearch from "./UserSearch/UserSearch";
-
-import posts from "mock/posts";
+import { users } from "mock/data/users";
 
 export default function Home(): JSX.Element {
   return (
@@ -20,7 +19,7 @@ export default function Home(): JSX.Element {
             </Grid>
 
             <Grid item xs>
-              <PostList data={posts} />
+              <PostList authorId={users[0].id} />
             </Grid>
           </Grid>
 

@@ -1,25 +1,20 @@
 import React from "react";
 import { Grid, GridSpacing } from "@material-ui/core";
 import useStyles from "./useStyles";
-import ImageViewer from "../ImageViewer/ImageViewer";
-import IImage from "model/ImageDto";
+import PostImageDto from "model/dto/PostImageDto";
 
 const SPACING: GridSpacing = 1;
 
-type ImageGridProps = {
-  images: IImage[];
-};
+interface ImageGridProps {
+  images: PostImageDto[];
+  onImageClick: (index: number) => void;
+}
 
-export default function ImageGrid({ images }: ImageGridProps): JSX.Element {
+export default function ImageGrid({
+  images,
+  onImageClick,
+}: ImageGridProps): JSX.Element {
   const classes = useStyles();
-
-  const [viewerOpen, setViewerOpen] = React.useState(false);
-  const [imageIndex, setImageIndex] = React.useState(0);
-
-  function handleImageClick(index: number) {
-    setImageIndex(index);
-    setViewerOpen(true);
-  }
 
   let elements: JSX.Element[] = [];
 
@@ -31,7 +26,7 @@ export default function ImageGrid({ images }: ImageGridProps): JSX.Element {
           <img
             className={classes.image}
             src={image.url}
-            onClick={() => handleImageClick(index)}
+            onClick={() => onImageClick(index)}
           />
         </Grid>
       ));
@@ -44,7 +39,7 @@ export default function ImageGrid({ images }: ImageGridProps): JSX.Element {
           <img
             className={classes.image}
             src={images[0].url}
-            onClick={() => handleImageClick(0)}
+            onClick={() => onImageClick(0)}
           />
         </Grid>,
 
@@ -54,7 +49,7 @@ export default function ImageGrid({ images }: ImageGridProps): JSX.Element {
               <img
                 className={classes.image}
                 src={image.url}
-                onClick={() => handleImageClick(index + 1)}
+                onClick={() => onImageClick(index + 1)}
               />
             </Grid>
           ))}
@@ -69,7 +64,7 @@ export default function ImageGrid({ images }: ImageGridProps): JSX.Element {
             <img
               className={classes.image}
               src={image.url}
-              onClick={() => handleImageClick(index)}
+              onClick={() => onImageClick(index)}
             />
           </Grid>
         )),
@@ -79,7 +74,7 @@ export default function ImageGrid({ images }: ImageGridProps): JSX.Element {
             <img
               className={classes.image}
               src={image.url}
-              onClick={() => handleImageClick(index + 2)}
+              onClick={() => onImageClick(index + 2)}
             />
           </Grid>
         )),
@@ -94,7 +89,7 @@ export default function ImageGrid({ images }: ImageGridProps): JSX.Element {
           <img
             className={classes.image}
             src={images[0].url}
-            onClick={() => handleImageClick(0)}
+            onClick={() => onImageClick(0)}
           />
         </Grid>,
 
@@ -103,7 +98,7 @@ export default function ImageGrid({ images }: ImageGridProps): JSX.Element {
             <img
               className={classes.image}
               src={image.url}
-              onClick={() => handleImageClick(index + 1)}
+              onClick={() => onImageClick(index + 1)}
             />
           </Grid>
         )),
@@ -116,7 +111,7 @@ export default function ImageGrid({ images }: ImageGridProps): JSX.Element {
           <img
             className={classes.image}
             src={image.url}
-            onClick={() => handleImageClick(index)}
+            onClick={() => onImageClick(index)}
           />
         </Grid>
       ));
@@ -129,7 +124,7 @@ export default function ImageGrid({ images }: ImageGridProps): JSX.Element {
             <img
               className={classes.image}
               src={image.url}
-              onClick={() => handleImageClick(index)}
+              onClick={() => onImageClick(index)}
             />
           </Grid>
         )),
@@ -139,7 +134,7 @@ export default function ImageGrid({ images }: ImageGridProps): JSX.Element {
             <img
               className={classes.image}
               src={image.url}
-              onClick={() => handleImageClick(index + 2)}
+              onClick={() => onImageClick(index + 2)}
             />
           </Grid>
         )),
@@ -150,15 +145,6 @@ export default function ImageGrid({ images }: ImageGridProps): JSX.Element {
   return (
     <Grid container spacing={SPACING}>
       {elements}
-
-      {images.length > 0 && (
-        <ImageViewer
-          open={viewerOpen}
-          initialImageIndex={imageIndex}
-          images={images}
-          onClose={() => setViewerOpen(false)}
-        />
-      )}
     </Grid>
   );
 }

@@ -26,7 +26,6 @@ import { Formik, Form } from "formik";
 import Copyright from "components/Copyright/Copyright";
 import Header from "components/Header/Header";
 import TabPanel from "components/TabPanel/TabPanel";
-import PostList from "components/PostList/PostList";
 import FollowList from "components/FollowList/FollowList";
 import PasswordField from "components/PasswordField/PasswordField";
 

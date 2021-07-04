@@ -4,35 +4,17 @@ import {
   Box,
   Paper,
   Button,
-  Input,
-  Divider,
-  IconButton,
   TextField,
   Avatar,
   Typography,
-  Tabs,
-  Tab,
 } from "@material-ui/core";
-import {
-  Edit,
-  Delete,
-  PhotoCameraOutlined,
-  CloudUpload,
-} from "@material-ui/icons";
-import moment from "moment";
+import { PhotoCameraOutlined, CloudUpload } from "@material-ui/icons";
 
 import Header from "components/Header/Header";
-import TabPanel from "components/TabPanel/TabPanel";
-import PostList from "components/PostList/PostList";
-import FollowList from "components/FollowList/FollowList";
 
 import { useFormik, Form } from "formik";
 
-import { getUserName } from "utils/userUtils";
 import useStyles from "./useStyles";
-import posts from "mock/posts";
-import profiles from "mock/userProfiles";
-import users from "mock/users";
 
 import faker from "faker";
 

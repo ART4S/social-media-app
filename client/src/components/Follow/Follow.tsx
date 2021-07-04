@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Avatar, Typography, Grid, Link, Button } from "@material-ui/core";
 import faker from "faker";
 
-import type User from "model/UserDto";
+import type User from "model/dto/UserDto";
 import { getUserName } from "utils/userUtils";
 import useStyles from "./useStyles";
 

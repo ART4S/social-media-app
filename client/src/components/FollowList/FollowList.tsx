@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid } from "@material-ui/core";
 import Follow from "../Follow/Follow";
-import type IUser from "model/UserDto";
+import type IUser from "model/dto/UserDto";
 
 type FollowListProps = {
   data: IUser[];
