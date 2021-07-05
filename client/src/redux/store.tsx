@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, AnyAction } from "@reduxjs/toolkit";
 
+import commonReducer from "pages/commonSlice";
 import homeReducer from "pages/Home/homeSlice";
 
 const store = configureStore({
   reducer: {
+    common: commonReducer,
     home: homeReducer,
   },
 });

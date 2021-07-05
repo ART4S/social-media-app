@@ -20,17 +20,19 @@ import {
   fetchPostComments,
   fetchMorePostComments,
   fetchPostImages,
+  notfyPostLiked,
   setSelectedImageIndex,
   getPostInfo,
   getPostImages,
-  getPostComments,
-  getSelectedImage,
-  getCommentPagination,
+  getPostCommentIds,
+  getPostCommentsPagination,
   getSelectedImageIndex,
+  toggleLike,
 } from "../postListSlice";
 import useAppDispatch from "hooks/useAppDispatch";
 import PostCommentDto from "model/dto/PostCommentDto";
 import PostDto from "model/dto/PostDto";
+import { debounce, DebouncedFunc } from "lodash";
 
 interface PostProps {
   postId: string;
@@ -40,8 +42,8 @@ export default function Post({ postId }: PostProps): JSX.Element {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const post: PostDto = useAppSelector((state) => getPostInfo(state, postId));
-  const comments: PostCommentDto[] = useAppSelector((state) =>
-    getPostComments(state, postId),
+  const commentIds: string[] = useAppSelector((state) =>
+    getPostCommentIds(state, postId),
   );
   const images: PostImageDto[] = useAppSelector((state) =>
     getPostImages(state, postId),
@@ -50,13 +52,25 @@ export default function Post({ postId }: PostProps): JSX.Element {
     getSelectedImageIndex(state, postId),
   );
   const { currentPage, totalPages } = useAppSelector((state) =>
-    getCommentPagination(state, postId),
+    getPostCommentsPagination(state, postId),
   );
 
   React.useEffect(() => {
     dispatch(fetchPostImages(postId));
     dispatch(fetchPostComments(postId));
   }, []);
+
+  // TODO: глянуть можно ли сделать напрямую через thunk
+  const debouncedNotfyPostLiked: DebouncedFunc<(postId: string) => void> =
+    React.useCallback(
+      debounce((postId: string) => dispatch(notfyPostLiked(postId)), 500),
+      [],
+    );
+
+  function handleLikeClick() {
+    dispatch(toggleLike(postId));
+    debouncedNotfyPostLiked(postId);
+  }
 
   return (
     <Paper elevation={3}>
@@ -95,7 +109,7 @@ export default function Post({ postId }: PostProps): JSX.Element {
       )}
 
       <Box display="flex" p={2}>
-        <LikeButton active={post.liked} />
+        <LikeButton active={post.liked} onClick={handleLikeClick} />
 
         <ShareButton />
       </Box>
@@ -112,9 +126,9 @@ export default function Post({ postId }: PostProps): JSX.Element {
             <CommentForm />
           </Box>
 
-          {comments.map((x) => (
-            <Box key={x.id} mt={2}>
-              <Comment data={x} />
+          {commentIds.map((id) => (
+            <Box key={id} mt={2}>
+              <Comment postId={postId} commentId={id} />
             </Box>
           ))}
 

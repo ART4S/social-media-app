@@ -3,37 +3,52 @@ import { IconButton, Typography, Box, Link } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 import moment from "moment";
-import Avatar from "../../../../components/Avatar/Avatar";
+
+import Avatar from "components/Avatar/Avatar";
 
 import { getUserName } from "utils/userUtils";
+import useAppDispatch from "hooks/useAppDispatch";
+import { deletePostComment, getPostCommentById } from "../postListSlice";
+import useAppSelector from "hooks/useAppSelector";
 
 interface PostCommentProps {
-  data: PostCommentDto;
+  postId: string;
+  commentId: string;
 }
 
-export default function PostComment({ data }: PostCommentProps): JSX.Element {
-  const user = {
-    id: data.authorId,
-    firstName: data.authorFirstName,
-    lastName: data.authorLastName,
-  };
+export default function PostComment({
+  postId,
+  commentId,
+}: PostCommentProps): JSX.Element {
+  const dispatch = useAppDispatch();
+  const comment: PostCommentDto = useAppSelector((state) =>
+    getPostCommentById(state, postId, commentId),
+  );
 
   return (
     <Box display="flex">
-      <Avatar src={data.avatarUrl} />
+      <Avatar src={comment.avatarUrl} />
 
       <Box display="flex" flexDirection="column" ml={2}>
-        <Link>{getUserName(user)}</Link>
+        <Link>
+          {getUserName({
+            firstName: comment.authorFirstName,
+            lastName: comment.authorLastName,
+          })}
+        </Link>
 
-        <Typography variant="body2">{data.text}</Typography>
+        <Typography variant="body2">{comment.text}</Typography>
 
         <Box display="flex" alignItems="center">
           <Typography variant="caption">
-            {moment(data.createDate).fromNow()}
+            {moment(comment.createDate).fromNow()}
           </Typography>
 
           <IconButton size="small">
-            <DeleteIcon color="secondary" />
+            <DeleteIcon
+              color="secondary"
+              onClick={() => dispatch(deletePostComment({ postId, commentId }))}
+            />
           </IconButton>
         </Box>
       </Box>

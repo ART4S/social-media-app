@@ -2,14 +2,14 @@ import { Box } from "@material-ui/core";
 import LikeButton from "components/Buttons/LikeButton/LikeButton";
 import ShareButton from "components/Buttons/ShareButton/ShareButton";
 
-type ActivitiesProps = {
+interface ImageActivitiesProps {
   liked: boolean;
-};
+}
 
-export default function ImageActivities({ liked }: ActivitiesProps) {
+export default function ImageActivities({ liked }: ImageActivitiesProps) {
   return (
     <Box display="flex">
-      <LikeButton active={liked} />
+      <LikeButton active={liked} onClick={() => {}} />
       <ShareButton />
     </Box>
   );

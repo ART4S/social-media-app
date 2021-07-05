@@ -17,9 +17,7 @@ export function toPagedResponse<TDto>(
 
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage;
-
   const data = items.slice(start, end);
-
   const pageSize = data.length;
 
   return { currentPage, totalPages, pageSize, totalItems, data };

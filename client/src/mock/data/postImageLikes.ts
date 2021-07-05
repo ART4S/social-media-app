@@ -1,6 +1,7 @@
 import { normalize } from "utils/dataUtils";
 import { postImages } from "./postImages";
 import { users } from "./users";
+import { composeKey } from "mock/utils/entityUtils";
 
 export interface PostImageLikes {
   imageId: string;
@@ -32,7 +33,7 @@ export const postImageLikes: PostImageLikes[] = [
 
 const entities: { [postIduserId: string]: PostImageLikes } = normalize(
   postImageLikes,
-  (x) => `${x.imageId}-${x.userId}`,
+  (x) => composeKey(x.imageId, x.userId),
 );
 
 export default entities;

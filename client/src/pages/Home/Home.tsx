@@ -4,7 +4,7 @@ import Header from "components/Header/Header";
 import PostList from "./PostList/PostList";
 import PostForm from "./PostForm/PostForm";
 import UserSearch from "./UserSearch/UserSearch";
-import { users } from "mock/data/users";
+import useAppDispatch from "hooks/useAppDispatch";
 
 export default function Home(): JSX.Element {
   return (
@@ -19,7 +19,7 @@ export default function Home(): JSX.Element {
             </Grid>
 
             <Grid item xs>
-              <PostList authorId={users[0].id} />
+              <PostList />
             </Grid>
           </Grid>
 

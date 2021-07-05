@@ -3,6 +3,7 @@ import { ImageCommentDto } from "model/dto/ImageCommentDto";
 import type PostCommentDto from "model/dto/PostCommentDto";
 import type PostDto from "model/dto/PostDto";
 import type PostImageDto from "model/dto/PostImageDto";
+import PostCommentCreateDto from "model/dto/posts/PostCommentCreateDto";
 import type PagedRequest from "model/pagination/PagedRequest";
 import type PagedResponse from "model/pagination/PagedResponse";
 
@@ -39,16 +40,62 @@ function getComments(
 }
 
 function getImageComments(
-  postId: string,
   imageId: string,
   pagination: PagedRequest,
 ): Promise<PagedResponse<ImageCommentDto>> {
   return new Promise<PagedResponse<ImageCommentDto>>((resolve) =>
     setTimeout(
-      () => resolve(postService.getImageComments(postId, imageId, pagination)),
+      () => resolve(postService.getImageComments(imageId, pagination)),
       config.delayMs,
     ),
   );
 }
 
-export default { getAll, getImages, getComments, getImageComments };
+function addLike(postId: string, userId: string): Promise<void> {
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      postService.addLike(postId, userId);
+      resolve();
+    }, config.delayMs),
+  );
+}
+
+function removeLike(postId: string, userId: string): Promise<void> {
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      postService.removeLike(postId, userId);
+      resolve();
+    }, config.delayMs),
+  );
+}
+
+function createComment(
+  postId: string,
+  comment: PostCommentCreateDto,
+): Promise<string> {
+  return new Promise<string>((resolve) =>
+    setTimeout(() => {
+      resolve(postService.createComment(postId, comment));
+    }, config.delayMs),
+  );
+}
+
+function deleteComment(commentId: string): Promise<void> {
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      postService.deleteComment(commentId);
+      resolve();
+    }, config.delayMs),
+  );
+}
+
+export default {
+  getAll,
+  getImages,
+  getComments,
+  getImageComments,
+  addLike,
+  removeLike,
+  createComment,
+  deleteComment,
+};

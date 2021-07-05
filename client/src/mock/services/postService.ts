@@ -1,3 +1,5 @@
+import faker from "faker";
+
 import posts from "mock/data/posts";
 import users from "mock/data/users";
 import postLikes from "mock/data/postLikes";
@@ -10,10 +12,14 @@ import type PostImageDto from "model/dto/PostImageDto";
 import type PostCommentDto from "model/dto/PostCommentDto";
 import type PagedRequest from "model/pagination/PagedRequest";
 import type PagedResponse from "model/pagination/PagedResponse";
+import type PostCommentCreateDto from "model/dto/posts/PostCommentCreateDto";
+
+import { composeKey } from "mock/utils/entityUtils";
 
 import { toPagedResponse } from "../utils/paginationUtils";
 import { ImageCommentDto } from "model/dto/ImageCommentDto";
 
+// posts
 function getAll(
   authorId: string,
   pagination: PagedRequest,
@@ -28,7 +34,7 @@ function getAll(
       authorAvatarUrl: users[x.authorId].avatarUrl,
       body: x.body,
       createDate: x.createDate,
-      liked: !!postLikes[`${x.id}-${authorId}`],
+      liked: !!postLikes[composeKey(x.id, authorId)],
       likeCount: Object.values(postLikes).filter((l) => l.postId == x.id)
         .length,
     }));
@@ -36,6 +42,7 @@ function getAll(
   return toPagedResponse(data, pagination);
 }
 
+// posts/:id/images
 function getImages(postId: string): PostImageDto[] {
   return Object.values(postImages)
     .filter((x) => x.postId === postId)
@@ -44,12 +51,13 @@ function getImages(postId: string): PostImageDto[] {
       postId: x.postId,
       url: x.url,
       createDate: x.createDate,
-      liked: !!postImageLikes[`${x.id}-${posts[x.postId].authorId}`],
+      liked: !!postImageLikes[composeKey(x.id, posts[x.postId].authorId)],
       likeCount: Object.values(postImageLikes).filter((l) => l.imageId === x.id)
         .length,
     }));
 }
 
+// posts/:id/comments
 function getComments(
   postId: string,
   pagination: PagedRequest,
@@ -70,8 +78,27 @@ function getComments(
   return toPagedResponse(data, pagination);
 }
 
+// posts/:postId/comments
+function createComment(postId: string, comment: PostCommentCreateDto) {
+  const id = faker.datatype.uuid();
+
+  postComments[id] = {
+    ...comment,
+    id,
+    postId,
+    createDate: new Date().toDateString(),
+  };
+
+  return id;
+}
+
+// posts/comments/:commentId
+function deleteComment(commentId: string) {
+  delete postComments[commentId];
+}
+
+// posts/images/:imageId/comments
 function getImageComments(
-  postId: string,
   imageId: string,
   pagination: PagedRequest,
 ): PagedResponse<ImageCommentDto> {
@@ -93,4 +120,25 @@ function getImageComments(
   return toPagedResponse(data, pagination);
 }
 
-export default { getAll, getImages, getComments, getImageComments };
+// posts/:id/like
+function addLike(postId: string, userId: string) {
+  // TODO: убрать userId и получать из токена
+  postLikes[composeKey(postId, userId)] = { postId, userId };
+}
+
+// posts/:id/like
+function removeLike(postId: string, userId: string) {
+  // TODO: убрать userId и получать из токена
+  delete postLikes[composeKey(postId, userId)];
+}
+
+export default {
+  getAll,
+  getImages,
+  getComments,
+  getImageComments,
+  addLike,
+  removeLike,
+  createComment,
+  deleteComment,
+};
