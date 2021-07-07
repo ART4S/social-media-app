@@ -4,6 +4,7 @@ import {
   createAsyncThunk,
   EntityState,
   PayloadAction,
+  createAction,
   createSelector,
   unwrapResult,
 } from "@reduxjs/toolkit";
@@ -16,14 +17,15 @@ import PagedResponse from "model/pagination/PagedResponse";
 import { ImageCommentDto } from "model/dto/ImageCommentDto";
 import PostCommentCreateDto from "model/dto/posts/PostCommentCreateDto";
 import { getUser } from "pages/commonSlice";
+import postService from "mock/services/postService";
 
 const sliceName = "home/postList";
 
 const postAdapter = createEntityAdapter<Post>({
   selectId: (post) => post.info.id,
 });
+const imageAdapter = createEntityAdapter<PostImage>();
 const commentAdapter = createEntityAdapter<PostCommentDto>();
-const imageAdapter = createEntityAdapter<PostImageDto>();
 const imageCommentAdapter = createEntityAdapter<ImageCommentDto>();
 
 interface Pagination {
@@ -34,7 +36,7 @@ interface Pagination {
   itemsPerPage: number;
 }
 
-export interface SelectedImage {
+interface PostImage {
   info: PostImageDto;
   comments: EntityState<ImageCommentDto> & {
     pagination: Pagination;
@@ -43,59 +45,37 @@ export interface SelectedImage {
 
 export interface Post {
   info: PostDto;
-  selectedImage: SelectedImage | null;
-  selectedImageIndex: number | null;
-  images: EntityState<PostImageDto>;
+  selectedImageId: string | null;
+  images: EntityState<PostImage>;
   comments: EntityState<PostCommentDto> & {
     pagination: Pagination;
   };
+  commentForm: {
+    isSubmitAreaVisible: boolean;
+  };
 }
 
-interface PostListState {
+export interface PostListState {
   loading: boolean;
   posts: EntityState<Post> & {
     pagination: Pagination;
   };
 }
 
-const postsInitialState = postAdapter.getInitialState({
-  pagination: {
-    currentPage: 1,
-    totalPages: 0,
-    pageSize: 0,
-    totalItems: 0,
-    itemsPerPage: 5,
-  },
-});
-
-const commentInitialState = commentAdapter.getInitialState({
-  pagination: {
-    currentPage: 1,
-    totalPages: 0,
-    pageSize: 0,
-    totalItems: 0,
-    itemsPerPage: 3,
-  },
-});
-
-const imageInitialState = imageAdapter.getInitialState();
-
-const imageCommentInitialState = imageCommentAdapter.getInitialState({
-  pagination: {
-    currentPage: 1,
-    totalPages: 0,
-    pageSize: 0,
-    totalItems: 0,
-    itemsPerPage: 3,
-  },
-});
-
 const initialState: PostListState = {
   loading: false,
-  posts: postsInitialState,
+  posts: postAdapter.getInitialState({
+    pagination: {
+      currentPage: 1,
+      totalPages: 0,
+      pageSize: 0,
+      totalItems: 0,
+      itemsPerPage: 5,
+    },
+  }),
 };
 
-const getSelf = (state: AppState) => state.home.postList;
+export const getSelf = (state: AppState) => state.home.postList;
 
 export const getPostIds = (state: AppState) =>
   getSelf(state).posts.ids as string[];
@@ -108,29 +88,21 @@ export const getPostInfo = createSelector(
   (post: Post) => post.info,
 );
 
-const getImagesEntity = createSelector(
+const getPostImagesEntity = createSelector(
   getPostById,
   (post: Post) => post.images,
 );
 
-export const getPostImages = createSelector(
-  getImagesEntity,
-  (images) => Object.values(images.entities) as PostImageDto[],
+export const getPostImagesInfo = createSelector(
+  getPostImagesEntity,
+  (images) => {
+    return Object.values(images.entities).map((x) => x!.info) as PostImageDto[];
+  },
 );
 
 export const getSelectedImage = createSelector(
   getPostById,
-  (post: Post) => post.selectedImage,
-);
-
-export const getSelectedImageInfo = createSelector(
-  getSelectedImage,
-  (image) => image!.info,
-);
-
-export const getSelectedImageIndex = createSelector(
-  getPostById,
-  (post: Post) => post.selectedImageIndex,
+  (post: Post) => post.images.entities[post.selectedImageId!]!,
 );
 
 const getPostCommentsEntity = createSelector(
@@ -155,229 +127,278 @@ export const getPostCommentById = (
   commentId: string,
 ) => getPostCommentsEntity(state, postId).entities[commentId]!;
 
-export const getPostImageById = createSelector(
-  getPostById,
-  (_, imageId: string) => imageId,
-  (post: Post, imageId: string) => post.images.entities[imageId]!,
+export const getPostImageById = (
+  state: AppState,
+  postId: string,
+  imageId: string,
+) => getPostImagesEntity(state, postId).entities[imageId]!;
+
+const getImageCommentsEntity = createSelector(
+  getPostImageById,
+  (image: PostImage) => image!.comments,
 );
 
-const getSelectedImageCommentsEntity = createSelector(
-  getSelectedImage,
-  (image: SelectedImage | null) => image!.comments,
+export const getImageCommentIds = createSelector(
+  getImageCommentsEntity,
+  (comments) => Array.from(comments.ids).reverse() as string[],
 );
 
-export const getSelectedImageComments = createSelector(
-  getSelectedImageCommentsEntity,
-  (comments) => Object.values(comments.entities).reverse() as ImageCommentDto[],
-);
-
-export const getSelectedImageCommentPagination = createSelector(
-  getSelectedImageCommentsEntity,
+export const getImageCommentsPagination = createSelector(
+  getImageCommentsEntity,
   (comments) => comments.pagination,
 );
 
-export const fetchUserPosts = createAsyncThunk<
-  PagedResponse<PostDto>,
-  void,
-  { state: AppState }
->(`${sliceName}/fetchUserPosts`, (_, thunkApi) => {
-  const userId = getUser(thunkApi.getState())!.id;
-  const { pagination } = getSelf(thunkApi.getState()).posts;
-  return postAPI.getAll(userId, pagination);
-});
+export const getImageCommentById = (
+  state: AppState,
+  postId: string,
+  commentId: string,
+) => getImageCommentsEntity(state, postId).entities[commentId]!;
 
-export const fetchPostImages = createAsyncThunk(
+export const getPostCommentSubmitAreaVisibility = (
+  state: AppState,
+  postId: string,
+) => getPostById(state, postId).commentForm.isSubmitAreaVisible;
+
+export const getSelectedImageId = createSelector(
+  getPostById,
+  (post: Post) => post.selectedImageId,
+);
+
+export const fetchUserPosts = createAction(`${sliceName}/fetchUserPosts`);
+
+export const fetchPostImages = createAction<string>(
   `${sliceName}/fetchPostImages`,
-  (postId: string) => postAPI.getImages(postId),
 );
 
-export const fetchPostComments = createAsyncThunk<
-  PagedResponse<PostCommentDto>,
-  string,
-  { state: AppState }
->(`${sliceName}/fetchPostComments`, (postId, thunkApi) => {
-  const { pagination } = getPostById(thunkApi.getState(), postId)!.comments;
-  return postAPI.getComments(postId, pagination);
-});
-
-export const fetchMorePostComments = createAsyncThunk<
-  PagedResponse<PostCommentDto>,
-  string,
-  { state: AppState; dispatch: AppDispatch }
->(`${sliceName}/fetchMorePostComments`, (postId, thunkApi) =>
-  thunkApi.dispatch(fetchPostComments(postId)).then(unwrapResult),
+export const fetchPostComments = createAction<string>(
+  `${sliceName}/fetchPostComments`,
 );
 
-export const fetchSelectedImageComments = createAsyncThunk<
-  PagedResponse<ImageCommentDto>,
-  string,
-  { state: AppState }
->(`${sliceName}/fetchSelectedImageComments`, (postId, thunkApi) => {
-  const {
-    comments: { pagination },
-    info: { id },
-  } = getSelectedImage(thunkApi.getState(), postId)!;
-  return postAPI.getImageComments(id, pagination);
-});
-
-export const fetchMoreSelectedImageComments = createAsyncThunk<
-  PagedResponse<ImageCommentDto>,
-  string,
-  { state: AppState; dispatch: AppDispatch }
->(`${sliceName}/fetchMoreSelectedImageComments`, (postId, thunkApi) =>
-  thunkApi.dispatch(fetchSelectedImageComments(postId)).then(unwrapResult),
+export const fetchMorePostComments = createAction<string>(
+  `${sliceName}/fetchMorePostComments`,
 );
 
-export const createPostComment = createAsyncThunk<
-  void,
-  { postId: string; comment: PostCommentCreateDto },
-  { state: AppState; dispatch: AppDispatch }
->(`${sliceName}/createPostComment`, async ({ postId, comment }, thunkApi) => {
-  await postAPI.createComment(postId, comment);
-  await thunkApi.dispatch(fetchPostComments(postId));
-});
+export const fetchImageComments = createAction<{
+  postId: string;
+  imageId: string;
+}>(`${sliceName}/fetchImageComments`);
 
-export const deletePostComment = createAsyncThunk<
-  void,
-  { postId: string; commentId: string },
-  { state: AppState; dispatch: AppDispatch }
->(`${sliceName}/deletePostComment`, async ({ postId, commentId }, thunkApi) => {
-  await postAPI.deleteComment(commentId);
-  await thunkApi.dispatch(fetchPostComments(postId));
-});
+export const fetchMoreImageComments = createAction<{
+  postId: string;
+  imageId: string;
+}>(`${sliceName}/fetchMoreImageComments`);
 
-export const notfyPostLiked = createAsyncThunk<
-  void,
-  string,
-  { state: AppState }
->(`${sliceName}/notfyPostLiked`, async (postId, thunkApi) => {
-  const state = thunkApi.getState();
-  const userId = getUser(state)!.id;
-  const post = getPostInfo(state, postId);
+export const createPostComment = createAction<{
+  postId: string;
+  comment: PostCommentCreateDto;
+}>(`${sliceName}/createPostComment`);
 
-  if (post.liked) await postAPI.addLike(postId, userId);
-  else await postAPI.removeLike(postId, userId);
-});
+export const deletePostComment = createAction<{
+  postId: string;
+  commentId: string;
+}>(`${sliceName}/deletePostComment`);
+
+export const notifyPostLiked = createAction<string>(
+  `${sliceName}/notifyPostLiked`,
+);
+
+export const notifyPostImageLiked = createAction<{
+  postId: string;
+  imageId: string;
+}>(`${sliceName}/notifyPostImageLiked`);
+
+export const deleteImageComment = createAction<{
+  postId: string;
+  imageId: string;
+  commentId: string;
+}>(`${sliceName}/deleteImageComment`);
 
 const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {
-    toggleLike(state, action: PayloadAction<string>) {
-      const postId = action.payload;
-      const post = state.posts.entities[postId];
-      if (post) {
-        post.info.liked = !post.info.liked;
-      }
-    },
-    setSelectedImageIndex(
+    showPostCommentSubmitArea(
       state,
-      action: PayloadAction<{ postId: string; index: number | null }>,
+      action: PayloadAction<{ postId: string; visibility: boolean }>,
     ) {
-      const { postId, index } = action.payload;
-      const post = state.posts.entities[postId];
-      if (post) {
-        const images = Object.values(post.images.entities) as PostImageDto[];
-        if (index !== null && images.length > index) {
-          post.selectedImage = {
-            info: images[index],
-            comments: imageCommentInitialState,
-          };
-        } else {
-          post.selectedImage = null;
-        }
-        post.selectedImageIndex = index;
+      const { postId, visibility } = action.payload;
+      const commentForm = state.posts.entities[postId]?.commentForm;
+      if (commentForm) {
+        commentForm.isSubmitAreaVisible = visibility;
       }
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchUserPosts.fulfilled, (state, action) => {
-        const { posts } = state;
-        const { data, currentPage, totalPages, pageSize, totalItems } =
-          action.payload;
+    togglePostLike(state, { payload: postId }: PayloadAction<string>) {
+      const post = state.posts.entities[postId]?.info;
+      if (post) {
+        post.liked = !post.liked;
+      }
+    },
+    togglePostImageLike(
+      state,
+      action: PayloadAction<{ postId: string; imageId: string }>,
+    ) {
+      const { postId, imageId } = action.payload;
+      const image =
+        state.posts.entities[postId]?.images.entities[imageId]?.info;
+      if (image) {
+        image.liked = !image.liked;
+      }
+    },
+    setSelectedImageId(
+      state,
+      action: PayloadAction<{ postId: string; imageId: string | null }>,
+    ) {
+      const { postId, imageId } = action.payload;
+      const post = state.posts.entities[postId];
+      if (post) {
+        post.selectedImageId = imageId;
+      }
+    },
+    fetchUserPostsSucceed(
+      state,
+      { payload: response }: PayloadAction<PagedResponse<PostDto>>,
+    ) {
+      const { posts } = state;
 
-        postAdapter.setAll(
-          posts,
+      postAdapter.setAll(
+        posts,
+        response.data.map((info) => ({
+          info,
+          selectedImageId: null,
+          images: imageAdapter.getInitialState(),
+          comments: commentAdapter.getInitialState({
+            pagination: {
+              currentPage: 1,
+              totalPages: 0,
+              pageSize: 0,
+              totalItems: 0,
+              itemsPerPage: 3,
+            },
+          }),
+          commentForm: {
+            isSubmitAreaVisible: false,
+          },
+        })),
+      );
+
+      const pagination: Omit<PagedResponse<PostCommentDto>, "data"> = response;
+
+      posts.pagination = {
+        ...posts.pagination,
+        ...pagination,
+      };
+    },
+    fetchPostImagesSucceed(
+      state,
+      action: PayloadAction<{ postId: string; data: PostImageDto[] }>,
+    ) {
+      const { postId, data } = action.payload;
+      const images = state.posts.entities[postId]?.images;
+      if (images) {
+        imageAdapter.setAll(
+          images,
           data.map((info) => ({
             info,
-            selectedImage: null,
-            selectedImageIndex: null,
-            images: imageInitialState,
-            comments: commentInitialState,
+            comments: imageCommentAdapter.getInitialState({
+              pagination: {
+                currentPage: 1,
+                totalPages: 0,
+                pageSize: 0,
+                totalItems: 0,
+                itemsPerPage: 3,
+              },
+            }),
           })),
         );
+      }
+    },
+    fetchImageCommentsSucceed(
+      state,
+      action: PayloadAction<{
+        postId: string;
+        imageId: string;
+        response: PagedResponse<ImageCommentDto>;
+      }>,
+    ) {
+      const { postId, imageId, response } = action.payload;
 
-        posts.pagination = {
-          ...posts.pagination,
-          currentPage,
-          totalPages,
-          pageSize,
-          totalItems,
+      const comments =
+        state.posts.entities[postId]?.images.entities[imageId]?.comments;
+
+      if (comments) {
+        imageCommentAdapter.setAll(comments, response.data);
+
+        const pagination: Omit<
+          PagedResponse<PostCommentDto>,
+          "data"
+        > = response;
+
+        comments.pagination = {
+          ...comments.pagination,
+          ...pagination,
         };
-      })
-      .addCase(fetchPostImages.fulfilled, (state, action) => {
-        const postId = action.meta.arg;
-        const images = state.posts.entities[postId]?.images;
-        if (images) {
-          imageAdapter.setAll(images, action.payload);
-        }
-      })
-      .addCase(fetchPostComments.fulfilled, (state, action) => {
-        const postId = action.meta.arg;
-        const comments = state.posts.entities[postId]?.comments;
-        if (comments) {
-          const { data, currentPage, totalPages, pageSize, totalItems } =
-            action.payload;
+      }
+    },
+    fetchMoreImageCommentsStarted(
+      state,
+      action: PayloadAction<{ postId: string; imageId: string }>,
+    ) {
+      const { postId, imageId } = action.payload;
 
-          commentAdapter.setAll(comments, data);
+      const pagination =
+        state.posts.entities[postId]?.images.entities[imageId]?.comments
+          .pagination;
 
-          comments.pagination = {
-            ...comments.pagination,
-            currentPage,
-            totalPages,
-            pageSize,
-            totalItems,
-          };
-        }
-      })
-      .addCase(fetchMorePostComments.pending, (state, action) => {
-        const postId = action.meta.arg;
-        const pagination = state.posts.entities[postId]?.comments.pagination;
-        if (pagination) {
-          pagination.itemsPerPage += 3;
-        }
-      })
-      .addCase(fetchSelectedImageComments.fulfilled, (state, action) => {
-        const postId = action.meta.arg;
-        const post = state.posts.entities[postId];
-        const imageComments = post?.selectedImage?.comments;
-        if (imageComments) {
-          const { data, currentPage, totalPages, pageSize, totalItems } =
-            action.payload;
+      if (pagination) {
+        pagination.itemsPerPage += 3;
+      }
+    },
+    fetchPostCommentsSucceed(
+      state,
+      action: PayloadAction<{
+        postId: string;
+        response: PagedResponse<PostCommentDto>;
+      }>,
+    ) {
+      const { postId, response } = action.payload;
+      const comments = state.posts.entities[postId]?.comments;
+      if (comments) {
+        commentAdapter.setAll(comments, response.data);
 
-          imageCommentAdapter.setAll(imageComments, data);
+        const pagination: Omit<
+          PagedResponse<PostCommentDto>,
+          "data"
+        > = response;
 
-          imageComments.pagination = {
-            ...imageComments.pagination,
-            currentPage,
-            totalPages,
-            pageSize,
-            totalItems,
-          };
-        }
-      })
-      .addCase(fetchMoreSelectedImageComments.pending, (state, action) => {
-        const postId = action.meta.arg;
-        const pagination =
-          state.posts.entities[postId]?.selectedImage?.comments.pagination;
-        if (pagination) {
-          pagination.itemsPerPage += 3;
-        }
-      });
+        comments.pagination = {
+          ...comments.pagination,
+          ...pagination,
+        };
+      }
+    },
+    fetchMorePostCommentsStarted(
+      state,
+      { payload: postId }: PayloadAction<string>,
+    ) {
+      const pagination = state.posts.entities[postId]?.comments.pagination;
+      if (pagination) {
+        pagination.itemsPerPage += 3;
+      }
+    },
   },
 });
 
-export const { setSelectedImageIndex, toggleLike } = slice.actions;
+export const {
+  setSelectedImageId,
+  togglePostLike,
+  togglePostImageLike,
+  showPostCommentSubmitArea,
+  fetchImageCommentsSucceed,
+  fetchUserPostsSucceed,
+  fetchPostImagesSucceed,
+  fetchMoreImageCommentsStarted,
+  fetchPostCommentsSucceed,
+  fetchMorePostCommentsStarted,
+} = slice.actions;
 
 export default slice.reducer;

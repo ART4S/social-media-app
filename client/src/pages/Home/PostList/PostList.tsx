@@ -17,7 +17,7 @@ export default function PostList(): JSX.Element {
     <Grid container spacing={2} direction="column">
       {postIds.map((id) => (
         <Grid key={id} item>
-          <Post postId={id as string} />
+          <Post postId={id} />
         </Grid>
       ))}
     </Grid>

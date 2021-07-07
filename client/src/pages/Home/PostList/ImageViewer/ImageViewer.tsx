@@ -2,7 +2,7 @@ import React from "react";
 import { createAction, createReducer } from "@reduxjs/toolkit";
 import { Grid, Box, Divider, Modal, Link } from "@material-ui/core";
 
-import CommentForm from "components/Forms/CommentForm/CommentForm";
+import CommentForm from "pages/Home/PostList/PostCommentForm/PostCommentForm";
 import ImageComment from "pages/Home/PostList/ImageComment/ImageComment";
 import ImageInfo from "../ImageInfo/ImageInfo";
 import Activities from "../ImageActivities/ImageActivities";
@@ -15,7 +15,7 @@ import {
   setSelectedImageIndex,
   getPostImages,
   getSelectedImageIndex,
-  getSelectedImageComments,
+  getSelectedImageCommentIds,
   getSelectedImageInfo,
   getPostInfo,
   getSelectedImageCommentPagination,
@@ -23,7 +23,6 @@ import {
 import useAppDispatch from "hooks/useAppDispatch";
 import useAppSelector from "hooks/useAppSelector";
 import PostDto from "model/dto/PostDto";
-import { ImageCommentDto } from "model/dto/ImageCommentDto";
 
 interface ImageViewerProps {
   postId: string;
@@ -46,8 +45,8 @@ export default function ImageViewer({
   const index = useAppSelector((state) =>
     getSelectedImageIndex(state, postId),
   ) as number;
-  const comments: ImageCommentDto[] = useAppSelector((state) =>
-    getSelectedImageComments(state, postId),
+  const commentIds: string[] = useAppSelector((state) =>
+    getSelectedImageCommentIds(state, postId),
   );
   const { currentPage, totalPages } = useAppSelector((state) =>
     getSelectedImageCommentPagination(state, postId),
@@ -78,6 +77,7 @@ export default function ImageViewer({
         <Box width="34%" display="flex" flexDirection="column">
           <Box
             style={{
+              height: "100%",
               overflowY: "auto",
             }}
           >
@@ -92,8 +92,10 @@ export default function ImageViewer({
                 <Divider />
 
                 <Box px={1} py={2}>
-                  <Activities liked={image.liked} />
+                  <Activities postId={postId} imageId={image.id} />
                 </Box>
+
+                {!commentIds.length && <Divider />}
               </Grid>
 
               {currentPage < totalPages && (
@@ -113,12 +115,12 @@ export default function ImageViewer({
                 </Grid>
               )}
 
-              {comments.map((x) => (
-                <Grid key={x.id} item xs="auto">
+              {commentIds.map((id) => (
+                <Grid key={id} item xs="auto">
                   <Divider />
 
                   <Box p={1}>
-                    <ImageComment data={x} />
+                    <ImageComment postId={postId} commentId={id} />
                   </Box>
                 </Grid>
               ))}
@@ -129,7 +131,7 @@ export default function ImageViewer({
             <Divider />
 
             <Box p={1}>
-              <CommentForm />
+              <CommentForm postId={postId} />
             </Box>
           </Box>
         </Box>

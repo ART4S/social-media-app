@@ -3,6 +3,7 @@ import { ImageCommentDto } from "model/dto/ImageCommentDto";
 import type PostCommentDto from "model/dto/PostCommentDto";
 import type PostDto from "model/dto/PostDto";
 import type PostImageDto from "model/dto/PostImageDto";
+import ImageCommentCreateDto from "model/dto/posts/ImageCommentCreateDto";
 import PostCommentCreateDto from "model/dto/posts/PostCommentCreateDto";
 import type PagedRequest from "model/pagination/PagedRequest";
 import type PagedResponse from "model/pagination/PagedResponse";
@@ -89,6 +90,44 @@ function deleteComment(commentId: string): Promise<void> {
   );
 }
 
+function addImageLike(imageId: string, userId: string): Promise<void> {
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      postService.addImageLike(imageId, userId);
+      resolve();
+    }, config.delayMs),
+  );
+}
+
+function removeImageLike(imageId: string, userId: string): Promise<void> {
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      postService.removeImageLike(imageId, userId);
+      resolve();
+    }, config.delayMs),
+  );
+}
+
+function addImageComment(
+  imageId: string,
+  comment: ImageCommentCreateDto,
+): Promise<string> {
+  return new Promise<string>((resolve) =>
+    setTimeout(() => {
+      resolve(postService.addImageComment(imageId, comment));
+    }, config.delayMs),
+  );
+}
+
+function deleteImageComment(commentId: string): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      postService.deleteImageComment(commentId);
+      resolve();
+    }, config.delayMs);
+  });
+}
+
 export default {
   getAll,
   getImages,
@@ -98,4 +137,8 @@ export default {
   removeLike,
   createComment,
   deleteComment,
+  addImageLike,
+  removeImageLike,
+  addImageComment,
+  deleteImageComment,
 };

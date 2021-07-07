@@ -18,6 +18,7 @@ import { composeKey } from "mock/utils/entityUtils";
 
 import { toPagedResponse } from "../utils/paginationUtils";
 import { ImageCommentDto } from "model/dto/ImageCommentDto";
+import ImageCommentCreateDto from "model/dto/posts/ImageCommentCreateDto";
 
 // posts
 function getAll(
@@ -79,16 +80,14 @@ function getComments(
 }
 
 // posts/:postId/comments
-function createComment(postId: string, comment: PostCommentCreateDto) {
+function createComment(postId: string, comment: PostCommentCreateDto): string {
   const id = faker.datatype.uuid();
-
   postComments[id] = {
     ...comment,
     id,
     postId,
     createDate: new Date().toDateString(),
   };
-
   return id;
 }
 
@@ -132,6 +131,38 @@ function removeLike(postId: string, userId: string) {
   delete postLikes[composeKey(postId, userId)];
 }
 
+// posts/images/:imageId
+function addImageLike(imageId: string, userId: string) {
+  // TODO: убрать userId и получать из токена
+  postImageLikes[composeKey(imageId, userId)] = { imageId, userId };
+}
+
+// posts/images/:imageId
+function removeImageLike(imageId: string, userId: string) {
+  // TODO: убрать userId и получать из токена
+  delete postImageLikes[composeKey(imageId, userId)];
+}
+
+// posts/images/:imageId/comments
+function addImageComment(
+  imageId: string,
+  comment: ImageCommentCreateDto,
+): string {
+  const id = faker.datatype.uuid();
+  imageComments[id] = {
+    ...comment,
+    id,
+    imageId,
+    createDate: new Date().toDateString(),
+  };
+  return id;
+}
+
+// posts/images/comments/:commentId
+function deleteImageComment(commentId: string) {
+  delete imageComments[commentId];
+}
+
 export default {
   getAll,
   getImages,
@@ -141,4 +172,8 @@ export default {
   removeLike,
   createComment,
   deleteComment,
+  addImageLike,
+  removeImageLike,
+  addImageComment,
+  deleteImageComment,
 };

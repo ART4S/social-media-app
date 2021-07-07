@@ -5,34 +5,54 @@ import moment from "moment";
 import Avatar from "../../../../components/Avatar/Avatar";
 
 import { getUserName } from "utils/userUtils";
+import useAppSelector from "hooks/useAppSelector";
 import { ImageCommentDto } from "model/dto/ImageCommentDto";
+import {
+  getSelectedImageCommentById,
+  deleteImageComment,
+} from "../postListSlice";
+import useAppDispatch from "hooks/useAppDispatch";
 
 interface ImageCommentProps {
-  data: ImageCommentDto;
+  postId: string;
+  commentId: string;
 }
 
-export default function ImageComment({ data }: ImageCommentProps): JSX.Element {
+export default function ImageComment({
+  postId,
+  commentId,
+}: ImageCommentProps): JSX.Element {
+  const dispatch = useAppDispatch();
+  const comment: ImageCommentDto = useAppSelector((state) =>
+    getSelectedImageCommentById(state, postId, commentId),
+  );
+
   return (
     <Box display="flex">
-      <Avatar src={data.avatarUrl} />
+      <Avatar src={comment.avatarUrl} />
 
       <Box display="flex" flexDirection="column" ml={2}>
         <Link>
           {getUserName({
-            firstName: data.authorFirstName,
-            lastName: data.authorLastName,
+            firstName: comment.authorFirstName,
+            lastName: comment.authorLastName,
           })}
         </Link>
 
-        <Typography variant="body2">{data.text}</Typography>
+        <Typography variant="body2">{comment.text}</Typography>
 
         <Box display="flex" alignItems="center">
           <Typography variant="caption">
-            {moment(data.createDate).fromNow()}
+            {moment(comment.createDate).fromNow()}
           </Typography>
 
           <IconButton size="small">
-            <DeleteIcon color="secondary" />
+            <DeleteIcon
+              color="secondary"
+              onClick={() =>
+                dispatch(deleteImageComment({ postId, commentId }))
+              }
+            />
           </IconButton>
         </Box>
       </Box>

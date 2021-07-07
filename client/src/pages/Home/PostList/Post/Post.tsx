@@ -4,7 +4,7 @@ import { Paper, IconButton, Box } from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
 
 import Comment from "pages/Home/PostList/PostComment/PostComment";
-import CommentForm from "components/Forms/CommentForm/CommentForm";
+import CommentForm from "pages/Home/PostList/PostCommentForm/PostCommentForm";
 import ImageGrid from "components/ImageGrid/ImageGrid";
 import ImageViewer from "pages/Home/PostList/ImageViewer/ImageViewer";
 import LikeButton from "components/Buttons/LikeButton/LikeButton";
@@ -21,13 +21,13 @@ import {
   fetchMorePostComments,
   fetchPostImages,
   notfyPostLiked,
-  setSelectedImageIndex,
+  setSelectedImageId,
   getPostInfo,
-  getPostImages,
+  getPostImagesInfo,
   getPostCommentIds,
   getPostCommentsPagination,
-  getSelectedImageIndex,
-  toggleLike,
+  getSelectedImageId,
+  togglePostLike,
 } from "../postListSlice";
 import useAppDispatch from "hooks/useAppDispatch";
 import PostCommentDto from "model/dto/PostCommentDto";
@@ -46,10 +46,10 @@ export default function Post({ postId }: PostProps): JSX.Element {
     getPostCommentIds(state, postId),
   );
   const images: PostImageDto[] = useAppSelector((state) =>
-    getPostImages(state, postId),
+    getPostImagesInfo(state, postId),
   );
-  const selectedImageIndex: number | null = useAppSelector((state) =>
-    getSelectedImageIndex(state, postId),
+  const selectedImageId: string | null = useAppSelector((state) =>
+    getSelectedImageId(state, postId),
   );
   const { currentPage, totalPages } = useAppSelector((state) =>
     getPostCommentsPagination(state, postId),
@@ -68,7 +68,7 @@ export default function Post({ postId }: PostProps): JSX.Element {
     );
 
   function handleLikeClick() {
-    dispatch(toggleLike(postId));
+    dispatch(togglePostLike(postId));
     debouncedNotfyPostLiked(postId);
   }
 
@@ -92,18 +92,18 @@ export default function Post({ postId }: PostProps): JSX.Element {
         <Box px={2}>
           <ImageGrid
             images={images}
-            onImageClick={(index: number) =>
-              dispatch(setSelectedImageIndex({ postId, index }))
+            onImageClick={({ id }: PostImageDto) =>
+              dispatch(setSelectedImageId({ postId, imageId: id }))
             }
           />
         </Box>
       )}
 
-      {selectedImageIndex !== null && (
+      {selectedImageId !== null && (
         <ImageViewer
           postId={postId}
           onClose={() =>
-            dispatch(setSelectedImageIndex({ postId, index: null }))
+            dispatch(setSelectedImageId({ postId, imageId: null }))
           }
         />
       )}
@@ -123,7 +123,7 @@ export default function Post({ postId }: PostProps): JSX.Element {
           px={3}
         >
           <Box my={2}>
-            <CommentForm />
+            <CommentForm postId={postId} />
           </Box>
 
           {commentIds.map((id) => (

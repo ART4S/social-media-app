@@ -7,7 +7,7 @@ const SPACING: GridSpacing = 1;
 
 interface ImageGridProps {
   images: PostImageDto[];
-  onImageClick: (index: number) => void;
+  onImageClick: (image: PostImageDto) => void;
 }
 
 export default function ImageGrid({
@@ -26,7 +26,7 @@ export default function ImageGrid({
           <img
             className={classes.image}
             src={image.url}
-            onClick={() => onImageClick(index)}
+            onClick={() => onImageClick(image)}
           />
         </Grid>
       ));
@@ -39,7 +39,7 @@ export default function ImageGrid({
           <img
             className={classes.image}
             src={images[0].url}
-            onClick={() => onImageClick(0)}
+            onClick={() => onImageClick(images[0])}
           />
         </Grid>,
 
@@ -49,7 +49,7 @@ export default function ImageGrid({
               <img
                 className={classes.image}
                 src={image.url}
-                onClick={() => onImageClick(index + 1)}
+                onClick={() => onImageClick(image)}
               />
             </Grid>
           ))}
@@ -64,7 +64,7 @@ export default function ImageGrid({
             <img
               className={classes.image}
               src={image.url}
-              onClick={() => onImageClick(index)}
+              onClick={() => onImageClick(image)}
             />
           </Grid>
         )),
@@ -74,7 +74,7 @@ export default function ImageGrid({
             <img
               className={classes.image}
               src={image.url}
-              onClick={() => onImageClick(index + 2)}
+              onClick={() => onImageClick(image)}
             />
           </Grid>
         )),
@@ -89,7 +89,7 @@ export default function ImageGrid({
           <img
             className={classes.image}
             src={images[0].url}
-            onClick={() => onImageClick(0)}
+            onClick={() => onImageClick(images[0])}
           />
         </Grid>,
 
@@ -98,7 +98,7 @@ export default function ImageGrid({
             <img
               className={classes.image}
               src={image.url}
-              onClick={() => onImageClick(index + 1)}
+              onClick={() => onImageClick(image)}
             />
           </Grid>
         )),
@@ -111,7 +111,7 @@ export default function ImageGrid({
           <img
             className={classes.image}
             src={image.url}
-            onClick={() => onImageClick(index)}
+            onClick={() => onImageClick(image)}
           />
         </Grid>
       ));
@@ -124,7 +124,7 @@ export default function ImageGrid({
             <img
               className={classes.image}
               src={image.url}
-              onClick={() => onImageClick(index)}
+              onClick={() => onImageClick(image)}
             />
           </Grid>
         )),
@@ -134,7 +134,7 @@ export default function ImageGrid({
             <img
               className={classes.image}
               src={image.url}
-              onClick={() => onImageClick(index + 2)}
+              onClick={() => onImageClick(image)}
             />
           </Grid>
         )),
