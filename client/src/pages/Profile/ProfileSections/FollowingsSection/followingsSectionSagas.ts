@@ -9,15 +9,12 @@ import {
 import { actions, getIsFollow } from "./followingsSectionSlice";
 import userAPI from "api/userAPI";
 import { getUser } from "pages/Login/loginSlice";
-import UserDto from "model/dto/UserDto";
 import FollowingDto from "model/dto/users/FollowingDto";
 
 function* fetchFollowings(action: ReturnType<typeof actions.fetchFollowings>) {
-  yield put(actions.fetchFollowingsStarted());
+  const userId = getUser(yield select()).id;
 
-  const user: UserDto = yield select(getUser);
-
-  const followings: FollowingDto[] = yield call(userAPI.getFollowings, user.id);
+  const followings: FollowingDto[] = yield call(userAPI.getFollowings, userId);
 
   yield put(actions.fetchFollowingsSucceed(followings));
 }
@@ -26,11 +23,9 @@ function* watchFetchFollowings() {
   yield takeLatest(actions.fetchFollowings.type, fetchFollowings);
 }
 
-function* toggleFollowing({
+function* toggleFollow({
   payload: userId,
-}: ReturnType<typeof actions.toggleFollowing>) {
-  yield put(actions.toggleFollowStarted(userId));
-
+}: ReturnType<typeof actions.toggleFollow>) {
   yield delay(500);
 
   const isFollow = getIsFollow(yield select(), userId);
@@ -39,10 +34,38 @@ function* toggleFollowing({
   else yield call(userAPI.deleteFollowing, userId);
 }
 
-function* watchToggleFollowing() {
-  yield takeLatest(actions.toggleFollowing.type, toggleFollowing);
+function* watchToggleFollow() {
+  yield takeLatest(actions.toggleFollow.type, toggleFollow);
+}
+
+function* changeSearchText({
+  payload,
+}: ReturnType<typeof actions.changeSearchText>) {
+  yield put(actions.setSearchText(payload));
+
+  yield delay(500);
+
+  yield put(actions.searchFollowings());
+
+  const userId = getUser(yield select()).id;
+
+  const followings: FollowingDto[] = yield call(
+    userAPI.searchFollowings,
+    userId,
+    payload,
+  );
+
+  yield put(actions.searchFollowingsSucceed(followings));
+}
+
+function* watchChangeSearchText() {
+  yield takeLatest(actions.changeSearchText.type, changeSearchText);
 }
 
 export default function* followingsSectionSaga() {
-  yield all([watchFetchFollowings(), watchToggleFollowing()]);
+  yield all([
+    watchFetchFollowings(),
+    watchToggleFollow(),
+    watchChangeSearchText(),
+  ]);
 }

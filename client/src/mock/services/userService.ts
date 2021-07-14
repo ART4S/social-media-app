@@ -3,12 +3,31 @@ import users from "mock/data/users";
 import UserProfileDto from "model/dto/userProfiles/UserProfileDto";
 import userProfiles from "mock/data/userProfiles";
 import { currentUser } from "./authService";
-import followings from "mock/data/followings";
-import faker from "faker";
+import followings, { Following } from "mock/data/followings";
 import FollowingDto from "model/dto/users/FollowingDto";
 import FollowerDto from "model/dto/users/FollowerDto";
 import FollowingCreateDto from "model/dto/users/FollowingCreateDto";
 import { composeKey } from "mock/utils/entityUtils";
+
+function mapFollowing(following: Following): FollowingDto {
+  return {
+    userId: following.userId,
+    firstName: users[following.userId].firstName,
+    lastName: users[following.userId].lastName,
+    avatarUrl: users[following.userId].avatarUrl,
+    status: userProfiles[following.userId].status,
+  };
+}
+
+function mapFollower(following: Following): FollowerDto {
+  return {
+    followerId: following.followerId,
+    firstName: users[following.followerId].firstName,
+    lastName: users[following.followerId].lastName,
+    avatarUrl: users[following.followerId].avatarUrl,
+    status: userProfiles[following.followerId].status,
+  };
+}
 
 // users/:id
 function getById(id: string): UserDto {
@@ -19,27 +38,14 @@ function getById(id: string): UserDto {
 function getFollowings(id: string): FollowingDto[] {
   return Object.values(followings)
     .filter((x) => x.followerId === id)
-    .map((x) => ({
-      userId: x.userId,
-      firstName: users[x.userId].firstName,
-      lastName: users[x.userId].lastName,
-      avatarUrl: users[x.userId].avatarUrl,
-      status: userProfiles[x.userId].status,
-    }));
+    .map(mapFollowing);
 }
 
 // users/:id/followers
 function getFollowers(id: string): FollowerDto[] {
   return Object.values(followings)
-    .filter((x) => x.followerId === id)
-    .map((x) => ({
-      userId: x.userId,
-      followerId: x.followerId,
-      firstName: users[x.userId].firstName,
-      lastName: users[x.userId].lastName,
-      avatarUrl: users[x.userId].avatarUrl,
-      status: userProfiles[x.userId].status,
-    }));
+    .filter((x) => x.userId === id)
+    .map(mapFollower);
 }
 
 // users/:userId/profile
@@ -69,6 +75,32 @@ function search(pattern: string): UserDto[] {
   );
 }
 
+// users/:id/followings/search
+function searchFollowings(id: string, pattern: string): FollowingDto[] {
+  const regex = new RegExp(pattern.toLocaleLowerCase());
+  return Object.values(followings)
+    .filter(
+      (x) =>
+        x.followerId == id &&
+        (regex.test(users[x.userId].firstName.toLocaleLowerCase()) ||
+          regex.test(users[x.userId].lastName.toLocaleLowerCase())),
+    )
+    .map(mapFollowing);
+}
+
+// users/:id/followers/search
+function searchFollowers(id: string, pattern: string): FollowerDto[] {
+  const regex = new RegExp(pattern.toLocaleLowerCase());
+  return Object.values(followings)
+    .filter(
+      (x) =>
+        x.userId == id &&
+        (regex.test(users[x.followerId].firstName.toLocaleLowerCase()) ||
+          regex.test(users[x.followerId].lastName.toLocaleLowerCase())),
+    )
+    .map(mapFollower);
+}
+
 // users/followings
 function createFollowing(following: FollowingCreateDto) {
   const userId = following.userId;
@@ -95,6 +127,8 @@ export default {
   getFollowers,
   getProfile,
   search,
+  searchFollowings,
+  searchFollowers,
   createFollowing,
   deleteFollowing,
   deleteFollower,

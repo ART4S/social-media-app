@@ -3,6 +3,7 @@ import { Box, Paper, Tabs, Tab } from "@material-ui/core";
 
 import TabPanel from "components/TabPanel/TabPanel";
 import FollowingsSection from "./FollowingsSection/FollowingsSection";
+import FollowersSection from "./FollowersSection/FollowersSection";
 
 const tabs = ["POSTS", "FOLLOWINGS", "FOLLOWERS"];
 
@@ -34,17 +35,9 @@ export default function ProfileSections() {
       </TabPanel>
 
       <TabPanel value={currentTab} index={2}>
-        {/* <Box display="flex" flexDirection="column" py={2}>
-          <SearchBar
-            placeholder="Search by followers..."
-            searchText={followerSearchText}
-            onSearchTextChange={(text: string) => setFollowerSearchText(text)}
-          />
-
-          <Box mt={2}>
-            <FollowList data={users} />
-          </Box>
-        </Box> */}
+        <Box py={2}>
+          <FollowersSection />
+        </Box>
       </TabPanel>
     </div>
   );

@@ -1,5 +1,5 @@
 export default interface FollowerDto {
-  userId: string;
+  followerId: string;
   firstName: string;
   lastName: string;
   avatarUrl?: string;

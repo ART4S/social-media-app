@@ -8,11 +8,16 @@ import { actions, getProfile } from "../profileCommonSlice";
 import DeleteButton from "components/Buttons/DeleteButton/DeleteButton";
 import EditButton from "components/Buttons/EditButton/EditButton";
 import UserProfileDto from "model/dto/userProfiles/UserProfileDto";
+import { getUser } from "pages/Login/loginSlice";
 
 export default function MainInfo(): JSX.Element {
   const classes = useStyles();
 
   const profile: UserProfileDto = useAppSelector(getProfile);
+
+  const isUserProfile = useAppSelector(
+    (state) => getUser(state).id === getProfile(state).userId,
+  );
 
   return (
     <Box display="flex">
@@ -24,9 +29,11 @@ export default function MainInfo(): JSX.Element {
             {getUserName(profile)}
           </Typography>
 
-          <Typography className={classes.userEmail} variant="body2">
-            {profile.email}
-          </Typography>
+          {isUserProfile && (
+            <Typography className={classes.userEmail} variant="body2">
+              {profile.email}
+            </Typography>
+          )}
         </Box>
       </Box>
 

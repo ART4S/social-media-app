@@ -4,73 +4,62 @@ import { getUserName } from "utils/userUtils";
 import useStyles from "./useStyles";
 import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
-import {
-  actions,
-  getFollowingInfo,
-  getIsFollow,
-} from "../followingsSectionSlice";
+import { actions, getFollowerInfo, getBlocked } from "../followersSectionSlice";
 import { wrap } from "utils/stringUtils";
-import FollowingDto from "model/dto/users/FollowingDto";
+import FollowerDto from "model/dto/users/FollowerDto";
 
 interface FollowingProps {
-  followingId: string;
+  followerId: string;
 }
 
-export default function Following({
-  followingId,
-}: FollowingProps): JSX.Element {
+export default function Follower({ followerId }: FollowingProps): JSX.Element {
   const classes = useStyles();
 
   const dispatch = useAppDispatch();
 
-  const following: FollowingDto = useAppSelector((state) =>
-    getFollowingInfo(state, followingId),
+  const follower: FollowerDto = useAppSelector((state) =>
+    getFollowerInfo(state, followerId),
   );
 
-  const isFollow: boolean = useAppSelector((state) =>
-    getIsFollow(state, followingId),
+  const blocked: boolean = useAppSelector((state) =>
+    getBlocked(state, followerId),
   );
 
-  function handleFollowClick() {
-    dispatch(actions.toggleFollow(followingId));
+  function handleBlockFollower() {
+    dispatch(actions.blockFollower(followerId));
   }
 
   return (
     <Box display="flex">
       <Box display="flex" justifyContent="center">
-        <Avatar className={classes.avatar} src={following.avatarUrl} />
+        <Avatar className={classes.avatar} src={follower.avatarUrl} />
       </Box>
 
       <Box ml={4}>
         <Grid container direction="column" spacing={1}>
           <Grid item xs>
-            <Link>{getUserName(following)}</Link>
+            <Link>{getUserName(follower)}</Link>
           </Grid>
 
           <Grid item xs>
             <Typography variant="body2">
-              {!!following.status && wrap(following.status, 50)}
+              {!!follower.status && wrap(follower.status, 50)}
             </Typography>
           </Grid>
 
           <Grid item xs>
-            {isFollow ? (
-              <Button
-                variant="outlined"
-                color="primary"
-                style={{ textTransform: "none" }}
-                onClick={handleFollowClick}
-              >
-                Unfollow
-              </Button>
+            {blocked ? (
+              <Typography variant="body2" color="textSecondary">
+                user has blocked
+              </Typography>
             ) : (
               <Button
                 variant="contained"
                 color="primary"
                 style={{ textTransform: "none" }}
-                onClick={handleFollowClick}
+                onClick={handleBlockFollower}
               >
-                Follow
+                Block
               </Button>
             )}
           </Grid>

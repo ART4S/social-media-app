@@ -37,6 +37,27 @@ function search(pattern: string): Promise<UserDto[]> {
   );
 }
 
+function searchFollowings(
+  id: string,
+  pattern: string,
+): Promise<FollowingDto[]> {
+  return new Promise<FollowingDto[]>((resolve) =>
+    setTimeout(
+      () => resolve(userService.searchFollowings(id, pattern)),
+      config.delayMs,
+    ),
+  );
+}
+
+function searchFollowers(id: string, pattern: string): Promise<FollowerDto[]> {
+  return new Promise<FollowerDto[]>((resolve) =>
+    setTimeout(
+      () => resolve(userService.searchFollowers(id, pattern)),
+      config.delayMs,
+    ),
+  );
+}
+
 function createFollowing(following: FollowingCreateDto): Promise<void> {
   return new Promise((resolve) =>
     setTimeout(() => {
@@ -70,6 +91,8 @@ export default {
   getFollowers,
   getProfile,
   search,
+  searchFollowings,
+  searchFollowers,
   createFollowing,
   deleteFollowing,
   deleteFollower,

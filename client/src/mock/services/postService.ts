@@ -22,7 +22,7 @@ import ImageCommentCreateDto from "model/dto/posts/ImageCommentCreateDto";
 import PostCreateDto from "model/dto/posts/PostCreateDto";
 import { currentUser } from "mock/services/authService";
 
-function mapPost(post: Post) {
+function mapPost(post: Post): PostDto {
   return {
     id: post.id,
     authorId: post.authorId,

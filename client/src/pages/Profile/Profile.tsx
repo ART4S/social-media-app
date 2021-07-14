@@ -32,10 +32,10 @@ export default function Profile({ userId }: ProfileProps) {
     dispatch(actions.fetchProfile(userId));
   }, [userId]);
 
-  return loading ? <PageProgress /> : <ProfileContent />;
+  return loading ? <PageProgress /> : <PageContent />;
 }
 
-function ProfileContent(): JSX.Element {
+function PageContent(): JSX.Element {
   const [showInfo, setShowInfo] = React.useState(false);
 
   return (
@@ -58,27 +58,22 @@ function ProfileContent(): JSX.Element {
 
               <Status />
 
-              <Box>
+              <Box my={2}>
                 <Link
                   style={{ cursor: "pointer" }}
                   onClick={() => setShowInfo(!showInfo)}
                 >
                   Show more information
                 </Link>
-
-                <Collapse in={showInfo}>
-                  <Box mt={1}>
-                    <AdditionalInfo />
-                  </Box>
-                </Collapse>
               </Box>
 
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                mt={2}
-              >
+              <Collapse in={showInfo}>
+                <Box mt={1}>
+                  <AdditionalInfo />
+                </Box>
+              </Collapse>
+
+              <Box display="flex" justifyContent="center" mt={2}>
                 <ProfileSections />
               </Box>
             </Box>
