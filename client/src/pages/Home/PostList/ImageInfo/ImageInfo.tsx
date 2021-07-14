@@ -4,17 +4,21 @@ import Avatar from "../../../../components/Avatar/Avatar";
 import moment from "moment";
 import { getUserName } from "utils/userUtils";
 import type PostImageDto from "model/dto/PostImageDto";
-import { Post, getPostById } from "pages/Home/PostList/postListSlice";
+import { getImageInfo, getPostInfo } from "pages/Home/PostList/postListSlice";
 import useAppSelector from "hooks/useAppSelector";
 import PostDto from "model/dto/PostDto";
 
 interface ImageInfoProps {
-  post: PostDto;
-  image: PostImageDto;
+  postId: string;
+  imageId: string;
 }
 
-export default function ImageInfo({ post, image }: ImageInfoProps) {
+export default function ImageInfo({ postId, imageId }: ImageInfoProps) {
   const classes = useStyles();
+  const post: PostDto = useAppSelector((state) => getPostInfo(state, postId));
+  const image: PostImageDto = useAppSelector((state) =>
+    getImageInfo(state, postId, imageId),
+  );
 
   return (
     <Box display="flex">

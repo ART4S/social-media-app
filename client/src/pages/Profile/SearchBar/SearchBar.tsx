@@ -12,11 +12,11 @@ import {
 import { PhotoCameraOutlined } from "@material-ui/icons";
 import { debounce } from "lodash";
 
-type SearchBarProps = {
+interface SearchBarProps {
   placeholder: string;
   searchText: string;
   onSearchTextChange: (text: string) => void;
-};
+}
 
 export default function SearchBar({
   placeholder,

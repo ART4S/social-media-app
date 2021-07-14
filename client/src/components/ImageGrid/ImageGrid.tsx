@@ -1,33 +1,26 @@
-import React from "react";
 import { Grid, GridSpacing } from "@material-ui/core";
-import useStyles from "./useStyles";
-import PostImageDto from "model/dto/PostImageDto";
 
 const SPACING: GridSpacing = 1;
 
 interface ImageGridProps {
-  images: PostImageDto[];
-  onImageClick: (image: PostImageDto) => void;
+  imagesCount: number;
+  renderImage: (index: number) => JSX.Element;
 }
 
 export default function ImageGrid({
-  images,
-  onImageClick,
+  imagesCount,
+  renderImage,
 }: ImageGridProps): JSX.Element {
-  const classes = useStyles();
-
   let elements: JSX.Element[] = [];
 
-  switch (images.length) {
+  const indexes = Array.from(Array(imagesCount)).map((_, index) => index);
+
+  switch (imagesCount) {
     case 1:
     case 2:
-      elements = images.map((image, index) => (
-        <Grid key={image.id} item xs>
-          <img
-            className={classes.image}
-            src={image.url}
-            onClick={() => onImageClick(image)}
-          />
+      elements = indexes.map((index) => (
+        <Grid key={index} item xs>
+          {renderImage(index)}
         </Grid>
       ));
       break;
@@ -35,22 +28,14 @@ export default function ImageGrid({
     case 3:
     case 4:
       elements = [
-        <Grid key={images[0].id} item xs={8}>
-          <img
-            className={classes.image}
-            src={images[0].url}
-            onClick={() => onImageClick(images[0])}
-          />
+        <Grid key={0} item xs={8}>
+          {renderImage(0)}
         </Grid>,
 
         <Grid item xs={4} container direction="column" spacing={SPACING}>
-          {images.slice(1).map((image, index) => (
-            <Grid key={image.id} item xs>
-              <img
-                className={classes.image}
-                src={image.url}
-                onClick={() => onImageClick(image)}
-              />
+          {indexes.slice(1).map((index) => (
+            <Grid key={index} item xs>
+              {renderImage(index)}
             </Grid>
           ))}
         </Grid>,
@@ -59,23 +44,15 @@ export default function ImageGrid({
 
     case 5:
       elements = [
-        ...images.slice(0, 2).map((image, index) => (
-          <Grid key={image.id} item xs={6}>
-            <img
-              className={classes.image}
-              src={image.url}
-              onClick={() => onImageClick(image)}
-            />
+        ...indexes.slice(0, 2).map((index) => (
+          <Grid key={index} item xs={6}>
+            {renderImage(index)}
           </Grid>
         )),
 
-        ...images.slice(2).map((image, index) => (
-          <Grid key={image.id} item xs>
-            <img
-              className={classes.image}
-              src={image.url}
-              onClick={() => onImageClick(image)}
-            />
+        ...indexes.slice(2).map((index) => (
+          <Grid key={index} item xs>
+            {renderImage(index)}
           </Grid>
         )),
       ];
@@ -85,57 +62,37 @@ export default function ImageGrid({
     case 7:
     case 8:
       elements = [
-        <Grid key={images[0].id} item xs={12}>
-          <img
-            className={classes.image}
-            src={images[0].url}
-            onClick={() => onImageClick(images[0])}
-          />
+        <Grid key={0} item xs={12}>
+          {renderImage(0)}
         </Grid>,
 
-        ...images.slice(1).map((image, index) => (
-          <Grid key={image.id} item xs>
-            <img
-              className={classes.image}
-              src={image.url}
-              onClick={() => onImageClick(image)}
-            />
+        ...indexes.slice(1).map((index) => (
+          <Grid key={index} item xs>
+            {renderImage(index)}
           </Grid>
         )),
       ];
       break;
 
     case 9:
-      elements = images.map((image, index) => (
-        <Grid key={image.id} item xs={4}>
-          <img
-            className={classes.image}
-            src={image.url}
-            onClick={() => onImageClick(image)}
-          />
+      elements = indexes.map((index) => (
+        <Grid key={index} item xs={4}>
+          {renderImage(index)}
         </Grid>
       ));
       break;
 
     case 10:
       elements = [
-        ...images.slice(0, 2).map((image, index) => (
-          <Grid key={image.id} item xs={6}>
-            <img
-              className={classes.image}
-              src={image.url}
-              onClick={() => onImageClick(image)}
-            />
+        ...indexes.slice(0, 2).map((index) => (
+          <Grid key={index} item xs={6}>
+            {renderImage(index)}
           </Grid>
         )),
 
-        ...images.slice(2).map((image, index) => (
-          <Grid key={image.id} item xs={3}>
-            <img
-              className={classes.image}
-              src={image.url}
-              onClick={() => onImageClick(image)}
-            />
+        ...indexes.slice(2).map((index) => (
+          <Grid key={index} item xs={3}>
+            {renderImage(index)}
           </Grid>
         )),
       ];

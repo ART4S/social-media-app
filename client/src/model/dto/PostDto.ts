@@ -8,4 +8,6 @@ export default interface PostDto {
   body: string;
   liked: boolean;
   likeCount: number;
+  shared: boolean;
+  shareCount: number;
 }

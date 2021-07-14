@@ -10,7 +10,7 @@ export default function TabPanel({
   children,
 }: TabPanelProps): JSX.Element {
   return (
-    <div style={{ display: value !== index ? "none" : "block", width: "100%" }}>
+    <div style={{ display: value === index ? "block" : "none", width: "100%" }}>
       {children}
     </div>
   );

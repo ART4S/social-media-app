@@ -2,34 +2,19 @@ import React from "react";
 import {
   Container,
   Box,
-  Paper,
   Grid,
   Button,
   Avatar,
-  Divider,
   Link,
-  InputAdornment,
-  IconButton,
-  FormControlLabel,
-  Checkbox,
   TextField,
   Typography,
-  Collapse,
-  Tabs,
-  Tab,
   GridSpacing,
 } from "@material-ui/core";
-import { LockOutlined, Visibility, VisibilityOff } from "@material-ui/icons";
-import moment from "moment";
+import { LockOutlined } from "@material-ui/icons";
 import { Formik, Form } from "formik";
 
 import Copyright from "components/Copyright/Copyright";
-import Header from "components/Header/Header";
-import TabPanel from "components/TabPanel/TabPanel";
-import FollowList from "components/FollowList/FollowList";
 import PasswordField from "components/PasswordField/PasswordField";
-
-import { getUserName } from "utils/userUtils";
 import useStyles from "./useStyles";
 
 const SPACING: GridSpacing = 2;

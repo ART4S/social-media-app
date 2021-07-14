@@ -1,63 +1,54 @@
 import React from "react";
 import useStyles from "./useStyles";
-import PostImageDto from "model/dto/PostImageDto";
 import SwipeableViews from "react-swipeable-views";
-import { ChevronLeftRounded, ChevronRightRounded } from "@material-ui/icons";
 import { virtualize, bindKeyboard } from "react-swipeable-views-utils";
+import Navigation from "./Navigation/Navigation";
 
 const VirtualizeSwipeableViews = bindKeyboard(virtualize(SwipeableViews));
 
 interface SliderProps {
-  images: PostImageDto[];
-  selectedImageIndex: number;
-  onIndexChange: (newIndex: number) => void;
+  slideCount: number;
+  selectedIndex: number;
+  renderSlide: (index: number, key: number) => JSX.Element;
+  onSlideChange: (index: number) => void;
 }
 
 export default function Slider({
-  images,
-  selectedImageIndex,
-  onIndexChange,
+  slideCount,
+  selectedIndex,
+  renderSlide,
+  onSlideChange,
 }: SliderProps) {
   const classes = useStyles();
 
   function gotoPrev() {
-    onIndexChange(prepareIndex(selectedImageIndex - 1));
+    onSlideChange(mod(selectedIndex - 1));
   }
 
   function gotoNext() {
-    onIndexChange(prepareIndex(selectedImageIndex + 1));
+    onSlideChange(mod(selectedIndex + 1));
   }
 
   function handleIndexChange(index: number) {
-    onIndexChange(prepareIndex(index));
+    onSlideChange(mod(index));
   }
 
   function slideRenderer({ index, key }: { index: number; key: number }) {
-    index = prepareIndex(index);
-    return <img key={key} className={classes.image} src={images[index].url} />;
+    return renderSlide(mod(index), key);
   }
 
-  function prepareIndex(index: number) {
-    return (images.length + (index % images.length)) % images.length;
+  function mod(index: number) {
+    return (slideCount + (index % slideCount)) % slideCount;
   }
 
   return (
     <div className={classes.root}>
-      {images.length > 1 && (
-        <div className={classes.imageNavigation}>
-          <div className={classes.leftArrowBox} onClick={gotoPrev}>
-            <ChevronLeftRounded className={classes.arrowIcon} />
-          </div>
-
-          <div className={classes.rightArrowBox} onClick={gotoNext}>
-            <ChevronRightRounded className={classes.arrowIcon} />
-          </div>
-        </div>
-      )}
+      {slideCount > 1 && <Navigation gotoPrev={gotoPrev} gotoNext={gotoNext} />}
 
       <VirtualizeSwipeableViews
-        className={classes.imageView}
-        index={selectedImageIndex}
+        className={classes.sliderView}
+        slideClassName={classes.slide}
+        index={selectedIndex}
         onChangeIndex={handleIndexChange}
         slideRenderer={slideRenderer}
       />

@@ -1,11 +1,13 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
-import userSearchReducer from "./UserSearch/userSearchSlice";
+import userListReducer from "./UserList/userListSlice";
 import postListReducer from "./PostList/postListSlice";
+import postFormReducer from "./PostForm/postFormSlice";
 
 const reducer = combineReducers({
-  userSearch: userSearchReducer,
+  postForm: postFormReducer,
   postList: postListReducer,
+  userList: userListReducer,
 });
 
 export default reducer;

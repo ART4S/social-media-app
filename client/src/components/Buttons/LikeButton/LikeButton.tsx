@@ -6,15 +6,20 @@ import useStyles from "./useStyles";
 
 type LikeButtonProps = {
   active: boolean;
+  likeCount: number;
   onClick: () => void;
 };
 
-export default function LikeButton({ active, onClick }: LikeButtonProps) {
+export default function LikeButton({
+  active,
+  likeCount,
+  onClick,
+}: LikeButtonProps) {
   const classes = useStyles();
 
   return (
     <IconButton onClick={onClick}>
-      <Badge classes={{ badge: classes.badge }} badgeContent={4}>
+      <Badge classes={{ badge: classes.badge }} badgeContent={likeCount}>
         {active ? (
           <Favorite className={classes.icon} />
         ) : (

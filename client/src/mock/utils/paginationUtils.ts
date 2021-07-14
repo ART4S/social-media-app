@@ -5,7 +5,11 @@ export function toPagedResponse<TDto>(
   items: TDto[],
   pagination: PagedRequest,
 ): PagedResponse<TDto> {
-  let { itemsPerPage, currentPage } = pagination;
+  let { fromEnd, itemsPerPage, currentPage } = pagination;
+
+  if (fromEnd) {
+    items = items.reverse();
+  }
 
   const totalItems = items.length;
 

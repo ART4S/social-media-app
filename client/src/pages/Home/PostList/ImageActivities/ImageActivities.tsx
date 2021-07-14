@@ -1,16 +1,11 @@
 import React from "react";
 import { Box } from "@material-ui/core";
-import {
-  togglePostImageLike,
-  notifyPostImageLiked,
-  getPostImageById,
-} from "../postListSlice";
+import { actions, getImageInfo } from "../postListSlice";
 import LikeButton from "components/Buttons/LikeButton/LikeButton";
 import ShareButton from "components/Buttons/ShareButton/ShareButton";
 import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
-
-import { debounce, DebouncedFunc } from "lodash";
+import PostImageDto from "model/dto/PostImageDto";
 
 interface ImageActivitiesProps {
   postId: string;
@@ -22,26 +17,24 @@ export default function ImageActivities({
   imageId,
 }: ImageActivitiesProps) {
   const dispatch = useAppDispatch();
-  const imageLiked = useAppSelector(
-    (state) => getPostImageById(state, postId, imageId).liked,
+
+  const image: PostImageDto = useAppSelector((state) =>
+    getImageInfo(state, postId, imageId),
   );
-
-  // TODO: глянуть можно ли сделать напрямую через thunk
-  const debouncedNotifyPostImageLiked: DebouncedFunc<() => void> =
-    React.useCallback(
-      debounce(() => dispatch(notifyPostImageLiked({ postId, imageId })), 500),
-      [postId, imageId],
-    );
-
-  function handleLikeClick() {
-    dispatch(togglePostImageLike({ postId, imageId }));
-    debouncedNotifyPostImageLiked();
-  }
 
   return (
     <Box display="flex">
-      <LikeButton active={imageLiked} onClick={handleLikeClick} />
-      <ShareButton />
+      <LikeButton
+        active={image.liked}
+        likeCount={image.likeCount}
+        onClick={() => dispatch(actions.toggleImageLike({ postId, imageId }))}
+      />
+
+      <ShareButton
+        active={image.shared}
+        shareCount={image.shareCount}
+        onClick={() => dispatch(actions.shareImage({ postId, imageId }))}
+      />
     </Box>
   );
 }

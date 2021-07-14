@@ -3,6 +3,7 @@ import {
   put,
   select,
   all,
+  delay,
   takeLatest,
   takeEvery,
 } from "@redux-saga/core/effects";
@@ -14,320 +15,242 @@ import PostDto from "model/dto/PostDto";
 import PostImageDto from "model/dto/PostImageDto";
 import PagedResponse from "model/pagination/PagedResponse";
 import { AppState } from "redux/store";
-import { getUser } from "../../commonSlice";
-import PostCommentCreateDto from "model/dto/posts/PostCommentCreateDto";
+import { getUser } from "pages/Login/loginSlice";
 import {
-  getSelf,
+  actions,
+  getPostsPagination,
   getPostCommentsPagination,
   getImageCommentsPagination,
   getPostInfo,
-  getPostImageById,
-  createPostComment,
-  deletePostComment,
-  deleteImageComment,
-  notifyPostLiked,
-  notifyPostImageLiked,
-  fetchUserPosts,
-  fetchPostImages,
-  fetchUserPostsSucceed,
-  fetchPostImagesSucceed,
-  fetchPostComments,
-  fetchPostCommentsSucceed,
-  fetchMorePostComments,
-  fetchMorePostCommentsStarted,
-  fetchImageComments,
-  fetchImageCommentsSucceed,
-  fetchMoreImageComments,
-  fetchMoreImageCommentsStarted,
+  getImageInfo,
 } from "./postListSlice";
 
-// TODO: заменить тип на ReturnType
+function* fetchUserPosts() {
+  const state: AppState = yield select();
+  const userId = getUser(state).id;
+  const pagination = getPostsPagination(state);
 
-function* fetchUserPostsSaga() {
-  yield takeLatest(fetchUserPosts.type, function* () {
+  const response: PagedResponse<PostDto> = yield call(
+    postAPI.getAll,
+    userId,
+    pagination,
+  );
+
+  yield put(actions.fetchUserPostsSucceed(response));
+}
+
+function* watchFetchUserPosts() {
+  yield takeLatest(actions.fetchUserPosts.type, fetchUserPosts);
+}
+
+function* fetchPostImages({ payload: postId }: PayloadAction<string>) {
+  const data: PostImageDto[] = yield call(postAPI.getImages, postId);
+  yield put(actions.fetchPostImagesSucceed({ postId, data }));
+}
+
+function* watchFetchPostImages() {
+  yield takeEvery(actions.fetchPostImages.type, fetchPostImages);
+}
+
+function* fetchPostComments({
+  payload: postId,
+}: ReturnType<typeof actions.fetchPostComments>) {
+  const state: AppState = yield select();
+  const pagination = getPostCommentsPagination(state, postId);
+  const response: PagedResponse<PostCommentDto> = yield call(
+    postAPI.getComments,
+    postId,
+    pagination,
+  );
+  yield put(actions.fetchPostCommentsSucceed({ postId, response }));
+}
+
+function* watchFetchPostComments() {
+  yield takeEvery(actions.fetchPostComments.type, fetchPostComments);
+}
+
+function* fetchMorePostComments({
+  payload: postId,
+}: ReturnType<typeof actions.fetchMorePostComments>) {
+  yield put(actions.fetchMorePostCommentsStarted(postId));
+  yield put(actions.fetchPostComments(postId)); // TODO: найти другой способ вызова
+}
+
+function* watchFetchMorePostComments() {
+  yield takeEvery(actions.fetchMorePostComments.type, fetchMorePostComments);
+}
+
+function* fetchImageComments(
+  action: ReturnType<typeof actions.fetchImageComments>,
+) {
+  const { postId, imageId } = action.payload;
+
+  const state: AppState = yield select();
+
+  const pagination = getImageCommentsPagination(state, postId, imageId);
+
+  const response: PagedResponse<ImageCommentDto> = yield call(
+    postAPI.getImageComments,
+    imageId,
+    pagination,
+  );
+
+  yield put(actions.fetchImageCommentsSucceed({ postId, imageId, response }));
+}
+
+function* watchFetchImageComments() {
+  yield takeLatest(actions.fetchImageComments.type, fetchImageComments);
+}
+
+function* fetchMoreImageComments({
+  payload,
+}: ReturnType<typeof actions.fetchMoreImageComments>) {
+  yield put(actions.fetchMoreImageCommentsStarted(payload));
+  yield put(actions.fetchImageComments(payload));
+}
+
+function* watchFetchMoreImageComments() {
+  yield takeLatest(actions.fetchMoreImageComments.type, fetchMoreImageComments);
+}
+
+function* createPostComment(
+  action: ReturnType<typeof actions.createPostComment>,
+) {
+  const { postId, comment } = action.payload;
+
+  const state: AppState = yield select();
+
+  yield call(postAPI.createComment, postId, comment);
+
+  const pagination = getPostCommentsPagination(state, postId);
+
+  const response: PagedResponse<PostCommentDto> = yield call(
+    postAPI.getComments,
+    postId,
+    { ...pagination, fromEnd: true, itemsPerPage: pagination.itemsPerPage + 1 },
+  );
+
+  yield put(actions.createPostCommentSucceed({ postId, response }));
+}
+
+function* watchCreatePostComment() {
+  yield takeEvery(actions.createPostComment.type, createPostComment);
+}
+
+function* deletePostComment(
+  action: ReturnType<typeof actions.deletePostComment>,
+) {
+  const { postId, commentId } = action.payload;
+  yield call(postAPI.deleteComment, commentId);
+  yield put(actions.fetchPostComments(postId));
+}
+
+function* watchDeletePostComment() {
+  yield takeEvery(actions.deletePostComment.type, deletePostComment);
+}
+
+function* createImageComment(
+  action: ReturnType<typeof actions.createImageComment>,
+) {
+  const { postId, imageId, comment } = action.payload;
+
+  const state: AppState = yield select();
+
+  yield call(postAPI.createImageComment, imageId, comment);
+
+  const pagination = getImageCommentsPagination(state, postId, imageId);
+
+  const response: PagedResponse<ImageCommentDto> = yield call(
+    postAPI.getImageComments,
+    imageId,
     {
-      const state: AppState = yield select();
-      const userId = getUser(state)!.id;
-      const { pagination } = getSelf(state).posts;
-
-      const data: PagedResponse<PostDto> = yield call(
-        postAPI.getAll,
-        userId,
-        pagination,
-      );
-
-      yield put(fetchUserPostsSucceed(data));
-    }
-  });
-}
-
-function* fetchPostImagesSaga() {
-  yield takeEvery(
-    fetchPostImages.type,
-    function* ({ payload: postId }: PayloadAction<string>) {
-      const data: PostImageDto[] = yield call(postAPI.getImages, postId);
-      yield put(fetchPostImagesSucceed({ postId, data }));
+      ...pagination,
+      itemsPerPage: pagination.itemsPerPage + 1,
     },
   );
+
+  yield put(actions.createImageCommentSucceed({ postId, imageId, response }));
 }
 
-// export const fetchPostComments = createAsyncThunk<
-//   PagedResponse<PostCommentDto>,
-//   string,
-//   { state: AppState }
-// >(`${sliceName}/fetchPostComments`, (postId, thunkApi) => {
-//   const { pagination } = getPostById(thunkApi.getState(), postId)!.comments;
-//   return postAPI.getComments(postId, pagination);
-// });
-
-function* fetchPostCommentsSaga() {
-  yield takeEvery(
-    fetchPostComments.type,
-    function* ({ payload: postId }: PayloadAction<string>) {
-      const state: AppState = yield select();
-      const pagination = getPostCommentsPagination(state, postId);
-      const response: PagedResponse<PostCommentDto> = yield call(
-        postAPI.getComments,
-        postId,
-        pagination,
-      );
-      yield put(fetchPostCommentsSucceed({ postId, response }));
-    },
-  );
+function* watchCreateImageComment() {
+  yield takeEvery(actions.createImageComment.type, createImageComment);
 }
 
-// export const fetchMorePostComments = createAsyncThunk<
-//   PagedResponse<PostCommentDto>,
-//   string,
-//   { state: AppState; dispatch: AppDispatch }
-// >(`${sliceName}/fetchMorePostComments`, (postId, thunkApi) =>
-//   thunkApi.dispatch(fetchPostComments(postId)).then(unwrapResult),
-// );
-
-function* fetchMorePostCommentsSaga() {
-  yield takeEvery(
-    fetchMorePostComments.type,
-    function* ({ payload: postId }: PayloadAction<string>) {
-      put(fetchMorePostCommentsStarted(postId));
-      put(fetchPostComments(postId)); // TODO: найти другой способ вызова
-    },
-  );
+function* deleteImageComment(
+  action: ReturnType<typeof actions.deleteImageComment>,
+) {
+  const { postId, imageId, commentId } = action.payload;
+  yield call(postAPI.deleteImageComment, commentId);
+  yield put(actions.fetchImageComments({ postId, imageId }));
 }
 
-// export const fetchSelectedImageComments = createAsyncThunk<
-//   PagedResponse<ImageCommentDto>,
-//   string,
-//   { state: AppState }
-// >(`${sliceName}/fetchSelectedImageComments`, (postId, thunkApi) => {
-//   const {
-//     comments: { pagination },
-//     info: { id },
-//   } = getSelectedImage(thunkApi.getState(), postId)!;
-//   return postAPI.getImageComments(id, pagination);
-// });
-
-function* fetchImageCommentsSaga() {
-  yield takeLatest(
-    fetchImageComments.type,
-    function* (action: PayloadAction<{ postId: string; imageId: string }>) {
-      const { postId, imageId } = action.payload;
-      const state: AppState = yield select();
-      const pagination = getImageCommentsPagination(state, postId, imageId);
-      const response: PagedResponse<ImageCommentDto> = yield call(
-        postAPI.getImageComments,
-        imageId,
-        pagination,
-      );
-      yield put(fetchImageCommentsSucceed({ postId, imageId, response }));
-    },
-  );
+function* watchDeleteImageComment() {
+  yield takeEvery(actions.deleteImageComment.type, deleteImageComment);
 }
 
-// export const fetchMoreSelectedImageComments = createAsyncThunk<
-//   PagedResponse<ImageCommentDto>,
-//   string,
-//   { state: AppState; dispatch: AppDispatch }
-// >(`${sliceName}/fetchMoreSelectedImageComments`, (postId, thunkApi) =>
-//   thunkApi.dispatch(fetchSelectedImageComments(postId)).then(unwrapResult),
-// );
-
-function* fetchMoreImageCommentsSaga() {
-  yield takeLatest(
-    fetchMoreImageComments.type,
-    function* ({
-      payload,
-    }: PayloadAction<{ postId: string; imageId: string }>) {
-      yield put(fetchMoreImageCommentsStarted(payload));
-      yield put(fetchImageComments(payload));
-    },
-  );
+function* deletePost({
+  payload: postId,
+}: ReturnType<typeof actions.deletePost>) {
+  yield call(postAPI.deletePost, postId);
+  yield put(actions.deletePostSucceed(postId));
 }
 
-function* createPostCommentSaga() {
-  yield takeEvery(
-    createPostComment.type,
-    function* (
-      action: PayloadAction<{ postId: string; comment: PostCommentCreateDto }>,
-    ) {
-      const { postId, comment } = action.payload;
-      yield call(postAPI.createComment, postId, comment);
-      yield put(fetchPostComments(postId));
-    },
-  );
+function* watchDeletePost() {
+  yield takeEvery(actions.deletePost.type, deletePost);
 }
 
-// export const deletePostComment = createAsyncThunk<
-//   void,
-//   { postId: string; commentId: string },
-//   { state: AppState; dispatch: AppDispatch }
-// >(`${sliceName}/deletePostComment`, async ({ postId, commentId }, thunkApi) => {
-//   await postAPI.deleteComment(commentId);
-//   await thunkApi.dispatch(fetchPostComments(postId));
-// });
+function* togglePostLike({
+  payload: postId,
+}: ReturnType<typeof actions.togglePostLike>) {
+  yield put(actions.togglePostLikeStarted(postId));
 
-function* deletePostCommentSaga() {
-  yield takeEvery(
-    deletePostComment.type,
-    function* (action: PayloadAction<{ postId: string; commentId: string }>) {
-      const { postId, commentId } = action.payload;
-      yield call(postAPI.deleteComment, commentId);
-      yield put(fetchPostComments(postId));
-    },
-  );
+  yield delay(500);
+
+  const state: AppState = yield select();
+
+  const { liked } = getPostInfo(state, postId);
+
+  if (liked) yield call(postAPI.addLike, postId);
+  else yield call(postAPI.removeLike, postId);
 }
 
-// export const notfyPostLiked = createAsyncThunk<
-//   void,
-//   string,
-//   { state: AppState }
-// >(`${sliceName}/notfyPostLiked`, async (postId, thunkApi) => {
-//   const state = thunkApi.getState();
-//   const userId = getUser(state)!.id;
-//   const post = getPostInfo(state, postId);
-
-//   if (post.liked) await postAPI.addLike(postId, userId);
-//   else await postAPI.removeLike(postId, userId);
-// });
-
-function* notifyPostLikedSaga() {
-  yield takeLatest(
-    notifyPostLiked.type,
-    function* ({ payload: postId }: ReturnType<typeof notifyPostLiked>) {
-      const state: AppState = yield select();
-      const post = getPostInfo(state, postId);
-      const { id: userId } = getUser(state)!;
-
-      if (post.liked) yield call(postAPI.addLike, postId, userId);
-      else yield call(postAPI.removeLike, postId, userId);
-    },
-  );
+function* watchTogglePostLike() {
+  yield takeLatest(actions.togglePostLike.type, togglePostLike);
 }
 
-// export const notifyPostImageLiked = createAsyncThunk<
-//   void,
-//   { postId: string; imageId: string },
-//   { state: AppState }
-// >(
-//   `${sliceName}/notifyPostImageLiked`,
-//   async ({ postId, imageId }, thunkApi) => {
-//     const state = thunkApi.getState();
-//     const image = getPostImageById(state, postId, imageId).info;
-//     const userId = getUser(state)!.id;
+function* toggleImageLike(action: ReturnType<typeof actions.toggleImageLike>) {
+  const { postId, imageId } = action.payload;
 
-//     if (image.liked) await postAPI.addImageLike(imageId, userId);
-//     else await postAPI.removeImageLike(imageId, userId);
-//   },
-// );
+  yield put(actions.toggleImageLikeStarted({ postId, imageId }));
 
-function* notifyPostImageLikedSaga() {
-  yield takeEvery(
-    notifyPostImageLiked.type,
-    function* (action: ReturnType<typeof notifyPostImageLiked>) {
-      const { postId, imageId } = action.payload;
-      const state: AppState = yield select();
-      const image = getPostImageById(state, postId, imageId).info;
-      const { id: userId } = getUser(state)!;
+  yield delay(500);
 
-      if (image.liked) yield call(postAPI.addImageLike, imageId, userId);
-      else yield call(postAPI.removeImageLike, imageId, userId);
-    },
-  );
+  const state: AppState = yield select();
+
+  const { liked } = getImageInfo(state, postId, imageId);
+
+  if (liked) yield call(postAPI.addImageLike, imageId);
+  else yield call(postAPI.removeImageLike, imageId);
 }
 
-// export const deleteImageComment = createAsyncThunk<
-//   void,
-//   { postId: string; commentId: string },
-//   { state: AppState; dispatch: AppDispatch }
-// >(
-//   `${sliceName}/deleteImageComment`,
-//   async ({ postId, commentId }, thunkApi) => {
-//     await postService.deleteImageComment(commentId);
-//     await thunkApi.dispatch(fetchSelectedImageComments(postId));
-//   },
-// );
-
-function* deleteImageCommentSaga() {
-  yield takeEvery(
-    deleteImageComment.type,
-    function* (action: ReturnType<typeof deleteImageComment>) {
-      const { postId, imageId, commentId } = action.payload;
-      yield call(postAPI.deleteImageComment, commentId);
-      yield put(fetchImageComments({ postId, imageId }));
-    },
-  );
+function* watchToggleImageLike() {
+  yield takeLatest(actions.toggleImageLike.type, toggleImageLike);
 }
 
-export default function* rootSaga() {
+export default function* postListSagas() {
   yield all([
-    fetchUserPostsSaga(),
-    fetchPostImagesSaga(),
-    fetchPostCommentsSaga(),
-    fetchMorePostCommentsSaga(),
-    fetchImageCommentsSaga(),
-    fetchMoreImageCommentsSaga(),
-    createPostCommentSaga(),
-    deletePostCommentSaga(),
-    notifyPostLikedSaga(),
-    notifyPostImageLikedSaga(),
-    deleteImageCommentSaga(),
+    watchFetchUserPosts(),
+    watchFetchPostImages(),
+    watchFetchPostComments(),
+    watchFetchMorePostComments(),
+    watchFetchImageComments(),
+    watchFetchMoreImageComments(),
+    watchCreatePostComment(),
+    watchDeletePostComment(),
+    watchCreateImageComment(),
+    watchDeleteImageComment(),
+    watchDeletePost(),
+    watchTogglePostLike(),
+    watchToggleImageLike(),
   ]);
 }
-
-// comments: imageCommentAdapter.getInitialState({
-//   pagination: {
-//     currentPage: 1,
-//     totalPages: 0,
-//     pageSize: 0,
-//     totalItems: 0,
-//     itemsPerPage: 3,
-//   },
-// })
-
-// .addCase(fetchSelectedImageComments.fulfilled, (state, action) => {
-//   const postId = action.meta.arg;
-//   const post = state.posts.entities[postId];
-//   const imageComments = post?.selectedImage?.comments;
-//   if (imageComments) {
-//     const { data, currentPage, totalPages, pageSize, totalItems } =
-//       action.payload;
-
-//     imageCommentAdapter.setAll(imageComments, data);
-
-//     imageComments.pagination = {
-//       ...imageComments.pagination,
-//       currentPage,
-//       totalPages,
-//       pageSize,
-//       totalItems,
-//     };
-//   }
-// })
-
-// .addCase(fetchMoreSelectedImageComments.pending, (state, action) => {
-//   const postId = action.meta.arg;
-//   const pagination =
-//     state.posts.entities[postId]?.selectedImage?.comments.pagination;
-//   if (pagination) {
-//     pagination.itemsPerPage += 3;
-//   }
-// })

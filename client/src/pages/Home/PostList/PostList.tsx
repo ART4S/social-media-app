@@ -3,14 +3,15 @@ import { Grid } from "@material-ui/core";
 import Post from "./Post/Post";
 import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
-import { fetchUserPosts, getPostIds } from "./postListSlice";
+import { actions, getPostIds } from "./postListSlice";
 
 export default function PostList(): JSX.Element {
   const dispatch = useAppDispatch();
+
   const postIds = useAppSelector(getPostIds);
 
   React.useEffect(() => {
-    dispatch(fetchUserPosts());
+    dispatch(actions.fetchUserPosts());
   }, []);
 
   return (

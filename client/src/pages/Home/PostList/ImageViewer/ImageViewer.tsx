@@ -1,63 +1,55 @@
 import React from "react";
-import { createAction, createReducer } from "@reduxjs/toolkit";
 import { Grid, Box, Divider, Modal, Link } from "@material-ui/core";
 
-import CommentForm from "pages/Home/PostList/PostCommentForm/PostCommentForm";
-import ImageComment from "pages/Home/PostList/ImageComment/ImageComment";
 import ImageInfo from "../ImageInfo/ImageInfo";
 import Activities from "../ImageActivities/ImageActivities";
 import useStyles from "./useStyles";
 import PostImageDto from "model/dto/PostImageDto";
 import ImageSlider from "components/Slider/Slider";
 import {
-  fetchSelectedImageComments,
-  fetchMoreSelectedImageComments,
-  setSelectedImageIndex,
-  getPostImages,
+  actions,
+  getImages,
   getSelectedImageIndex,
-  getSelectedImageCommentIds,
-  getSelectedImageInfo,
-  getPostInfo,
-  getSelectedImageCommentPagination,
+  getImageCommentsCount,
 } from "../postListSlice";
 import useAppDispatch from "hooks/useAppDispatch";
 import useAppSelector from "hooks/useAppSelector";
-import PostDto from "model/dto/PostDto";
+import ImageCommentList from "../ImageCommentList/ImageCommentList";
+import ImageCommentForm from "../ImageCommentForm/ImageCommentForm";
 
 interface ImageViewerProps {
   postId: string;
-  onClose: () => void;
 }
 
-export default function ImageViewer({
-  postId,
-  onClose,
-}: ImageViewerProps): JSX.Element {
+export default function ImageViewer({ postId }: ImageViewerProps): JSX.Element {
   const classes = useStyles();
+
   const dispatch = useAppDispatch();
-  const post: PostDto = useAppSelector((state) => getPostInfo(state, postId));
+
   const images: PostImageDto[] = useAppSelector((state) =>
-    getPostImages(state, postId),
-  );
-  const image = useAppSelector((state) =>
-    getSelectedImageInfo(state, postId),
-  ) as PostImageDto;
-  const index = useAppSelector((state) =>
-    getSelectedImageIndex(state, postId),
-  ) as number;
-  const commentIds: string[] = useAppSelector((state) =>
-    getSelectedImageCommentIds(state, postId),
-  );
-  const { currentPage, totalPages } = useAppSelector((state) =>
-    getSelectedImageCommentPagination(state, postId),
+    getImages(state, postId),
   );
 
-  React.useEffect(() => {
-    dispatch(fetchSelectedImageComments(postId));
-  }, [postId, image.id]);
+  const selectedImageIndex: number = useAppSelector(
+    (state) => getSelectedImageIndex(state, postId)!,
+  );
+
+  const selectedImage: PostImageDto = images[selectedImageIndex];
+
+  const hasAnyComment: boolean = useAppSelector(
+    (state) => getImageCommentsCount(state, postId, selectedImage.id) > 0,
+  );
+
+  function handleSlideChange(index: number) {
+    dispatch(actions.setSelectedImage({ postId, index }));
+  }
+
+  function handleClose() {
+    dispatch(actions.setSelectedImage({ postId, index: null }));
+  }
 
   return (
-    <Modal className={classes.modal} onClose={onClose} open disablePortal>
+    <Modal className={classes.modal} onClose={handleClose} open disablePortal>
       <Box
         className={classes.content}
         display="flex"
@@ -66,11 +58,16 @@ export default function ImageViewer({
       >
         <Box width="66%">
           <ImageSlider
-            selectedImageIndex={index}
-            images={images}
-            onIndexChange={(index: number) => {
-              dispatch(setSelectedImageIndex({ postId, index }));
-            }}
+            slideCount={images.length}
+            selectedIndex={selectedImageIndex}
+            renderSlide={(index: number, key: number) => (
+              <img
+                key={key}
+                className={classes.image}
+                src={images[index].url}
+              />
+            )}
+            onSlideChange={handleSlideChange}
           />
         </Box>
 
@@ -84,7 +81,7 @@ export default function ImageViewer({
             <Grid container direction="column">
               <Grid item xs>
                 <Box p={1}>
-                  <ImageInfo post={post} image={image} />
+                  <ImageInfo postId={postId} imageId={selectedImage.id} />
                 </Box>
               </Grid>
 
@@ -92,38 +89,15 @@ export default function ImageViewer({
                 <Divider />
 
                 <Box px={1} py={2}>
-                  <Activities postId={postId} imageId={image.id} />
+                  <Activities postId={postId} imageId={selectedImage.id} />
                 </Box>
 
-                {!commentIds.length && <Divider />}
+                {!hasAnyComment && <Divider />}
               </Grid>
 
-              {currentPage < totalPages && (
-                <Grid item xs>
-                  <Divider />
-
-                  <Box display="flex" justifyContent="center" my={1}>
-                    <Link
-                      style={{ cursor: "pointer" }}
-                      onClick={() =>
-                        dispatch(fetchMoreSelectedImageComments(postId))
-                      }
-                    >
-                      Show previous comments
-                    </Link>
-                  </Box>
-                </Grid>
-              )}
-
-              {commentIds.map((id) => (
-                <Grid key={id} item xs="auto">
-                  <Divider />
-
-                  <Box p={1}>
-                    <ImageComment postId={postId} commentId={id} />
-                  </Box>
-                </Grid>
-              ))}
+              <Grid item xs="auto">
+                <ImageCommentList postId={postId} imageId={selectedImage.id} />
+              </Grid>
             </Grid>
           </Box>
 
@@ -131,7 +105,7 @@ export default function ImageViewer({
             <Divider />
 
             <Box p={1}>
-              <CommentForm postId={postId} />
+              <ImageCommentForm postId={postId} imageId={selectedImage.id} />
             </Box>
           </Box>
         </Box>

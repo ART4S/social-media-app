@@ -7,13 +7,17 @@ import { getUserName } from "utils/userUtils";
 import useStyles from "./useStyles";
 import Avatar from "components/Avatar/Avatar";
 import type PostDto from "model/dto/PostDto";
+import useAppSelector from "hooks/useAppSelector";
+import { getPostInfo } from "../postListSlice";
 
 interface PostInfoProps {
-  post: PostDto;
+  postId: string;
 }
 
-export default function PostInfo({ post }: PostInfoProps): JSX.Element {
+export default function PostInfo({ postId }: PostInfoProps): JSX.Element {
   const classes = useStyles();
+
+  const post: PostDto = useAppSelector((state) => getPostInfo(state, postId));
 
   return (
     <Box display="flex">

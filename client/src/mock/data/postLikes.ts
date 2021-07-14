@@ -31,7 +31,7 @@ export const postLikes: PostLike[] = [
   },
 ];
 
-const entities: { [postIduserId: string]: PostLike } = normalize(
+const entities: { [compositeKey: string]: PostLike } = normalize(
   postLikes,
   (x) => composeKey(x.postId, x.userId),
 );

@@ -12,9 +12,9 @@ import {
 import { LockOutlined } from "@material-ui/icons";
 import { Formik, Form } from "formik";
 
-import Links from "./Links/Links";
-import Copyright from "../../components/Copyright/Copyright";
+import Copyright from "components/Copyright/Copyright";
 import PasswordField from "components/PasswordField/PasswordField";
+import Links from "./Links/Links";
 import useStyles from "./useStyles";
 
 export default function Login(): JSX.Element {

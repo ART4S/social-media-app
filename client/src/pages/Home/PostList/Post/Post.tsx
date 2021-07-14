@@ -1,38 +1,18 @@
 import React from "react";
-import { Typography, Link } from "@material-ui/core";
-import { Paper, IconButton, Box } from "@material-ui/core";
-import { Delete } from "@material-ui/icons";
-
-import Comment from "pages/Home/PostList/PostComment/PostComment";
-import CommentForm from "pages/Home/PostList/PostCommentForm/PostCommentForm";
-import ImageGrid from "components/ImageGrid/ImageGrid";
-import ImageViewer from "pages/Home/PostList/ImageViewer/ImageViewer";
-import LikeButton from "components/Buttons/LikeButton/LikeButton";
-import ShareButton from "components/Buttons/ShareButton/ShareButton";
+import { Typography } from "@material-ui/core";
+import { Paper, Box } from "@material-ui/core";
 
 import PostInfo from "../PostInfo/PostInfo";
 import useStyles from "./useStyles";
 
-import type PostImageDto from "model/dto/PostImageDto";
-
 import useAppSelector from "hooks/useAppSelector";
-import {
-  fetchPostComments,
-  fetchMorePostComments,
-  fetchPostImages,
-  notfyPostLiked,
-  setSelectedImageId,
-  getPostInfo,
-  getPostImagesInfo,
-  getPostCommentIds,
-  getPostCommentsPagination,
-  getSelectedImageId,
-  togglePostLike,
-} from "../postListSlice";
+import { getPostInfo, actions } from "../postListSlice";
+import { PostActivities } from "../PostActivities/PostActivities";
+import { PostCommentList } from "../PostCommentList/PostCommentList";
+import PostAttachments from "../PostAttachments/PostAttachments";
 import useAppDispatch from "hooks/useAppDispatch";
-import PostCommentDto from "model/dto/PostCommentDto";
-import PostDto from "model/dto/PostDto";
-import { debounce, DebouncedFunc } from "lodash";
+import { getUser } from "pages/Login/loginSlice";
+import DeleteButton from "components/Buttons/DeleteButton/DeleteButton";
 
 interface PostProps {
   postId: string;
@@ -40,108 +20,46 @@ interface PostProps {
 
 export default function Post({ postId }: PostProps): JSX.Element {
   const classes = useStyles();
+
   const dispatch = useAppDispatch();
-  const post: PostDto = useAppSelector((state) => getPostInfo(state, postId));
-  const commentIds: string[] = useAppSelector((state) =>
-    getPostCommentIds(state, postId),
-  );
-  const images: PostImageDto[] = useAppSelector((state) =>
-    getPostImagesInfo(state, postId),
-  );
-  const selectedImageId: string | null = useAppSelector((state) =>
-    getSelectedImageId(state, postId),
-  );
-  const { currentPage, totalPages } = useAppSelector((state) =>
-    getPostCommentsPagination(state, postId),
+
+  const body: string = useAppSelector(
+    (state) => getPostInfo(state, postId).body,
   );
 
-  React.useEffect(() => {
-    dispatch(fetchPostImages(postId));
-    dispatch(fetchPostComments(postId));
-  }, []);
+  const isUserPost: boolean = useAppSelector(
+    (state) => getPostInfo(state, postId).authorId == getUser(state).id,
+  );
 
-  // TODO: глянуть можно ли сделать напрямую через thunk
-  const debouncedNotfyPostLiked: DebouncedFunc<(postId: string) => void> =
-    React.useCallback(
-      debounce((postId: string) => dispatch(notfyPostLiked(postId)), 500),
-      [],
-    );
-
-  function handleLikeClick() {
-    dispatch(togglePostLike(postId));
-    debouncedNotfyPostLiked(postId);
+  function handleDelete() {
+    dispatch(actions.deletePost(postId));
   }
 
   return (
     <Paper elevation={3}>
       <div className={classes.header}>
         <Box display="flex" justifyContent="space-between" px={3} py={1}>
-          <PostInfo post={post} />
+          <PostInfo postId={postId} />
 
-          <IconButton>
-            <Delete color="secondary" />
-          </IconButton>
+          {isUserPost && <DeleteButton onClick={handleDelete} />}
         </Box>
       </div>
 
       <Box p={2}>
-        <Typography variant="body1">{post.body}</Typography>
+        <Typography variant="body1">{body}</Typography>
       </Box>
 
-      {images.length > 0 && (
-        <Box px={2}>
-          <ImageGrid
-            images={images}
-            onImageClick={({ id }: PostImageDto) =>
-              dispatch(setSelectedImageId({ postId, imageId: id }))
-            }
-          />
-        </Box>
-      )}
-
-      {selectedImageId !== null && (
-        <ImageViewer
-          postId={postId}
-          onClose={() =>
-            dispatch(setSelectedImageId({ postId, imageId: null }))
-          }
-        />
-      )}
+      <Box px={2}>
+        <PostAttachments postId={postId} />
+      </Box>
 
       <Box display="flex" p={2}>
-        <LikeButton active={post.liked} onClick={handleLikeClick} />
-
-        <ShareButton />
+        <PostActivities postId={postId} />
       </Box>
 
       <div className={classes.footer}>
-        <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent="start"
-          py={2}
-          px={3}
-        >
-          <Box my={2}>
-            <CommentForm postId={postId} />
-          </Box>
-
-          {commentIds.map((id) => (
-            <Box key={id} mt={2}>
-              <Comment postId={postId} commentId={id} />
-            </Box>
-          ))}
-
-          {currentPage < totalPages && (
-            <Box mt={2}>
-              <Link
-                style={{ cursor: "pointer" }}
-                onClick={() => dispatch(fetchMorePostComments(postId))}
-              >
-                Show more comments
-              </Link>
-            </Box>
-          )}
+        <Box py={2} px={3}>
+          <PostCommentList postId={postId} />
         </Box>
       </div>
     </Paper>

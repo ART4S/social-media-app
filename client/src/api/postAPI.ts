@@ -5,6 +5,7 @@ import type PostDto from "model/dto/PostDto";
 import type PostImageDto from "model/dto/PostImageDto";
 import ImageCommentCreateDto from "model/dto/posts/ImageCommentCreateDto";
 import PostCommentCreateDto from "model/dto/posts/PostCommentCreateDto";
+import PostCreateDto from "model/dto/posts/PostCreateDto";
 import type PagedRequest from "model/pagination/PagedRequest";
 import type PagedResponse from "model/pagination/PagedResponse";
 
@@ -52,19 +53,19 @@ function getImageComments(
   );
 }
 
-function addLike(postId: string, userId: string): Promise<void> {
+function addLike(postId: string): Promise<void> {
   return new Promise((resolve) =>
     setTimeout(() => {
-      postService.addLike(postId, userId);
+      postService.addLike(postId);
       resolve();
     }, config.delayMs),
   );
 }
 
-function removeLike(postId: string, userId: string): Promise<void> {
+function removeLike(postId: string): Promise<void> {
   return new Promise((resolve) =>
     setTimeout(() => {
-      postService.removeLike(postId, userId);
+      postService.removeLike(postId);
       resolve();
     }, config.delayMs),
   );
@@ -90,31 +91,31 @@ function deleteComment(commentId: string): Promise<void> {
   );
 }
 
-function addImageLike(imageId: string, userId: string): Promise<void> {
+function addImageLike(imageId: string): Promise<void> {
   return new Promise((resolve) =>
     setTimeout(() => {
-      postService.addImageLike(imageId, userId);
+      postService.addImageLike(imageId);
       resolve();
     }, config.delayMs),
   );
 }
 
-function removeImageLike(imageId: string, userId: string): Promise<void> {
+function removeImageLike(imageId: string): Promise<void> {
   return new Promise((resolve) =>
     setTimeout(() => {
-      postService.removeImageLike(imageId, userId);
+      postService.removeImageLike(imageId);
       resolve();
     }, config.delayMs),
   );
 }
 
-function addImageComment(
+function createImageComment(
   imageId: string,
   comment: ImageCommentCreateDto,
 ): Promise<string> {
   return new Promise<string>((resolve) =>
     setTimeout(() => {
-      resolve(postService.addImageComment(imageId, comment));
+      resolve(postService.createImageComment(imageId, comment));
     }, config.delayMs),
   );
 }
@@ -128,17 +129,45 @@ function deleteImageComment(commentId: string): Promise<void> {
   });
 }
 
+function deletePost(id: string): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      postService.deletePost(id);
+      resolve();
+    }, config.delayMs);
+  });
+}
+
+function createPost(post: PostCreateDto): Promise<string> {
+  return new Promise<string>((resolve) =>
+    setTimeout(() => {
+      resolve(postService.createPost(post));
+    }, config.delayMs),
+  );
+}
+
+function getById(id: string): Promise<PostDto> {
+  return new Promise<PostDto>((resolve) =>
+    setTimeout(() => {
+      resolve(postService.getById(id));
+    }, config.delayMs),
+  );
+}
+
 export default {
   getAll,
+  getById,
   getImages,
   getComments,
   getImageComments,
+  createPost,
+  createComment,
+  createImageComment,
+  deletePost,
+  deleteComment,
+  deleteImageComment,
   addLike,
   removeLike,
-  createComment,
-  deleteComment,
   addImageLike,
   removeImageLike,
-  addImageComment,
-  deleteImageComment,
 };

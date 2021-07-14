@@ -14,6 +14,11 @@ const useStyles = makeStyles((theme: Theme) =>
         outline: "none",
       },
     },
+    image: {
+      maxWidth: "100%",
+      maxHeight: "100%",
+      objectFit: "cover",
+    },
   }),
 );
 

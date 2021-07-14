@@ -3,8 +3,7 @@ import { Grid, Box } from "@material-ui/core";
 import Header from "components/Header/Header";
 import PostList from "./PostList/PostList";
 import PostForm from "./PostForm/PostForm";
-import UserSearch from "./UserSearch/UserSearch";
-import useAppDispatch from "hooks/useAppDispatch";
+import UserList from "./UserList/UserList";
 
 export default function Home(): JSX.Element {
   return (
@@ -24,7 +23,7 @@ export default function Home(): JSX.Element {
           </Grid>
 
           <Grid item xs={6}>
-            <UserSearch />
+            <UserList />
           </Grid>
         </Grid>
       </Box>

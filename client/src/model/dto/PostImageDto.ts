@@ -5,4 +5,6 @@ export default interface PostImageDto {
   createDate: string;
   liked: boolean;
   likeCount: number;
+  shared: boolean;
+  shareCount: number;
 }

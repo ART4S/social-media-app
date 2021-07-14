@@ -1,86 +1,99 @@
 import React from "react";
 import { Box, TextField, Button, Collapse } from "@material-ui/core";
-import { Formik, Form, FormikProps, FormikHelpers } from "formik";
+import { Formik, Form, FormikHelpers } from "formik";
+import * as yup from "yup";
 
 import Avatar from "components/Avatar/Avatar";
 import useStyles from "./useStyles";
-
-import {
-  getPostCommentSubmitAreaVisibility,
-  showPostCommentSubmitArea,
-} from "../postListSlice";
+import PostCommentCreateDto from "model/dto/posts/PostCommentCreateDto";
+import { actions } from "../postListSlice";
 import useAppSelector from "hooks/useAppSelector";
+import { getUser } from "pages/Login/loginSlice";
 import useAppDispatch from "hooks/useAppDispatch";
+
+const initialValues: PostCommentCreateDto = {
+  text: "",
+};
+
+const validationSchema = yup.object({
+  text: yup.string().trim().required(),
+});
 
 interface PostCommentFormProps {
   postId: string;
-}
-
-interface FormValues {
-  comment: "";
 }
 
 export default function PostCommentForm({
   postId,
 }: PostCommentFormProps): JSX.Element {
   const classes = useStyles();
+
   const dispatch = useAppDispatch();
 
-  const isSubmitAreaVisible = useAppSelector((state) =>
-    getPostCommentSubmitAreaVisibility(state, postId),
-  );
+  const avatarUrl = useAppSelector((state) => getUser(state).avatarUrl);
 
-  function handleCommentFocus() {
-    dispatch(showPostCommentSubmitArea({ postId, visibility: true }));
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
+
+  const [isButtonsVisible, setIsButtonsVisible] = React.useState(false);
+
+  function handleSubmit(
+    comment: PostCommentCreateDto,
+    formik: FormikHelpers<PostCommentCreateDto>,
+  ) {
+    inputRef.current?.blur();
+    dispatch(actions.createPostComment({ postId, comment }));
+    setIsButtonsVisible(false);
+    formik.resetForm();
+    formik.setSubmitting(false);
   }
-
-  function handleCancelClick(formik: FormikProps<FormValues>) {
-    formik.setFieldValue("comment", "");
-    dispatch(showPostCommentSubmitArea({ postId, visibility: false }));
-  }
-
-  const initialValues: FormValues = {
-    comment: "",
-  };
 
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values: FormValues, formik: FormikHelpers<FormValues>) => {
-        formik.setSubmitting(false);
-      }}
+      validationSchema={validationSchema}
+      validateOnChange={true}
+      onSubmit={handleSubmit}
     >
-      {(formik: FormikProps<FormValues>) => (
+      {({ values, isSubmitting, handleBlur, handleChange, resetForm }) => (
         <Form className={classes.form} autoComplete="off">
           <Box display="flex" justifyContent="center">
-            <Avatar />
+            <Avatar src={avatarUrl} />
 
             <Box ml={2} width="100%">
               <TextField
-                id="comment"
+                inputRef={inputRef}
+                id="text"
                 placeholder="Leave a comment..."
-                value={formik.values.comment}
-                onFocus={handleCommentFocus}
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
+                value={values.text}
+                onFocus={() => setIsButtonsVisible(true)}
+                onBlur={handleBlur}
+                onChange={handleChange}
                 fullWidth
               />
             </Box>
           </Box>
 
-          <Collapse in={isSubmitAreaVisible}>
+          <Collapse in={isButtonsVisible}>
             <Box display="flex" justifyContent="flex-end" mt={1}>
               <Box display="flex">
                 <Button
                   variant="outlined"
                   color="primary"
-                  onClick={() => handleCancelClick(formik)}
+                  onClick={() => {
+                    resetForm();
+                    setIsButtonsVisible(false);
+                  }}
                 >
                   cancel
                 </Button>
 
                 <Box ml={2}>
-                  <Button type="submit" variant="contained" color="primary">
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    disabled={isSubmitting}
+                  >
                     add
                   </Button>
                 </Box>

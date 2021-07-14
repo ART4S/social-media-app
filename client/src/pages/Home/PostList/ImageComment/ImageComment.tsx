@@ -1,43 +1,55 @@
-import { IconButton, Typography, Box, Link } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
+import { Typography, Box, Link } from "@material-ui/core";
 
 import moment from "moment";
-import Avatar from "../../../../components/Avatar/Avatar";
+import Avatar from "components/Avatar/Avatar";
 
 import { getUserName } from "utils/userUtils";
 import useAppSelector from "hooks/useAppSelector";
 import { ImageCommentDto } from "model/dto/ImageCommentDto";
-import {
-  getSelectedImageCommentById,
-  deleteImageComment,
-} from "../postListSlice";
+import { actions, getImageCommentById } from "../postListSlice";
 import useAppDispatch from "hooks/useAppDispatch";
+import { getUser } from "pages/Login/loginSlice";
+
+import DeleteButton from "components/Buttons/DeleteButton/DeleteButton";
 
 interface ImageCommentProps {
   postId: string;
+  imageId: string;
   commentId: string;
 }
 
 export default function ImageComment({
   postId,
+  imageId,
   commentId,
 }: ImageCommentProps): JSX.Element {
   const dispatch = useAppDispatch();
+
   const comment: ImageCommentDto = useAppSelector((state) =>
-    getSelectedImageCommentById(state, postId, commentId),
+    getImageCommentById(state, postId, imageId, commentId),
   );
+
+  const userName: string = getUserName({
+    firstName: comment.authorFirstName,
+    lastName: comment.authorLastName,
+  });
+
+  const isUserComment: boolean = useAppSelector(
+    (state) =>
+      getImageCommentById(state, postId, imageId, commentId).authorId ===
+      getUser(state).id,
+  );
+
+  function handleDelete() {
+    dispatch(actions.deleteImageComment({ postId, imageId, commentId }));
+  }
 
   return (
     <Box display="flex">
       <Avatar src={comment.avatarUrl} />
 
       <Box display="flex" flexDirection="column" ml={2}>
-        <Link>
-          {getUserName({
-            firstName: comment.authorFirstName,
-            lastName: comment.authorLastName,
-          })}
-        </Link>
+        <Link>{userName}</Link>
 
         <Typography variant="body2">{comment.text}</Typography>
 
@@ -46,14 +58,9 @@ export default function ImageComment({
             {moment(comment.createDate).fromNow()}
           </Typography>
 
-          <IconButton size="small">
-            <DeleteIcon
-              color="secondary"
-              onClick={() =>
-                dispatch(deleteImageComment({ postId, commentId }))
-              }
-            />
-          </IconButton>
+          {isUserComment && (
+            <DeleteButton size="small" onClick={handleDelete} />
+          )}
         </Box>
       </Box>
     </Box>

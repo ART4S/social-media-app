@@ -8,8 +8,9 @@ import Avatar from "components/Avatar/Avatar";
 
 import { getUserName } from "utils/userUtils";
 import useAppDispatch from "hooks/useAppDispatch";
-import { deletePostComment, getPostCommentById } from "../postListSlice";
+import { actions, getPostCommentById } from "../postListSlice";
 import useAppSelector from "hooks/useAppSelector";
+import { getUser } from "pages/Login/loginSlice";
 
 interface PostCommentProps {
   postId: string;
@@ -21,8 +22,15 @@ export default function PostComment({
   commentId,
 }: PostCommentProps): JSX.Element {
   const dispatch = useAppDispatch();
+
   const comment: PostCommentDto = useAppSelector((state) =>
     getPostCommentById(state, postId, commentId),
+  );
+
+  const isUserComment = useAppSelector(
+    (state) =>
+      getPostCommentById(state, postId, commentId).authorId ===
+      getUser(state).id,
   );
 
   return (
@@ -44,12 +52,16 @@ export default function PostComment({
             {moment(comment.createDate).fromNow()}
           </Typography>
 
-          <IconButton size="small">
-            <DeleteIcon
-              color="secondary"
-              onClick={() => dispatch(deletePostComment({ postId, commentId }))}
-            />
-          </IconButton>
+          {isUserComment && (
+            <IconButton size="small">
+              <DeleteIcon
+                color="secondary"
+                onClick={() =>
+                  dispatch(actions.deletePostComment({ postId, commentId }))
+                }
+              />
+            </IconButton>
+          )}
         </Box>
       </Box>
     </Box>
