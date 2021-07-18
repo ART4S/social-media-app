@@ -4,6 +4,7 @@ import { Box, Paper, Tabs, Tab } from "@material-ui/core";
 import TabPanel from "components/TabPanel/TabPanel";
 import FollowingsSection from "./FollowingsSection/FollowingsSection";
 import FollowersSection from "./FollowersSection/FollowersSection";
+import PostsSection from "./PostsSection/PostsSection";
 
 const tabs = ["POSTS", "FOLLOWINGS", "FOLLOWERS"];
 
@@ -25,7 +26,9 @@ export default function ProfileSections() {
       </Paper>
 
       <TabPanel value={currentTab} index={0}>
-        <Box py={2}>{/* <PostList data={posts} /> */}</Box>
+        <Box py={2}>
+          <PostsSection />
+        </Box>
       </TabPanel>
 
       <TabPanel value={currentTab} index={1}>

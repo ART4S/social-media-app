@@ -1,26 +1,42 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import UserDto from "model/dto/UserDto";
+import { Action, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import LoginVm from "model/login/loginVm";
 import { AppState } from "redux/store";
-import { users } from "mock/data/users";
 
 interface LoginState {
-  loggedIn: boolean;
-  user: UserDto | null;
+  isSubmitting: boolean;
+  errors: string[];
 }
 
 const initialState: LoginState = {
-  loggedIn: true,
-  user: users[0],
+  isSubmitting: false,
+  errors: [],
 };
 
 const slice = createSlice({
   name: "login",
   initialState,
-  reducers: {},
+  reducers: {
+    login(state, action: PayloadAction<LoginVm>) {
+      state.isSubmitting = true;
+      state.errors = [];
+    },
+    loginSucceed(state, action: Action) {
+      state.isSubmitting = false;
+    },
+    loginFailed(state, { payload }: PayloadAction<string[]>) {
+      state.isSubmitting = false;
+      state.errors = payload;
+    },
+    logout(state, action: Action) {},
+  },
 });
 
+export const actions = slice.actions;
+
 const getSelf = (state: AppState) => state.login;
-export const getLoggedIn = (state: AppState) => getSelf(state).loggedIn;
-export const getUser = (state: AppState) => getSelf(state).user!;
+
+export const getIsSubmitting = (state: AppState) => getSelf(state).isSubmitting;
+
+export const getErrors = (state: AppState) => getSelf(state).errors;
 
 export default slice.reducer;

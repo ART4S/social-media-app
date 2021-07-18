@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Paper,
-  Avatar,
   Box,
   TextField,
   List,
@@ -10,12 +9,14 @@ import {
   ListItemText,
   Typography,
 } from "@material-ui/core";
-import { PhotoCameraOutlined } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 import useAppDispatch from "hooks/useAppDispatch";
 import { actions, getLoading, getSearchText, getUsers } from "./userListSlice";
 import useAppSelector from "hooks/useAppSelector";
 import Progress from "components/Progress/Progress";
 import { getUserName } from "utils/userUtils";
+import Avatar from "components/Avatar/Avatar";
+import Navigate from "components/Navigate/Navigate";
 
 export default function UserList(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -35,10 +36,10 @@ export default function UserList(): JSX.Element {
       <Box padding={2}>
         <TextField
           id="searchText"
+          variant="outlined"
           placeholder="Search user..."
           value={searchText}
           onChange={(e) => dispatch(actions.changeSearchText(e.target.value))}
-          variant="outlined"
           InputProps={{
             endAdornment: <>{loading && <Progress size={20} />}</>,
           }}
@@ -61,15 +62,15 @@ export default function UserList(): JSX.Element {
         {!!users.length && (
           <List>
             {users.map((x) => (
-              <ListItem key={x.id} button>
-                <ListItemIcon>
-                  <Avatar src={x.avatarUrl}>
-                    <PhotoCameraOutlined />
-                  </Avatar>
-                </ListItemIcon>
+              <Navigate to={`/${x.id}`}>
+                <ListItem key={x.id} button>
+                  <ListItemIcon>
+                    <Avatar src={x.avatarUrl} />
+                  </ListItemIcon>
 
-                <ListItemText primary={getUserName(x)} />
-              </ListItem>
+                  <ListItemText primary={getUserName(x)} />
+                </ListItem>
+              </Navigate>
             ))}
           </List>
         )}

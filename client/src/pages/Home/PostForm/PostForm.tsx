@@ -1,21 +1,16 @@
 import React from "react";
 import { Paper, Box, TextField, Button, IconButton } from "@material-ui/core";
-import { Typography } from "@material-ui/core";
 import { AddAPhoto, PlayCircleOutline } from "@material-ui/icons";
 import { useFormik } from "formik";
 import * as yup from "yup";
-
-import Avatar from "components/Avatar/Avatar";
 import UploadImage from "./UploadImage/UploadImage";
 import useStyles from "./useStyles";
 import ImageGrid from "components/ImageGrid/ImageGrid";
-import UserDto from "model/dto/UserDto";
 import useAppSelector from "hooks/useAppSelector";
-import { getUser } from "pages/Login/loginSlice";
-import { getUserName } from "utils/userUtils";
 import useAppDispatch from "hooks/useAppDispatch";
 import { actions, getIsSubmitting } from "./postFormSlice";
 import PostCreateDto from "model/dto/posts/PostCreateDto";
+import UserInfo from "./UserInfo/UserInfo";
 
 const initialValues: PostCreateDto = {
   body: "",
@@ -30,8 +25,6 @@ export default function PostForm(): JSX.Element {
   const classes = useStyles();
 
   const dispatch = useAppDispatch();
-
-  const user: UserDto = useAppSelector(getUser);
 
   const isSubmitting = useAppSelector(getIsSubmitting);
 
@@ -74,16 +67,16 @@ export default function PostForm(): JSX.Element {
   return (
     <Paper elevation={4}>
       <div className={classes.header}>
-        <Box display="flex" px={2} py={1}>
-          <Avatar src={user.avatarUrl} />
-
-          <Box display="flex" alignItems="center" ml={2}>
-            <Typography align="center">{getUserName(user)}</Typography>
-          </Box>
+        <Box px={2} py={1}>
+          <UserInfo />
         </Box>
       </div>
 
-      <form autoComplete="off" onSubmit={formik.handleSubmit}>
+      <form
+        autoComplete="off"
+        onSubmit={formik.handleSubmit}
+        onReset={formik.handleReset}
+      >
         <div className={classes.body}>
           <Box px={3} pt={3}>
             <TextField

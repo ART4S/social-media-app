@@ -11,22 +11,24 @@ import {
 import Header from "components/Header/Header";
 import AdditionalInfo from "./AdditionalInfo/AdditionalInfo";
 import useAppSelector from "hooks/useAppSelector";
-import { actions, getLoading } from "./profileCommonSlice";
+import { actions, getLoading } from "./profileSlice";
 import useAppDispatch from "hooks/useAppDispatch";
 import PageProgress from "components/PageProgress/PageProgress";
-import Title from "./Title/Title";
 import MainInfo from "./MainInfo/MainInfo";
 import Status from "./Status/Status";
 import ProfileSections from "./ProfileSections/ProfileSections";
+import { useHistory, useParams } from "react-router-dom";
 
-interface ProfileProps {
+interface ProfileParams {
   userId: string;
 }
 
-export default function Profile({ userId }: ProfileProps) {
-  const loading = useAppSelector(getLoading);
-
+export default function Profile() {
   const dispatch = useAppDispatch();
+
+  const { userId } = useParams<ProfileParams>();
+
+  const loading = useAppSelector(getLoading);
 
   React.useEffect(() => {
     dispatch(actions.fetchProfile(userId));
@@ -45,11 +47,7 @@ function PageContent(): JSX.Element {
       <Box mt={12}>
         <Container maxWidth="sm">
           <Paper>
-            <Box display="flex" justifyContent="center" color="primary" p={6}>
-              <Title />
-            </Box>
-
-            <Box display="flex" flexDirection="column" mx={3}>
+            <Box display="flex" flexDirection="column" px={3} pt={6}>
               <MainInfo />
 
               <Box mt={2}>
@@ -58,12 +56,12 @@ function PageContent(): JSX.Element {
 
               <Status />
 
-              <Box my={2}>
+              <Box my={1}>
                 <Link
                   style={{ cursor: "pointer" }}
                   onClick={() => setShowInfo(!showInfo)}
                 >
-                  Show more information
+                  {showInfo ? "Hide" : "Show"} more information
                 </Link>
               </Box>
 

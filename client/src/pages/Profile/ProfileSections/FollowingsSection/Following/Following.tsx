@@ -4,13 +4,12 @@ import { getUserName } from "utils/userUtils";
 import useStyles from "./useStyles";
 import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
-import {
-  actions,
-  getFollowingInfo,
-  getIsFollow,
-} from "../followingsSectionSlice";
+import { actions, getFollowingInfo } from "../followingsSectionSlice";
 import { wrap } from "utils/stringUtils";
 import FollowingDto from "model/dto/users/FollowingDto";
+import { getIsCurrentUserProfile } from "pages/Profile/profileSlice";
+import FollowButton from "./FollowButton/FollowButton";
+import Navigate from "components/Navigate/Navigate";
 
 interface FollowingProps {
   followingId: string;
@@ -27,13 +26,7 @@ export default function Following({
     getFollowingInfo(state, followingId),
   );
 
-  const isFollow: boolean = useAppSelector((state) =>
-    getIsFollow(state, followingId),
-  );
-
-  function handleFollowClick() {
-    dispatch(actions.toggleFollow(followingId));
-  }
+  const isCurrentUserProfile = useAppSelector(getIsCurrentUserProfile);
 
   return (
     <Box display="flex">
@@ -44,7 +37,9 @@ export default function Following({
       <Box ml={4}>
         <Grid container direction="column" spacing={1}>
           <Grid item xs>
-            <Link>{getUserName(following)}</Link>
+            <Navigate to={following.userId}>
+              <Link>{getUserName(following)}</Link>
+            </Navigate>
           </Grid>
 
           <Grid item xs>
@@ -54,24 +49,11 @@ export default function Following({
           </Grid>
 
           <Grid item xs>
-            {isFollow ? (
-              <Button
-                variant="outlined"
-                color="primary"
-                style={{ textTransform: "none" }}
-                onClick={handleFollowClick}
-              >
-                Unfollow
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                color="primary"
-                style={{ textTransform: "none" }}
-                onClick={handleFollowClick}
-              >
-                Follow
-              </Button>
+            {isCurrentUserProfile && (
+              <FollowButton
+                followingId={followingId}
+                onClick={() => dispatch(actions.toggleFollow(followingId))}
+              />
             )}
           </Grid>
         </Grid>

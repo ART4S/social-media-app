@@ -9,11 +9,12 @@ import {
 } from "@redux-saga/core/effects";
 import { actions } from "./followersSectionSlice";
 import userAPI from "api/userAPI";
-import { getUser } from "pages/Login/loginSlice";
 import FollowerDto from "model/dto/users/FollowerDto";
+import { getUser } from "pages/commonSlice";
+import { getProfile } from "pages/Profile/profileSlice";
 
 function* fetchFollowers(action: ReturnType<typeof actions.fetchFollowers>) {
-  const userId = getUser(yield select()).id;
+  const { userId } = getProfile(yield select());
 
   const followers: FollowerDto[] = yield call(userAPI.getFollowers, userId);
 
@@ -33,7 +34,7 @@ function* changeSearchText({
 
   yield put(actions.searchFollowers());
 
-  const userId = getUser(yield select()).id;
+  const userId = getUser(yield select())!.id;
 
   const followings: FollowerDto[] = yield call(
     userAPI.searchFollowers,

@@ -7,6 +7,9 @@ import useAppDispatch from "hooks/useAppDispatch";
 import { actions, getFollowerInfo, getBlocked } from "../followersSectionSlice";
 import { wrap } from "utils/stringUtils";
 import FollowerDto from "model/dto/users/FollowerDto";
+import { getIsCurrentUserProfile } from "pages/Profile/profileSlice";
+import { getUser } from "pages/commonSlice";
+import Navigate from "components/Navigate/Navigate";
 
 interface FollowingProps {
   followerId: string;
@@ -25,6 +28,8 @@ export default function Follower({ followerId }: FollowingProps): JSX.Element {
     getBlocked(state, followerId),
   );
 
+  const isCurrentUserProfile = useAppSelector(getIsCurrentUserProfile);
+
   function handleBlockFollower() {
     dispatch(actions.blockFollower(followerId));
   }
@@ -38,7 +43,9 @@ export default function Follower({ followerId }: FollowingProps): JSX.Element {
       <Box ml={4}>
         <Grid container direction="column" spacing={1}>
           <Grid item xs>
-            <Link>{getUserName(follower)}</Link>
+            <Navigate to={follower.followerId}>
+              <Link>{getUserName(follower)}</Link>
+            </Navigate>
           </Grid>
 
           <Grid item xs>
@@ -48,20 +55,21 @@ export default function Follower({ followerId }: FollowingProps): JSX.Element {
           </Grid>
 
           <Grid item xs>
-            {blocked ? (
-              <Typography variant="body2" color="textSecondary">
-                user has blocked
-              </Typography>
-            ) : (
-              <Button
-                variant="contained"
-                color="primary"
-                style={{ textTransform: "none" }}
-                onClick={handleBlockFollower}
-              >
-                Block
-              </Button>
-            )}
+            {isCurrentUserProfile &&
+              (blocked ? (
+                <Typography variant="body2" color="textSecondary">
+                  user was blocked
+                </Typography>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ textTransform: "none" }}
+                  onClick={handleBlockFollower}
+                >
+                  Block
+                </Button>
+              ))}
           </Grid>
         </Grid>
       </Box>

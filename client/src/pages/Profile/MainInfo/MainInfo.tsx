@@ -4,20 +4,21 @@ import { Box, Avatar, Typography } from "@material-ui/core";
 import { getUserName } from "utils/userUtils";
 import useStyles from "./useStyles";
 import useAppSelector from "hooks/useAppSelector";
-import { actions, getProfile } from "../profileCommonSlice";
 import DeleteButton from "components/Buttons/DeleteButton/DeleteButton";
 import EditButton from "components/Buttons/EditButton/EditButton";
 import UserProfileDto from "model/dto/userProfiles/UserProfileDto";
-import { getUser } from "pages/Login/loginSlice";
+import DeleteProfileDialog from "../DeleteProfileDialog/DeleteProfileDialog";
+import { getIsCurrentUserProfile, getProfile } from "../profileSlice";
+import Navigate from "components/Navigate/Navigate";
 
 export default function MainInfo(): JSX.Element {
   const classes = useStyles();
 
   const profile: UserProfileDto = useAppSelector(getProfile);
 
-  const isUserProfile = useAppSelector(
-    (state) => getUser(state).id === getProfile(state).userId,
-  );
+  const isCurrentUserProfile = useAppSelector(getIsCurrentUserProfile);
+
+  const [open, setOpen] = React.useState(false);
 
   return (
     <Box display="flex">
@@ -29,7 +30,7 @@ export default function MainInfo(): JSX.Element {
             {getUserName(profile)}
           </Typography>
 
-          {isUserProfile && (
+          {isCurrentUserProfile && (
             <Typography className={classes.userEmail} variant="body2">
               {profile.email}
             </Typography>
@@ -39,13 +40,26 @@ export default function MainInfo(): JSX.Element {
 
       <Box flexGrow="1" />
 
-      <Box display="flex" flexDirection="column" justifyContent="flex-start">
-        <div>
-          <EditButton />
+      {isCurrentUserProfile && (
+        <Box display="flex" flexDirection="column" justifyContent="flex-start">
+          <div>
+            <Navigate
+              to={{
+                pathname: `${profile.userId}/edit`,
+                state: {
+                  profileId: profile.id,
+                },
+              }}
+            >
+              <EditButton />
+            </Navigate>
 
-          <DeleteButton />
-        </div>
-      </Box>
+            <DeleteButton onClick={() => setOpen(true)} />
+          </div>
+        </Box>
+      )}
+
+      <DeleteProfileDialog open={open} onClose={() => setOpen(false)} />
     </Box>
   );
 }

@@ -1,22 +1,15 @@
 import { configureStore, ThunkAction, AnyAction } from "@reduxjs/toolkit";
 import createSagaMiddleware from "@redux-saga/core";
 
-import rootSaga from "pages/rootSaga";
-
-import homeReducer from "pages/Home/homeSlice";
-import loginReducer from "pages/Login/loginSlice";
-import profileRedicer from "pages/Profile/profileSlice";
+import rootSaga from "redux/rootSaga";
+import rootReducer from "redux/rootReducer";
 
 const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(sagaMiddleware),
-  reducer: {
-    login: loginReducer,
-    home: homeReducer,
-    profile: profileRedicer,
-  },
+  reducer: rootReducer,
   devTools: process.env.NODE_ENV !== "production",
 });
 

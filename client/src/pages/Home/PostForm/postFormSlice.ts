@@ -1,4 +1,9 @@
-import { Action, createAction, createSlice } from "@reduxjs/toolkit";
+import {
+  Action,
+  createAction,
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import PostCreateDto from "model/dto/posts/PostCreateDto";
 import { AppState } from "redux/store";
 
@@ -16,7 +21,7 @@ const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {
-    createPostStarted(state, action: Action) {
+    createPost(state, action: PayloadAction<PostCreateDto>) {
       state.isSubmitting = true;
     },
     createPostSucceed(state, action: Action) {
@@ -25,11 +30,7 @@ const slice = createSlice({
   },
 });
 
-export const actions = {
-  ...slice.actions,
-
-  createPost: createAction<PostCreateDto>(`${sliceName}/createPost`),
-};
+export const actions = slice.actions;
 
 const getSelf = (state: AppState) => state.home.postForm;
 

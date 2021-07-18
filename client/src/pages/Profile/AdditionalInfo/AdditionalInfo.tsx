@@ -4,8 +4,8 @@ import moment from "moment";
 
 import useStyles from "./useStyles";
 import useAppSelector from "hooks/useAppSelector";
-import { getProfile } from "../profileCommonSlice";
 import { capitalizeFirstLetter } from "utils/stringUtils";
+import { getProfile } from "../profileSlice";
 
 const SPACING: GridSpacing = 1;
 

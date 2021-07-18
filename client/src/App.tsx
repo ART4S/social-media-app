@@ -1,24 +1,28 @@
 import React from "react";
 import { CssBaseline } from "@material-ui/core";
-
-import Home from "pages/Home/Home";
-import Profile from "pages/Profile/Profile";
-import ProfileEditor from "pages/ProfileEditor/ProfileEditor";
-import Login from "pages/Login/Login";
-import Registration from "pages/Registration/Registration";
-
-import { users } from "mock/data/users";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import routes from "routes";
+import ProtectedRoute from "components/ProtectedRoute/ProtectedRoute";
 
 function App(): JSX.Element {
   return (
-    <div>
+    <Router>
       <CssBaseline />
-      {/* <Registration /> */}
-      {/* <Login /> */}
-      {/* <Home /> */}
-      <Profile userId={users[0].id} />
-      {/* <ProfileEditor /> */}
-    </div>
+
+      <Switch>
+        {routes.map((route, i) =>
+          route.protected ? (
+            <ProtectedRoute key={i} path={route.path} exact={route.exact}>
+              <route.component routes={route.routes} />
+            </ProtectedRoute>
+          ) : (
+            <Route key={i} path={route.path} exact={route.exact}>
+              <route.component routes={route.routes} />
+            </Route>
+          ),
+        )}
+      </Switch>
+    </Router>
   );
 }
 

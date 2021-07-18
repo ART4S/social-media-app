@@ -30,19 +30,19 @@ export const followings: Following[] = [
     followerId: users[5].id,
   },
   {
-    userId: users[1].id,
+    userId: users[5].id,
+    followerId: users[0].id,
+  },
+  {
+    userId: users[4].id,
+    followerId: users[0].id,
+  },
+  {
+    userId: users[3].id,
     followerId: users[0].id,
   },
   {
     userId: users[2].id,
-    followerId: users[0].id,
-  },
-  {
-    userId: users[3].id,
-    followerId: users[0].id,
-  },
-  {
-    userId: users[3].id,
     followerId: users[0].id,
   },
 ];

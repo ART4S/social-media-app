@@ -8,15 +8,27 @@ import {
 } from "@material-ui/core";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import Navigate from "components/Navigate/Navigate";
+import useAppDispatch from "hooks/useAppDispatch";
+import useAppSelector from "hooks/useAppSelector";
+import { getUser } from "pages/commonSlice";
+
+import { actions as loginActions } from "pages/Login/loginSlice";
 
 import useStyles from "./useStyles";
 
 function Logo(): JSX.Element {
-  return <Typography>Hello</Typography>;
+  return (
+    <Navigate to="/">
+      <Typography>Logo</Typography>
+    </Navigate>
+  );
 }
 
 export default function Header(): JSX.Element {
   const classes = useStyles();
+  const dispatch = useAppDispatch();
+  const userId = useAppSelector((state) => getUser(state).id);
 
   return (
     <AppBar>
@@ -27,10 +39,12 @@ export default function Header(): JSX.Element {
           <Box flexGrow="1" />
 
           <IconButton>
-            <AccountCircle className={classes.icon} />
+            <Navigate to={userId}>
+              <AccountCircle className={classes.icon} />
+            </Navigate>
           </IconButton>
 
-          <IconButton>
+          <IconButton onClick={() => dispatch(loginActions.logout())}>
             <ExitToAppIcon className={classes.icon} />
           </IconButton>
         </Toolbar>

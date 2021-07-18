@@ -1,5 +1,5 @@
 import React from "react";
-import { InputAdornment, IconButton, TextField } from "@material-ui/core";
+import { IconButton, TextField } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 
 export default function PasswordField(
@@ -14,14 +14,9 @@ export default function PasswordField(
       InputProps={{
         ...props.InputProps,
         endAdornment: (
-          <InputAdornment position="end">
-            <IconButton
-              edge="end"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <Visibility /> : <VisibilityOff />}
-            </IconButton>
-          </InputAdornment>
+          <IconButton edge="end" onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? <Visibility /> : <VisibilityOff />}
+          </IconButton>
         ),
       }}
     />

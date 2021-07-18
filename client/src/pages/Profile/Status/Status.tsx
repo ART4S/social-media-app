@@ -1,17 +1,19 @@
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
-import EditButton from "components/Buttons/EditButton/EditButton";
-import useAppSelector from "hooks/useAppSelector";
-import { getProfile } from "../profileCommonSlice";
+import ViewStatus from "./ViewStatus/ViewStatus";
+import EditStatus from "./EditStatus/EditStatus";
+
+enum StatusMode {
+  view,
+  edit,
+}
 
 export default function Status(): JSX.Element {
-  const status = useAppSelector((state) => getProfile(state).status);
+  const [mode, setMode] = React.useState(StatusMode.view);
 
-  return (
-    <Box display="flex" alignItems="center">
-      <Typography>{status}</Typography>
-
-      <EditButton />
-    </Box>
-  );
+  switch (mode) {
+    case StatusMode.view:
+      return <ViewStatus onEdit={() => setMode(StatusMode.edit)} />;
+    case StatusMode.edit:
+      return <EditStatus onClose={() => setMode(StatusMode.view)} />;
+  }
 }

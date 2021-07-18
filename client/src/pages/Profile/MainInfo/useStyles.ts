@@ -5,9 +5,6 @@ const useStyles = makeStyles((theme: Theme) => {
   const color = grey[500];
 
   return createStyles({
-    title: {
-      textTransform: "uppercase",
-    },
     avatar: {
       width: theme.spacing(15),
       height: theme.spacing(15),
@@ -17,12 +14,6 @@ const useStyles = makeStyles((theme: Theme) => {
     },
     userEmail: {
       color,
-    },
-    joinDate: {
-      color,
-    },
-    tabs: {
-      width: "100%",
     },
   });
 });

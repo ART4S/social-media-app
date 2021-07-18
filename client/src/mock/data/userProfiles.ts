@@ -24,9 +24,10 @@ export const userProfiles: UserProfile[] = users.map(({ id }) =>
   createProfile(id),
 );
 
-const entities: { [id: string]: UserProfile } = normalize(
+export const userProfilesById: { [id: string]: UserProfile } = normalize(
   userProfiles,
-  (x) => x.userId,
+  (x) => x.id,
 );
 
-export default entities;
+export const userProfilesByUserId: { [userId: string]: UserProfile } =
+  normalize(userProfiles, (x) => x.userId);

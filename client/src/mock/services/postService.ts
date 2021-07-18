@@ -1,43 +1,23 @@
 import faker from "faker";
-
 import posts, { Post } from "mock/data/posts";
 import users from "mock/data/users";
 import postLikes from "mock/data/postLikes";
 import postImageLikes from "mock/data/postImageLikes";
-import postImages from "mock/data/postImages";
-import postComments from "mock/data/postComments";
-import imageComments from "mock/data/imageComments";
+import postImages, { PostImage } from "mock/data/postImages";
+import postComments, { PostComment } from "mock/data/postComments";
+import imageComments, { ImageComment } from "mock/data/imageComments";
 import type PostDto from "model/dto/PostDto";
 import type PostImageDto from "model/dto/PostImageDto";
 import type PostCommentDto from "model/dto/PostCommentDto";
 import type PagedRequest from "model/pagination/PagedRequest";
 import type PagedResponse from "model/pagination/PagedResponse";
 import type PostCommentCreateDto from "model/dto/posts/PostCommentCreateDto";
-
 import { composeKey } from "mock/utils/entityUtils";
-
 import { toPagedResponse } from "../utils/paginationUtils";
 import { ImageCommentDto } from "model/dto/ImageCommentDto";
 import ImageCommentCreateDto from "model/dto/posts/ImageCommentCreateDto";
 import PostCreateDto from "model/dto/posts/PostCreateDto";
 import { currentUser } from "mock/services/authService";
-
-function mapPost(post: Post): PostDto {
-  return {
-    id: post.id,
-    authorId: post.authorId,
-    authorFirstName: users[post.authorId].firstName,
-    authorLastName: users[post.authorId].lastName,
-    authorAvatarUrl: users[post.authorId].avatarUrl,
-    body: post.body,
-    createDate: post.createDate,
-    liked: !!postLikes[composeKey(post.id, currentUser!.id)],
-    likeCount: Object.values(postLikes).filter((l) => l.postId == post.id)
-      .length,
-    shareCount: 0,
-    shared: false,
-  };
-}
 
 // posts
 function getAll(
@@ -61,17 +41,7 @@ function getById(id: string) {
 function getImages(id: string): PostImageDto[] {
   return Object.values(postImages)
     .filter((x) => x.postId === id)
-    .map((x) => ({
-      id: x.id,
-      postId: x.postId,
-      url: x.url,
-      createDate: x.createDate,
-      liked: !!postImageLikes[composeKey(x.id, posts[x.postId].authorId)],
-      likeCount: Object.values(postImageLikes).filter((l) => l.imageId === x.id)
-        .length,
-      shared: false,
-      shareCount: 0,
-    }));
+    .map(mapImage);
 }
 
 // posts/:id/comments
@@ -82,16 +52,7 @@ function getComments(
   const data: PostCommentDto[] = Object.values(postComments)
     .filter((x) => x.postId === id)
     .sort((a, b) => (new Date(a.createDate) > new Date(b.createDate) ? 1 : -1))
-    .map((x) => ({
-      id: x.id,
-      postId: x.postId,
-      authorId: x.authorId,
-      authorFirstName: users[x.authorId].firstName,
-      authorLastName: users[x.authorId].lastName,
-      avatarUrl: users[x.authorId].avatarUrl,
-      text: x.text,
-      createDate: x.createDate,
-    }));
+    .map(mapPostComment);
 
   return toPagedResponse(data, pagination);
 }
@@ -124,7 +85,7 @@ function createPost(post: PostCreateDto) {
 function createComment(id: string, comment: PostCommentCreateDto): string {
   const commentId = faker.datatype.uuid();
 
-  postComments[id] = {
+  postComments[commentId] = {
     ...comment,
     id: commentId,
     postId: id,
@@ -132,7 +93,7 @@ function createComment(id: string, comment: PostCommentCreateDto): string {
     createDate: new Date().toISOString(),
   };
 
-  return id;
+  return commentId;
 }
 
 // posts/comments/:commentId
@@ -148,16 +109,7 @@ function getImageComments(
   const data: ImageCommentDto[] = Object.values(imageComments)
     .filter((x) => x.imageId === imageId)
     .sort((a, b) => (new Date(a.createDate) > new Date(b.createDate) ? 1 : -1))
-    .map((x) => ({
-      id: x.id,
-      imageId: x.imageId,
-      authorId: x.authorId,
-      authorFirstName: users[x.authorId].firstName,
-      authorLastName: users[x.authorId].lastName,
-      avatarUrl: users[x.authorId].avatarUrl,
-      text: x.text,
-      createDate: x.createDate,
-    }));
+    .map(mapImageComment);
 
   return toPagedResponse(data, pagination);
 }
@@ -231,3 +183,61 @@ export default {
   addImageLike,
   removeImageLike,
 };
+
+function mapPost(post: Post): PostDto {
+  return {
+    id: post.id,
+    authorId: post.authorId,
+    authorFirstName: users[post.authorId].firstName,
+    authorLastName: users[post.authorId].lastName,
+    authorAvatarUrl: users[post.authorId].avatarUrl,
+    body: post.body,
+    createDate: post.createDate,
+    liked: !!postLikes[composeKey(post.id, currentUser!.id)],
+    likeCount: Object.values(postLikes).filter((l) => l.postId == post.id)
+      .length,
+    shareCount: 0,
+    shared: false,
+  };
+}
+
+function mapPostComment(comment: PostComment): PostCommentDto {
+  return {
+    id: comment.id,
+    postId: comment.postId,
+    authorId: comment.authorId,
+    authorFirstName: users[comment.authorId].firstName,
+    authorLastName: users[comment.authorId].lastName,
+    avatarUrl: users[comment.authorId].avatarUrl,
+    text: comment.text,
+    createDate: comment.createDate,
+  };
+}
+
+function mapImageComment(comment: ImageComment): ImageCommentDto {
+  return {
+    id: comment.id,
+    imageId: comment.imageId,
+    authorId: comment.authorId,
+    authorFirstName: users[comment.authorId].firstName,
+    authorLastName: users[comment.authorId].lastName,
+    avatarUrl: users[comment.authorId].avatarUrl,
+    text: comment.text,
+    createDate: comment.createDate,
+  };
+}
+
+function mapImage(image: PostImage): PostImageDto {
+  return {
+    id: image.id,
+    postId: image.postId,
+    url: image.url,
+    createDate: image.createDate,
+    liked: !!postImageLikes[composeKey(image.id, posts[image.postId].authorId)],
+    likeCount: Object.values(postImageLikes).filter(
+      (l) => l.imageId === image.id,
+    ).length,
+    shared: false,
+    shareCount: 0,
+  };
+}
