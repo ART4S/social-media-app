@@ -23,7 +23,7 @@ import * as yup from "yup";
 import LoginVm from "model/login/loginVm";
 import useAppDispatch from "hooks/useAppDispatch";
 import { useHistory, useLocation } from "react-router-dom";
-import { getUser } from "pages/commonSlice";
+import { getUser } from "redux/commonSlice";
 
 const SPACING = 2;
 
@@ -119,7 +119,6 @@ export default function Login(): JSX.Element {
                   <PasswordField
                     id="password"
                     label="Password"
-                    variant="outlined"
                     value={values.password}
                     helperText={touched.password && !!errors.password}
                     error={touched.password && !!errors.password}

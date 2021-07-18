@@ -62,8 +62,8 @@ export default function UserList(): JSX.Element {
         {!!users.length && (
           <List>
             {users.map((x) => (
-              <Navigate to={`/${x.id}`}>
-                <ListItem key={x.id} button>
+              <Navigate key={x.id} to={`/${x.id}`}>
+                <ListItem button>
                   <ListItemIcon>
                     <Avatar src={x.avatarUrl} />
                   </ListItemIcon>

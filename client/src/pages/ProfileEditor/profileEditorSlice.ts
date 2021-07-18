@@ -6,14 +6,16 @@ import { AppState } from "redux/store";
 const name = "profileEditor";
 
 interface ProfileEditorState {
-  loading: boolean;
+  loaded: boolean;
   isSubmitting: boolean;
+  submitted: boolean;
   profile: UserProfileInfoDto | null;
 }
 
 const initialState: ProfileEditorState = {
-  loading: true,
+  loaded: false,
   isSubmitting: false,
+  submitted: false,
   profile: null,
 };
 
@@ -22,10 +24,10 @@ const slice = createSlice({
   initialState,
   reducers: {
     fetchProfile(state, { payload }: PayloadAction<string>) {
-      state.loading = true;
+      state.loaded = false;
     },
     fetchProfileSucceed(state, { payload }: PayloadAction<UserProfileInfoDto>) {
-      state.loading = false;
+      state.loaded = true;
       state.profile = payload;
     },
     saveProfile(state, action: PayloadAction<UserProfileEditDto>) {
@@ -33,18 +35,24 @@ const slice = createSlice({
     },
     saveProfileSucceed(state, action: AnyAction) {
       state.isSubmitting = false;
+      state.submitted = true;
+    },
+    reset(state) {
+      state.submitted = false;
     },
   },
 });
 
-export const actions = {
-  ...slice.actions,
-};
+export const actions = slice.actions;
 
 const getSelf = (state: AppState) => state.profileEditor;
 
-export const getLoading = (state: AppState) => getSelf(state).loading;
+export const getLoaded = (state: AppState) => getSelf(state).loaded;
+
 export const getProfile = (state: AppState) => getSelf(state).profile!;
+
 export const getIsSubmitting = (state: AppState) => getSelf(state).isSubmitting;
+
+export const getSubmitted = (state: AppState) => getSelf(state).submitted;
 
 export default slice.reducer;

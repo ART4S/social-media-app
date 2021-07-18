@@ -9,20 +9,27 @@ import {
   Button,
 } from "@material-ui/core";
 import useAppSelector from "hooks/useAppSelector";
-import { getProfile } from "../profileSlice";
+import { actions, getProfile } from "../profileSlice";
+import useAppDispatch from "hooks/useAppDispatch";
 
 type DialogProps = React.ComponentProps<typeof Dialog>;
 
 type DeleteProfileDialogProps = Omit<DialogProps, "onClose"> & {
-  onClose: () => void;
+  onClose(): void;
 };
 
 export default function DeleteProfileDialog(
   props: DeleteProfileDialogProps,
 ): JSX.Element {
+  const dispatch = useAppDispatch();
+
   const email = useAppSelector((state) => getProfile(state).email);
 
   const [emailConfirm, setEmailConfirm] = React.useState("");
+
+  function handleDelete() {
+    dispatch(actions.deleteProfile());
+  }
 
   return (
     <Dialog {...props}>
@@ -51,10 +58,11 @@ export default function DeleteProfileDialog(
         </Button>
 
         <Button
+          type="submit"
           variant="contained"
           color="primary"
           disabled={email !== emailConfirm}
-          onClick={props.onClose}
+          onClick={handleDelete}
         >
           OK
         </Button>

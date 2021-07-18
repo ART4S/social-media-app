@@ -15,6 +15,7 @@ import {
 } from "../postListSlice";
 import useAppSelector from "hooks/useAppSelector";
 import Navigate from "components/Navigate/Navigate";
+import DeleteButton from "components/Buttons/DeleteButton/DeleteButton";
 
 interface PostCommentProps {
   postId: string;
@@ -30,15 +31,17 @@ export default function PostComment({
   const comment: PostCommentDto = useAppSelector((state) =>
     getPostCommentById(state, postId, commentId),
   );
-
   const isCurrentUserComment = useAppSelector((state) =>
     getIsCurrentUserComment(state, postId, commentId),
   );
-
   const authorName = getUserName({
     firstName: comment.authorFirstName,
     lastName: comment.authorLastName,
   });
+
+  function handleDelete() {
+    dispatch(actions.deletePostComment({ postId, commentId }));
+  }
 
   return (
     <Box display="flex">
@@ -57,14 +60,7 @@ export default function PostComment({
           </Typography>
 
           {isCurrentUserComment && (
-            <IconButton size="small">
-              <DeleteIcon
-                color="secondary"
-                onClick={() =>
-                  dispatch(actions.deletePostComment({ postId, commentId }))
-                }
-              />
-            </IconButton>
+            <DeleteButton size="small" onClick={handleDelete} />
           )}
         </Box>
       </Box>

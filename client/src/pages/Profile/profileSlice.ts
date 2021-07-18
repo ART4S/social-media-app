@@ -1,21 +1,21 @@
-import { combineReducers } from "@reduxjs/toolkit";
+import { Action, combineReducers, createAction } from "@reduxjs/toolkit";
 import followingsSectionReducer from "./ProfileSections/FollowingsSection/followingsSectionSlice";
 import followersSectionReducer from "./ProfileSections/FollowersSection/followersSectionSlice";
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import UserProfileDto from "model/dto/userProfiles/UserProfileDto";
-import { getUser } from "pages/commonSlice";
+import { getUser } from "redux/commonSlice";
 import { AppState } from "redux/store";
 
 const name = "profile";
 
 interface ProfileState {
-  loading: boolean;
+  loaded: boolean;
   profile?: UserProfileDto;
 }
 
 const initialState: ProfileState = {
-  loading: true,
+  loaded: false,
 };
 
 const slice = createSlice({
@@ -29,20 +29,26 @@ const slice = createSlice({
       }
     },
     fetchProfile(state, action: PayloadAction<string>) {
-      state.loading = true;
+      state.loaded = false;
     },
     fetchProfileSucceed(state, { payload }: PayloadAction<UserProfileDto>) {
-      state.loading = false;
+      state.loaded = true;
       state.profile = payload;
+    },
+    reset(state, action: Action) {
+      state.loaded = false;
     },
   },
 });
 
-export const actions = slice.actions;
+export const actions = {
+  ...slice.actions,
+  deleteProfile: createAction(`${name}/delete`),
+};
 
 const getSelf = (state: AppState) => state.profile.common;
 
-export const getLoading = (state: AppState) => getSelf(state).loading;
+export const getLoaded = (state: AppState) => getSelf(state).loaded;
 
 export const getProfile = (state: AppState) => getSelf(state).profile!;
 

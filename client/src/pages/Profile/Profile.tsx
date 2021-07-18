@@ -11,7 +11,7 @@ import {
 import Header from "components/Header/Header";
 import AdditionalInfo from "./AdditionalInfo/AdditionalInfo";
 import useAppSelector from "hooks/useAppSelector";
-import { actions, getLoading } from "./profileSlice";
+import { actions, getLoaded as getLoaded } from "./profileSlice";
 import useAppDispatch from "hooks/useAppDispatch";
 import PageProgress from "components/PageProgress/PageProgress";
 import MainInfo from "./MainInfo/MainInfo";
@@ -26,15 +26,22 @@ interface ProfileParams {
 export default function Profile() {
   const dispatch = useAppDispatch();
 
+  const history = useHistory();
+
   const { userId } = useParams<ProfileParams>();
 
-  const loading = useAppSelector(getLoading);
+  const loaded = useAppSelector(getLoaded);
 
   React.useEffect(() => {
-    dispatch(actions.fetchProfile(userId));
-  }, [userId]);
+    if (!loaded) {
+      dispatch(actions.fetchProfile(userId));
+    }
+  }, [userId, loaded]);
 
-  return loading ? <PageProgress /> : <PageContent />;
+  // TODO: not fires when using backward/forward arrows inside browser window
+  React.useEffect(() => history.listen(() => dispatch(actions.reset())), []);
+
+  return loaded ? <PageContent /> : <PageProgress />;
 }
 
 function PageContent(): JSX.Element {

@@ -5,7 +5,7 @@ import PostList from "../../components/PostList/PostList";
 import PostForm from "./PostForm/PostForm";
 import UserList from "./UserList/UserList";
 import useAppSelector from "hooks/useAppSelector";
-import { getUser } from "pages/commonSlice";
+import { getUser } from "redux/commonSlice";
 
 export default function Home(): JSX.Element {
   const userId = useAppSelector((state) => getUser(state).id);

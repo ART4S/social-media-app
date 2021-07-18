@@ -11,7 +11,7 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Navigate from "components/Navigate/Navigate";
 import useAppDispatch from "hooks/useAppDispatch";
 import useAppSelector from "hooks/useAppSelector";
-import { getUser } from "pages/commonSlice";
+import { getUser } from "redux/commonSlice";
 
 import { actions as loginActions } from "pages/Login/loginSlice";
 

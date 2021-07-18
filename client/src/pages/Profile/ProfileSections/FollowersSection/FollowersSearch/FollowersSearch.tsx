@@ -20,11 +20,11 @@ export default function FollowersSearch(props: FollowersSearchProps) {
 
   return (
     <TextField
-      id="searchText"
+      name="searchText"
       placeholder="Search by followers..."
+      variant="outlined"
       value={searchText}
       onChange={handleOnChange}
-      variant="outlined"
       InputProps={{
         endAdornment: <>{loading && <Progress size={20} />}</>,
       }}

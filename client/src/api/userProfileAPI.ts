@@ -18,6 +18,15 @@ function updateProfile(id: string, profile: UserProfileEditDto): Promise<void> {
   );
 }
 
+function updateStatus(id: string, text: string): Promise<void> {
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      userProfileService.updateStatus(id, text);
+      resolve();
+    }, config.delayMs),
+  );
+}
+
 function deleteProfile(id: string): Promise<void> {
   return new Promise<void>((resolve) =>
     setTimeout(() => {
@@ -27,4 +36,4 @@ function deleteProfile(id: string): Promise<void> {
   );
 }
 
-export default { getById, updateProfile, deleteProfile };
+export default { getById, updateProfile, updateStatus, deleteProfile };

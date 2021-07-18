@@ -8,7 +8,7 @@ import { actions, getFollowerInfo, getBlocked } from "../followersSectionSlice";
 import { wrap } from "utils/stringUtils";
 import FollowerDto from "model/dto/users/FollowerDto";
 import { getIsCurrentUserProfile } from "pages/Profile/profileSlice";
-import { getUser } from "pages/commonSlice";
+import { getUser } from "redux/commonSlice";
 import Navigate from "components/Navigate/Navigate";
 
 interface FollowingProps {

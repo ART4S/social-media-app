@@ -1,9 +1,11 @@
-import { put, call, takeLatest, all } from "@redux-saga/core/effects";
+import { put, call, takeLatest, all, select } from "@redux-saga/core/effects";
 import followingsSectionSagas from "./ProfileSections/FollowingsSection/followingsSectionSagas";
 import followersSectionSagas from "./ProfileSections/FollowersSection/followersSectionSagas";
 import userAPI from "api/userAPI";
+import userProfileAPI from "api/userProfileAPI";
 import UserProfileDto from "model/dto/userProfiles/UserProfileDto";
-import { actions } from "./profileSlice";
+import { actions, getProfile } from "./profileSlice";
+import { actions as commonActions } from "redux/commonSlice";
 
 function* fetchProfile({
   payload: userId,
@@ -17,17 +19,29 @@ function* watchFetchProfile() {
 }
 
 function* setStatus({ payload: text }: ReturnType<typeof actions.setStatus>) {
-  yield call(userAPI.updateStatus, text);
+  const { id } = getProfile(yield select());
+  yield call(userProfileAPI.updateStatus, id, text);
 }
 
 function* watchSetStatus() {
   yield takeLatest(actions.setStatus.type, setStatus);
 }
 
+function* deleteProfile() {
+  const { id } = getProfile(yield select());
+  yield call(userProfileAPI.deleteProfile, id);
+  yield put(commonActions.clearUser());
+}
+
+function* watchDeleteProfile() {
+  yield takeLatest(actions.deleteProfile.type, deleteProfile);
+}
+
 export default function* profileSagas() {
   yield all([
     watchFetchProfile(),
     watchSetStatus(),
+    watchDeleteProfile(),
     followingsSectionSagas(),
     followersSectionSagas(),
   ]);

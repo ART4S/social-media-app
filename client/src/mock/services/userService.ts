@@ -83,11 +83,6 @@ function searchFollowers(id: string, pattern: string): FollowerDto[] {
     .map(mapFollower);
 }
 
-// users/profile/status
-function updateStatus(text: string) {
-  userProfilesByUserId[currentUser!.id].status = text;
-}
-
 // users/followings
 function createFollowing(following: FollowingCreateDto) {
   const userId = following.userId;
@@ -116,7 +111,6 @@ export default {
   search,
   searchFollowings,
   searchFollowers,
-  updateStatus,
   createFollowing,
   deleteFollowing,
   deleteFollower,

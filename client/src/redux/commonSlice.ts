@@ -25,7 +25,7 @@ const slice = createSlice({
   name,
   initialState,
   reducers: {
-    fetchUserSucceed(state, { payload }: PayloadAction<UserDto>) {
+    setUser(state, { payload }: PayloadAction<UserDto>) {
       state.auth.user = payload;
     },
 

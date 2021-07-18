@@ -14,7 +14,6 @@ import {
 import useAppDispatch from "hooks/useAppDispatch";
 
 import DeleteButton from "components/Buttons/DeleteButton/DeleteButton";
-import { getUser } from "pages/commonSlice";
 import Navigate from "components/Navigate/Navigate";
 
 interface ImageCommentProps {
@@ -33,12 +32,10 @@ export default function ImageComment({
   const comment: ImageCommentDto = useAppSelector((state) =>
     getImageCommentById(state, postId, imageId, commentId),
   );
-
   const userName: string = getUserName({
     firstName: comment.authorFirstName,
     lastName: comment.authorLastName,
   });
-
   const isCurrentUserComment: boolean = useAppSelector((state) =>
     getIsCurrentUserImageComment(state, postId, imageId, commentId),
   );

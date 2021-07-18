@@ -1,10 +1,10 @@
 import React from "react";
-import { Grid, Box, Paper } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import Post from "./Post/Post";
 import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
 import { actions, getLoaded, getPostIds } from "./postListSlice";
-import Progress from "components/Progress/Progress";
+import { useHistory } from "react-router-dom";
 
 interface PostListProps {
   userId: string;
@@ -12,40 +12,30 @@ interface PostListProps {
 
 export default function PostList({ userId }: PostListProps): JSX.Element {
   const dispatch = useAppDispatch();
-
-  const postIds = useAppSelector(getPostIds);
+  const history = useHistory();
 
   const loaded = useAppSelector(getLoaded);
+  const postIds = useAppSelector(getPostIds);
 
   React.useEffect(() => {
-    return () => {
-      dispatch(actions.reset());
-    };
-  }, []);
+    if (!loaded) {
+      dispatch(actions.fetchPosts(userId));
+    }
+  }, [userId, loaded]);
 
-  React.useEffect(() => {
-    dispatch(actions.fetchPosts(userId));
-  }, [userId]);
+  React.useEffect(() => history.listen(() => dispatch(actions.reset())), []);
 
-  return loaded ? (
-    <Grid container spacing={2} direction="column">
-      {postIds.map((id) => (
-        <Grid key={id} item>
-          <Post postId={id} />
-        </Grid>
-      ))}
-    </Grid>
-  ) : (
-    <Spinner />
-  );
-}
-
-function Spinner() {
   return (
-    <Paper elevation={4} style={{ width: "100%" }}>
-      <Box py={2}>
-        <Progress />
-      </Box>
-    </Paper>
+    <>
+      {loaded && (
+        <Grid container spacing={2} direction="column">
+          {postIds.map((id) => (
+            <Grid key={id} item>
+              <Post postId={id} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+    </>
   );
 }

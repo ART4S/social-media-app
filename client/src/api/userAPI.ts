@@ -58,16 +58,6 @@ function searchFollowers(id: string, pattern: string): Promise<FollowerDto[]> {
   );
 }
 
-// TODO: вынести в userProfileAPI
-function updateStatus(text: string): Promise<void> {
-  return new Promise((resolve) =>
-    setTimeout(() => {
-      userService.updateStatus(text);
-      resolve();
-    }, config.delayMs),
-  );
-}
-
 function createFollowing(following: FollowingCreateDto): Promise<void> {
   return new Promise((resolve) =>
     setTimeout(() => {
@@ -100,7 +90,6 @@ export default {
   getFollowings,
   getFollowers,
   getProfile,
-  updateStatus,
   search,
   searchFollowings,
   searchFollowers,

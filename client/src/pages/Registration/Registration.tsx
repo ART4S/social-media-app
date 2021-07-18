@@ -8,7 +8,6 @@ import {
   Link,
   TextField,
   Typography,
-  GridSpacing,
 } from "@material-ui/core";
 import { LockOutlined } from "@material-ui/icons";
 import Alert from "@material-ui/lab/Alert";
@@ -25,7 +24,7 @@ import useAppDispatch from "hooks/useAppDispatch";
 import { actions, getErrors, getIsSubmitting } from "./registrationSlice";
 import RegistrationVm from "model/registration/registrationVm";
 import Navigate from "components/Navigate/Navigate";
-import { getUser } from "pages/commonSlice";
+import { getUser } from "redux/commonSlice";
 import { useHistory } from "react-router-dom";
 
 const SPACING = 2;

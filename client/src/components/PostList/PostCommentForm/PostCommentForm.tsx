@@ -9,7 +9,7 @@ import PostCommentCreateDto from "model/dto/posts/PostCommentCreateDto";
 import { actions } from "../postListSlice";
 import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
-import { getUser } from "pages/commonSlice";
+import { getUser } from "redux/commonSlice";
 
 const initialValues: PostCommentCreateDto = {
   text: "",

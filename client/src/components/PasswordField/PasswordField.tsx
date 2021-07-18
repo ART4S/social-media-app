@@ -9,6 +9,8 @@ export default function PasswordField(
 
   return (
     <TextField
+      autoComplete="current-password"
+      variant="outlined"
       {...props}
       type={showPassword ? "text" : "password"}
       InputProps={{

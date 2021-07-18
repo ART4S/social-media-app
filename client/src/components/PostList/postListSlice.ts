@@ -14,7 +14,7 @@ import PagedResponse from "model/pagination/PagedResponse";
 import { ImageCommentDto } from "model/dto/ImageCommentDto";
 import PostCommentCreateDto from "model/dto/posts/PostCommentCreateDto";
 import ImageCommentCreateDto from "model/dto/posts/ImageCommentCreateDto";
-import { getUser } from "pages/commonSlice";
+import { getUser } from "redux/commonSlice";
 
 const sliceName = "components/postList";
 
@@ -176,7 +176,9 @@ const slice = createSlice({
         post.selectedImageIndex = index;
       }
     },
-    fetchPosts(state, action: PayloadAction<string>) {},
+    fetchPosts(state, action: PayloadAction<string>) {
+      state.loaded = false;
+    },
     fetchPostsSucceed(
       state,
       { payload: response }: PayloadAction<PagedResponse<PostDto>>,

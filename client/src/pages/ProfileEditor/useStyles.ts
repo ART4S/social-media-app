@@ -6,6 +6,10 @@ const useStyles = makeStyles((theme: Theme) =>
       width: theme.spacing(25),
       height: theme.spacing(25),
     },
+    avatarIcon: {
+      width: theme.spacing(10),
+      height: theme.spacing(10),
+    },
   }),
 );
 

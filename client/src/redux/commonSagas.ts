@@ -5,7 +5,7 @@ import { actions } from "./commonSlice";
 
 function* fetchUser({ payload: userId }: ReturnType<typeof actions.fetchUser>) {
   const user: UserDto = yield call(userAPI.getById, userId);
-  yield put(actions.fetchUserSucceed(user));
+  yield put(actions.setUser(user));
 }
 
 function* watchFetchUser() {

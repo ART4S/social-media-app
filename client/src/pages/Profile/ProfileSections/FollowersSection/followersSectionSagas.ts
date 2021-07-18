@@ -10,7 +10,7 @@ import {
 import { actions } from "./followersSectionSlice";
 import userAPI from "api/userAPI";
 import FollowerDto from "model/dto/users/FollowerDto";
-import { getUser } from "pages/commonSlice";
+import { getUser } from "redux/commonSlice";
 import { getProfile } from "pages/Profile/profileSlice";
 
 function* fetchFollowers(action: ReturnType<typeof actions.fetchFollowers>) {

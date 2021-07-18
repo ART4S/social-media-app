@@ -3,7 +3,7 @@ import authAPI from "api/authAPI";
 import RegistrationErrorResponse from "model/registration/RegistrationErrorResponse";
 import RegistrationSuccessResponse from "model/registration/RegistrationSuccessResponse";
 import { actions } from "./registrationSlice";
-import { actions as commonActions } from "pages/commonSlice";
+import { actions as commonActions } from "redux/commonSlice";
 
 function* registerUser({ payload }: ReturnType<typeof actions.registerUser>) {
   const response: RegistrationSuccessResponse | RegistrationErrorResponse =

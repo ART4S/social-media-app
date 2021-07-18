@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
 import useAppSelector from "hooks/useAppSelector";
-import { getUser } from "pages/commonSlice";
+import { getUser } from "redux/commonSlice";
 
 type ProtectedRouteProps = React.ComponentProps<typeof Route>;
 

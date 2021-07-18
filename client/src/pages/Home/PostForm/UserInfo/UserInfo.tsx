@@ -5,7 +5,7 @@ import { Typography } from "@material-ui/core";
 import Avatar from "components/Avatar/Avatar";
 import useAppSelector from "hooks/useAppSelector";
 import { getUserName } from "utils/userUtils";
-import { getUser } from "pages/commonSlice";
+import { getUser } from "redux/commonSlice";
 
 export default function UserInfo(): JSX.Element {
   const user = useAppSelector(getUser);

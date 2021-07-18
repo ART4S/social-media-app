@@ -1,6 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
-import common from "pages/commonSlice";
+import common from "./commonSlice";
 import home from "pages/Home/homeSlice";
 import login from "pages/Login/loginSlice";
 import registration from "pages/Registration/registrationSlice";

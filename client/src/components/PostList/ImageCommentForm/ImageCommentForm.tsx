@@ -9,7 +9,7 @@ import { actions } from "../postListSlice";
 import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
 import ImageCommentCreateDto from "model/dto/posts/ImageCommentCreateDto";
-import { getUser } from "pages/commonSlice";
+import { getUser } from "redux/commonSlice";
 
 const initialValues: ImageCommentCreateDto = {
   text: "",

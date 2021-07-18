@@ -3,7 +3,7 @@ import authAPI from "api/authAPI";
 import LoginErrorResponse from "model/login/LoginErrorResponse";
 import LoginSuccessReponse from "model/login/LoginSuccessResponse";
 import { actions } from "./loginSlice";
-import { actions as commonActions } from "pages/commonSlice";
+import { actions as commonActions } from "redux/commonSlice";
 
 function* login({ payload: vm }: ReturnType<typeof actions.login>) {
   const response: LoginSuccessReponse | LoginErrorResponse = yield call(
