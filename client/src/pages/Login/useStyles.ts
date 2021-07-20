@@ -4,9 +4,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       backgroundColor: theme.palette.background.paper,
-    },
-    header: {
-      textTransform: "capitalize",
+      height: "100vh",
+      paddingTop: theme.spacing(4),
     },
     avatar: {
       backgroundColor: theme.palette.secondary.main,

@@ -15,12 +15,11 @@ export default function ProtectedRoute({
   return (
     <Route
       {...routeProps}
-      render={(props) =>
+      render={({ location }) =>
         isLoggedIn ? (
           children
         ) : (
           <Redirect
-            {...props}
             to={{
               pathname: "/login",
               state: {

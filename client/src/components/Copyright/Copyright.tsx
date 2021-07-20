@@ -17,8 +17,6 @@ import {
   Tab,
 } from "@material-ui/core";
 
-import useStyles from "./useStyles";
-
 export default function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary">

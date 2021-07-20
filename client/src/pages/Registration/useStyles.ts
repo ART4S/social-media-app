@@ -4,8 +4,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       backgroundColor: theme.palette.background.paper,
-      height: "100%",
-      background: theme.palette.background.paper,
+      height: "100vh",
+      paddingTop: theme.spacing(1),
     },
     header: {
       textTransform: "capitalize",

@@ -74,14 +74,14 @@ export default function Login(): JSX.Element {
   return (
     <div className={classes.root}>
       <Container maxWidth="xs">
-        <Box display="flex" justifyContent="center" mt={10}>
+        <Box display="flex" justifyContent="center">
           <Avatar className={classes.avatar}>
             <LockOutlined className={classes.icon} />
           </Avatar>
         </Box>
 
         <Box display="flex" justifyContent="center" mt={SPACING}>
-          <Typography className={classes.header} variant="h5">
+          <Typography style={{ textTransform: "capitalize" }} variant="h5">
             sign in
           </Typography>
         </Box>
