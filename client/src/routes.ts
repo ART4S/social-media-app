@@ -4,7 +4,7 @@ import ProfileEditor from "pages/ProfileEditor/ProfileEditor";
 import Login from "pages/Login/Login";
 import Registration from "pages/Registration/Registration";
 import NotFound from "pages/NotFound/NotFound";
-// "homepage": "https://art4s.github.io/social-media-app",
+
 interface Route {
   path: string;
   component: React.ComponentType<any>;

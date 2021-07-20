@@ -7,9 +7,6 @@ const useStyles = makeStyles((theme: Theme) =>
       height: "100vh",
       paddingTop: theme.spacing(1),
     },
-    header: {
-      textTransform: "capitalize",
-    },
     avatar: {
       backgroundColor: theme.palette.secondary.main,
     },

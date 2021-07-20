@@ -89,7 +89,7 @@ export default function Registration(): JSX.Element {
         </Box>
 
         <Box display="flex" justifyContent="center" mt={SPACING}>
-          <Typography className={classes.header} variant="h5">
+          <Typography style={{ textTransform: "capitalize" }} variant="h5">
             sign up
           </Typography>
         </Box>
