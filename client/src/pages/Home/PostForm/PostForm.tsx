@@ -9,7 +9,7 @@ import ImageGrid from "components/ImageGrid/ImageGrid";
 import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
 import { actions, getIsSubmitting } from "./postFormSlice";
-import PostCreateDto from "model/dto/posts/PostCreateDto";
+import PostCreateDto from "model/dto/post/PostCreateDto";
 import UserInfo from "./UserInfo/UserInfo";
 
 const initialValues: PostCreateDto = {

@@ -5,7 +5,7 @@ import LikeButton from "components/Buttons/LikeButton/LikeButton";
 import ShareButton from "components/Buttons/ShareButton/ShareButton";
 import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
-import PostImageDto from "model/dto/PostImageDto";
+import PostImageDto from "model/dto/postImage/PostImageDto";
 
 interface ImageActivitiesProps {
   postId: string;

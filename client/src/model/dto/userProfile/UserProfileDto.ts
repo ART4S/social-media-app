@@ -8,4 +8,5 @@ export default interface UserProfileDto {
   email: string;
   status?: string;
   about?: string;
+  isCurrentUserFollow: boolean;
 }

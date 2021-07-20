@@ -6,7 +6,7 @@ import {
   EntityState,
   PayloadAction,
 } from "@reduxjs/toolkit";
-import FollowingDto from "model/dto/users/FollowingDto";
+import type FollowingDto from "model/dto/following/FollowingDto";
 import { AppState } from "redux/store";
 
 const name = "profile/followingsSection";

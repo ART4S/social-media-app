@@ -1,9 +1,16 @@
-import { put, call, takeLatest, all, select } from "@redux-saga/core/effects";
+import {
+  put,
+  call,
+  takeLatest,
+  all,
+  select,
+  delay,
+} from "@redux-saga/core/effects";
 import followingsSectionSagas from "./ProfileSections/FollowingsSection/followingsSectionSagas";
 import followersSectionSagas from "./ProfileSections/FollowersSection/followersSectionSagas";
 import userAPI from "api/userAPI";
 import userProfileAPI from "api/userProfileAPI";
-import UserProfileDto from "model/dto/userProfiles/UserProfileDto";
+import UserProfileDto from "model/dto/userProfile/UserProfileDto";
 import { actions, getProfile } from "./profileSlice";
 import { actions as commonActions } from "redux/commonSlice";
 
@@ -30,11 +37,27 @@ function* watchSetStatus() {
 function* deleteProfile() {
   const { id } = getProfile(yield select());
   yield call(userProfileAPI.deleteProfile, id);
-  yield put(commonActions.clearUser());
+  yield put(commonActions.setUser(null));
 }
 
 function* watchDeleteProfile() {
   yield takeLatest(actions.deleteProfile.type, deleteProfile);
+}
+
+function* toggleProfileFollow() {
+  yield delay(500);
+
+  const { userId, isCurrentUserFollow } = getProfile(yield select());
+
+  if (isCurrentUserFollow) {
+    yield call(userAPI.createFollowing, { userId });
+  } else {
+    yield call(userAPI.deleteFollowing, userId);
+  }
+}
+
+function* watchToggleFollowProfile() {
+  yield takeLatest(actions.toggleFollowProfile.type, toggleProfileFollow);
 }
 
 export default function* profileSagas() {
@@ -42,6 +65,7 @@ export default function* profileSagas() {
     watchFetchProfile(),
     watchSetStatus(),
     watchDeleteProfile(),
+    watchToggleFollowProfile(),
     followingsSectionSagas(),
     followersSectionSagas(),
   ]);

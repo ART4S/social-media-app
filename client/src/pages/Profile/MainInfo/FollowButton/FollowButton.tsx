@@ -1,20 +1,14 @@
 import React from "react";
 import { Button } from "@material-ui/core";
 import useAppSelector from "hooks/useAppSelector";
-import { actions, getIsFollow } from "../../followingsSectionSlice";
 import useAppDispatch from "hooks/useAppDispatch";
+import { actions, getProfile } from "pages/Profile/profileSlice";
 
-interface FollowButtonProps {
-  followingId: string;
-}
-
-export default function FollowButton({
-  followingId,
-}: FollowButtonProps): JSX.Element {
+export default function FollowButton(): JSX.Element {
   const dispatch = useAppDispatch();
 
-  const isFollow: boolean = useAppSelector((state) =>
-    getIsFollow(state, followingId),
+  const isFollow: boolean = useAppSelector(
+    (state) => getProfile(state).isCurrentUserFollow,
   );
 
   return (
@@ -22,7 +16,7 @@ export default function FollowButton({
       variant={isFollow ? "outlined" : "contained"}
       color="primary"
       style={{ textTransform: "none" }}
-      onClick={() => dispatch(actions.toggleFollow(followingId))}
+      onClick={() => dispatch(actions.toggleFollowProfile())}
     >
       {isFollow ? "Unfollow" : "Follow"}
     </Button>

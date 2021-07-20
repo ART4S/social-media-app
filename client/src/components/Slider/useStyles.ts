@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: "100%",
       height: "100%",
       display: "flex",
+      overflowY: "hidden",
       justifyContent: "center",
       alignItems: "center",
       backgroundColor: "rgba(0, 0, 0, 0.9)",

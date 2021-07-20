@@ -1,6 +1,6 @@
 import { put, call, takeEvery, all } from "@redux-saga/core/effects";
 import postAPI from "api/postAPI";
-import PostDto from "model/dto/PostDto";
+import PostDto from "model/dto/post/PostDto";
 import { actions } from "./postFormSlice";
 import { actions as postListActions } from "../../../components/PostList/postListSlice";
 

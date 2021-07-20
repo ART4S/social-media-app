@@ -4,7 +4,7 @@ import { Grid, Box, Divider, Modal, Link } from "@material-ui/core";
 import ImageInfo from "../ImageInfo/ImageInfo";
 import Activities from "../ImageActivities/ImageActivities";
 import useStyles from "./useStyles";
-import PostImageDto from "model/dto/PostImageDto";
+import PostImageDto from "model/dto/postImage/PostImageDto";
 import ImageSlider from "components/Slider/Slider";
 import {
   actions,

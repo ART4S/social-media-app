@@ -8,7 +8,7 @@ import useStyles from "./useStyles";
 import { actions } from "../postListSlice";
 import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
-import ImageCommentCreateDto from "model/dto/posts/ImageCommentCreateDto";
+import ImageCommentCreateDto from "model/dto/imageComment/ImageCommentCreateDto";
 import { getUser } from "redux/commonSlice";
 
 const initialValues: ImageCommentCreateDto = {

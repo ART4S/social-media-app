@@ -1,5 +1,5 @@
 import { Box, Typography, Link } from "@material-ui/core";
-import Navigate from "components/Navigate/Navigate";
+import NavLink from "components/NavLink/NavLink";
 
 import useStyles from "./useStyles";
 
@@ -12,11 +12,11 @@ export default function Links() {
         <Typography variant="body2">Forgot password?</Typography>
       </Link>
 
-      <Navigate to="/registration">
+      <NavLink to="/registration">
         <Link className={classes.link}>
           <Typography variant="body2">Sign up</Typography>
         </Link>
-      </Navigate>
+      </NavLink>
     </Box>
   );
 }

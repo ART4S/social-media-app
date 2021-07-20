@@ -23,7 +23,7 @@ import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
 import { actions, getErrors, getIsSubmitting } from "./registrationSlice";
 import RegistrationVm from "model/registration/registrationVm";
-import Navigate from "components/Navigate/Navigate";
+import NavLink from "components/NavLink/NavLink";
 import { getUser } from "redux/commonSlice";
 import { useHistory } from "react-router-dom";
 
@@ -225,13 +225,13 @@ export default function Registration(): JSX.Element {
         </Box>
 
         <Box display="flex" justifyContent="flex-end" mt={SPACING}>
-          <Navigate to="/login">
+          <NavLink to="/login">
             <Link className={classes.link}>
               <Typography variant="body2">
                 Already have an account? Sign in
               </Typography>
             </Link>
-          </Navigate>
+          </NavLink>
         </Box>
 
         <Box display="flex" justifyContent="center" mt={6}>

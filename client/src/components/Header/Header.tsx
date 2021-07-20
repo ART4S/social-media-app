@@ -5,50 +5,62 @@ import {
   Box,
   Container,
   IconButton,
+  Slide,
+  useScrollTrigger,
 } from "@material-ui/core";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import Navigate from "components/Navigate/Navigate";
+import NavLink from "components/NavLink/NavLink";
 import useAppDispatch from "hooks/useAppDispatch";
 import useAppSelector from "hooks/useAppSelector";
+import Avatar from "components/Avatar/Avatar";
 import { getUser } from "redux/commonSlice";
+import { getUserName } from "utils/userUtils";
+import Logo from "./Logo/Logo";
 
 import { actions as loginActions } from "pages/Login/loginSlice";
 
 import useStyles from "./useStyles";
 
-function Logo(): JSX.Element {
+function HideOnScroll({ children }: { children: React.ReactElement }) {
+  const trigger = useScrollTrigger();
+
   return (
-    <Navigate to="/">
-      <Typography>Logo</Typography>
-    </Navigate>
+    <Slide appear={false} direction="down" in={!trigger}>
+      {children}
+    </Slide>
   );
 }
 
 export default function Header(): JSX.Element {
   const classes = useStyles();
   const dispatch = useAppDispatch();
-  const userId = useAppSelector((state) => getUser(state).id);
+  const user = useAppSelector(getUser);
 
   return (
-    <AppBar>
-      <Container maxWidth="md">
-        <Toolbar>
-          <Logo />
+    <HideOnScroll>
+      <AppBar>
+        <Container maxWidth="md">
+          <Toolbar>
+            <Logo />
 
-          <Box flexGrow="1" />
+            <Box flexGrow="1" />
 
-          <IconButton>
-            <Navigate to={userId}>
-              <AccountCircle className={classes.icon} />
-            </Navigate>
-          </IconButton>
+            <NavLink to={user.id}>
+              <Box display="flex" alignItems="center">
+                <Typography>{getUserName(user)}</Typography>
 
-          <IconButton onClick={() => dispatch(loginActions.logout())}>
-            <ExitToAppIcon className={classes.icon} />
-          </IconButton>
-        </Toolbar>
-      </Container>
-    </AppBar>
+                <IconButton>
+                  <Avatar src={user.avatarUrl} />
+                </IconButton>
+              </Box>
+            </NavLink>
+
+            <IconButton onClick={() => dispatch(loginActions.logout())}>
+              <ExitToAppIcon className={classes.icon} />
+            </IconButton>
+          </Toolbar>
+        </Container>
+      </AppBar>
+    </HideOnScroll>
   );
 }

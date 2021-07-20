@@ -1,10 +1,11 @@
 import { capitalizeFirstLetter } from "./stringUtils";
 
-export function getUserName(user: {
+interface User {
   firstName: string;
   lastName: string;
-}): string {
-  const { firstName, lastName } = user;
+}
+
+export function getUserName({ firstName, lastName }: User): string {
   return [firstName, lastName]
     .filter((x) => !!x)
     .map((x) => capitalizeFirstLetter(x.trim()))

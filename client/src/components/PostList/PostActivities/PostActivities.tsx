@@ -7,7 +7,7 @@ import ShareButton from "components/Buttons/ShareButton/ShareButton";
 import useAppSelector from "hooks/useAppSelector";
 import { actions, getPostInfo } from "../postListSlice";
 import useAppDispatch from "hooks/useAppDispatch";
-import PostDto from "model/dto/PostDto";
+import PostDto from "model/dto/post/PostDto";
 
 interface PostActivitiesProps {
   postId: string;

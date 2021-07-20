@@ -23,7 +23,7 @@ import {
 import useAppSelector from "hooks/useAppSelector";
 import PageProgress from "components/PageProgress/PageProgress";
 import useAppDispatch from "hooks/useAppDispatch";
-import UserProfileEditDto from "model/dto/userProfiles/UserProfileEditDto";
+import UserProfileEditDto from "model/dto/userProfile/UserProfileEditDto";
 import * as yup from "yup";
 import { Redirect, useHistory, useLocation } from "react-router-dom";
 import { PhotoCameraOutlined } from "@material-ui/icons";

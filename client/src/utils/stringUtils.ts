@@ -3,5 +3,9 @@ export function capitalizeFirstLetter(value: string): string {
 }
 
 export function wrap(value: string, symbolCount: number = 20) {
-  return value.slice(0, symbolCount) + "...";
+  if (value.length < symbolCount) {
+    return value;
+  } else {
+    return value.slice(0, symbolCount) + "...";
+  }
 }

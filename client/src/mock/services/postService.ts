@@ -6,17 +6,17 @@ import postImageLikes from "mock/data/postImageLikes";
 import postImages, { PostImage } from "mock/data/postImages";
 import postComments, { PostComment } from "mock/data/postComments";
 import imageComments, { ImageComment } from "mock/data/imageComments";
-import type PostDto from "model/dto/PostDto";
-import type PostImageDto from "model/dto/PostImageDto";
-import type PostCommentDto from "model/dto/PostCommentDto";
+import type PostDto from "model/dto/post/PostDto";
+import type PostImageDto from "model/dto/postImage/PostImageDto";
+import type PostCommentDto from "model/dto/postComment/PostCommentDto";
 import type PagedRequest from "model/pagination/PagedRequest";
 import type PagedResponse from "model/pagination/PagedResponse";
-import type PostCommentCreateDto from "model/dto/posts/PostCommentCreateDto";
+import type PostCommentCreateDto from "model/dto/postComment/PostCommentCreateDto";
 import { composeKey } from "mock/utils/entityUtils";
 import { toPagedResponse } from "../utils/paginationUtils";
-import { ImageCommentDto } from "model/dto/ImageCommentDto";
-import ImageCommentCreateDto from "model/dto/posts/ImageCommentCreateDto";
-import PostCreateDto from "model/dto/posts/PostCreateDto";
+import ImageCommentDto from "model/dto/imageComment/ImageCommentDto";
+import ImageCommentCreateDto from "model/dto/imageComment/ImageCommentCreateDto";
+import PostCreateDto from "model/dto/post/PostCreateDto";
 import { currentUser } from "mock/services/authService";
 
 // posts

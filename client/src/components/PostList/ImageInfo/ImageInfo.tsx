@@ -3,11 +3,11 @@ import useStyles from "./useStyles";
 import Avatar from "../../Avatar/Avatar";
 import moment from "moment";
 import { getUserName } from "utils/userUtils";
-import type PostImageDto from "model/dto/PostImageDto";
+import type PostImageDto from "model/dto/postImage/PostImageDto";
 import { getImageInfo, getPostInfo } from "components/PostList/postListSlice";
 import useAppSelector from "hooks/useAppSelector";
-import PostDto from "model/dto/PostDto";
-import Navigate from "components/Navigate/Navigate";
+import PostDto from "model/dto/post/PostDto";
+import NavLink from "components/NavLink/NavLink";
 
 interface ImageInfoProps {
   postId: string;
@@ -30,11 +30,11 @@ export default function ImageInfo({ postId, imageId }: ImageInfoProps) {
       <Avatar className={classes.avatar} src={post.authorAvatarUrl} />
 
       <Box display="flex" flexDirection="column" ml={2}>
-        <Navigate to={post.authorId}>
+        <NavLink to={post.authorId}>
           <Link>
             <Typography>{authorName}</Typography>
           </Link>
-        </Navigate>
+        </NavLink>
 
         <Typography variant="subtitle2">
           {moment(image.createDate).fromNow()}

@@ -1,6 +1,6 @@
 import { put, call, takeLatest, select, all } from "@redux-saga/core/effects";
 import userAPI from "api/userAPI";
-import UserDto from "model/dto/UserDto";
+import UserDto from "model/dto/user/UserDto";
 import { actions } from "./commonSlice";
 
 function* fetchUser({ payload: userId }: ReturnType<typeof actions.fetchUser>) {

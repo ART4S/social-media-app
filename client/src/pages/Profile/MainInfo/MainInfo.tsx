@@ -6,10 +6,11 @@ import useStyles from "./useStyles";
 import useAppSelector from "hooks/useAppSelector";
 import DeleteButton from "components/Buttons/DeleteButton/DeleteButton";
 import EditButton from "components/Buttons/EditButton/EditButton";
-import UserProfileDto from "model/dto/userProfiles/UserProfileDto";
+import UserProfileDto from "model/dto/userProfile/UserProfileDto";
 import DeleteProfileDialog from "../DeleteProfileDialog/DeleteProfileDialog";
 import { getIsCurrentUserProfile, getProfile } from "../profileSlice";
-import Navigate from "components/Navigate/Navigate";
+import NavLink from "components/NavLink/NavLink";
+import FollowButton from "./FollowButton/FollowButton";
 
 export default function MainInfo(): JSX.Element {
   const classes = useStyles();
@@ -40,10 +41,10 @@ export default function MainInfo(): JSX.Element {
 
       <Box flexGrow="1" />
 
-      {isCurrentUserProfile && (
-        <Box display="flex" flexDirection="column" justifyContent="flex-start">
+      <Box display="flex" flexDirection="column" justifyContent="flex-start">
+        {isCurrentUserProfile ? (
           <div>
-            <Navigate
+            <NavLink
               to={{
                 pathname: `${profile.userId}/edit`,
                 state: {
@@ -52,12 +53,14 @@ export default function MainInfo(): JSX.Element {
               }}
             >
               <EditButton />
-            </Navigate>
+            </NavLink>
 
             <DeleteButton onClick={() => setOpen(true)} />
           </div>
-        </Box>
-      )}
+        ) : (
+          <FollowButton />
+        )}
+      </Box>
 
       <DeleteProfileDialog open={open} onClose={() => setOpen(false)} />
     </Box>

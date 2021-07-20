@@ -65,6 +65,8 @@ export default function Login(): JSX.Element {
     }
   }, [isLoggedIn, history, location]);
 
+  React.useEffect(() => history.listen(() => dispatch(actions.reset())), []);
+
   function handleSubmit(values: LoginVm) {
     dispatch(actions.login(values));
   }

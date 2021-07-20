@@ -1,8 +1,9 @@
 import React from "react";
 import ImageGrid from "components/ImageGrid/ImageGrid";
 import ImageViewer from "components/PostList/ImageViewer/ImageViewer";
+import { Box } from "@material-ui/core";
 
-import type PostImageDto from "model/dto/PostImageDto";
+import type PostImageDto from "model/dto/postImage/PostImageDto";
 
 import useAppSelector from "hooks/useAppSelector";
 import { actions, getImages, getSelectedImageIndex } from "../postListSlice";

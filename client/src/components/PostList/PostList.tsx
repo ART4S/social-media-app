@@ -23,6 +23,7 @@ export default function PostList({ userId }: PostListProps): JSX.Element {
     }
   }, [userId, loaded]);
 
+  // TODO: not fires when using backward/forward arrows inside browser window
   React.useEffect(() => history.listen(() => dispatch(actions.reset())), []);
 
   return (

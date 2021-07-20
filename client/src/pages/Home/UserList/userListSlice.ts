@@ -4,7 +4,7 @@ import {
   createSlice,
   PayloadAction,
 } from "@reduxjs/toolkit";
-import UserDto from "model/dto/UserDto";
+import UserDto from "model/dto/user/UserDto";
 import { AppState } from "redux/store";
 
 const name = "home/userList";

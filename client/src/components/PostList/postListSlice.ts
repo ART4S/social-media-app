@@ -6,14 +6,14 @@ import {
   createAction,
   Action,
 } from "@reduxjs/toolkit";
-import PostDto from "model/dto/PostDto";
+import PostDto from "model/dto/post/PostDto";
 import { AppState } from "redux/store";
-import PostImageDto from "model/dto/PostImageDto";
-import PostCommentDto from "model/dto/PostCommentDto";
+import PostImageDto from "model/dto/postImage/PostImageDto";
+import PostCommentDto from "model/dto/postComment/PostCommentDto";
 import PagedResponse from "model/pagination/PagedResponse";
-import { ImageCommentDto } from "model/dto/ImageCommentDto";
-import PostCommentCreateDto from "model/dto/posts/PostCommentCreateDto";
-import ImageCommentCreateDto from "model/dto/posts/ImageCommentCreateDto";
+import ImageCommentDto from "model/dto/imageComment/ImageCommentDto";
+import PostCommentCreateDto from "model/dto/postComment/PostCommentCreateDto";
+import ImageCommentCreateDto from "model/dto/imageComment/ImageCommentCreateDto";
 import { getUser } from "redux/commonSlice";
 
 const sliceName = "components/postList";
@@ -242,7 +242,7 @@ const slice = createSlice({
         };
       }
     },
-    fetchMoreImageCommentsStarted(
+    fetchMoreImageComments(
       state,
       action: PayloadAction<{ postId: string; imageId: string }>,
     ) {
@@ -274,10 +274,7 @@ const slice = createSlice({
         };
       }
     },
-    fetchMorePostCommentsStarted(
-      state,
-      { payload: postId }: PayloadAction<string>,
-    ) {
+    fetchMorePostComments(state, { payload: postId }: PayloadAction<string>) {
       const pagination = state.posts.entities[postId]?.comments.pagination;
       if (pagination) {
         pagination.itemsPerPage += 3;
@@ -492,7 +489,7 @@ export const getImageCommentsCount = (
 ) => getImageCommentsState(state, postId, imageId).ids.length;
 
 export const getIsCurrentUserPost = (state: AppState, postId: string) =>
-  getPostInfo(state, postId).id === getUser(state).id;
+  getPostInfo(state, postId).authorId === getUser(state).id;
 
 export const getLoaded = (state: AppState) => getSelf(state).loaded;
 

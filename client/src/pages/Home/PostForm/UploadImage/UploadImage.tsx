@@ -6,7 +6,7 @@ import DeleteButton from "components/Buttons/DeleteButton/DeleteButton";
 interface UploadImageProps {
   url: string;
   deleteDisabled: boolean;
-  onDelete: () => void;
+  onDelete(): void;
 }
 
 export default function UploadImage({
@@ -17,7 +17,7 @@ export default function UploadImage({
   const classes = useStyles();
 
   return (
-    <Box position="relative" width="100%" height="100%">
+    <Box position="relative">
       <img className={classes.image} src={url} />
 
       {!deleteDisabled && (

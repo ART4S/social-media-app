@@ -39,6 +39,11 @@ export const users: User[] = [
     email: "admin",
     password: "admin",
   },
+  {
+    ...createUser("4edc58af-e778-499e-bd6a-88f2fbbc1025"),
+    email: "user",
+    password: "user",
+  },
   ...ids.map(createUser),
 ];
 

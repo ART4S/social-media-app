@@ -5,7 +5,7 @@ import Avatar from "components/Avatar/Avatar";
 
 import { getUserName } from "utils/userUtils";
 import useAppSelector from "hooks/useAppSelector";
-import { ImageCommentDto } from "model/dto/ImageCommentDto";
+import type ImageCommentDto from "model/dto/imageComment/ImageCommentDto";
 import {
   actions,
   getImageCommentById,
@@ -14,7 +14,7 @@ import {
 import useAppDispatch from "hooks/useAppDispatch";
 
 import DeleteButton from "components/Buttons/DeleteButton/DeleteButton";
-import Navigate from "components/Navigate/Navigate";
+import NavLink from "components/NavLink/NavLink";
 
 interface ImageCommentProps {
   postId: string;
@@ -49,9 +49,9 @@ export default function ImageComment({
       <Avatar src={comment.avatarUrl} />
 
       <Box display="flex" flexDirection="column" ml={2}>
-        <Navigate to={comment.authorId}>
+        <NavLink to={comment.authorId}>
           <Link>{userName}</Link>
-        </Navigate>
+        </NavLink>
 
         <Typography variant="body2">{comment.text}</Typography>
 

@@ -5,7 +5,7 @@ import * as yup from "yup";
 
 import Avatar from "components/Avatar/Avatar";
 import useStyles from "./useStyles";
-import PostCommentCreateDto from "model/dto/posts/PostCommentCreateDto";
+import type PostCommentCreateDto from "model/dto/postComment/PostCommentCreateDto";
 import { actions } from "../postListSlice";
 import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";

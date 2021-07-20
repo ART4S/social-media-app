@@ -16,7 +16,7 @@ import useAppSelector from "hooks/useAppSelector";
 import Progress from "components/Progress/Progress";
 import { getUserName } from "utils/userUtils";
 import Avatar from "components/Avatar/Avatar";
-import Navigate from "components/Navigate/Navigate";
+import NavLink from "components/NavLink/NavLink";
 
 export default function UserList(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -62,7 +62,7 @@ export default function UserList(): JSX.Element {
         {!!users.length && (
           <List>
             {users.map((x) => (
-              <Navigate key={x.id} to={`/${x.id}`}>
+              <NavLink key={x.id} to={`/${x.id}`}>
                 <ListItem button>
                   <ListItemIcon>
                     <Avatar src={x.avatarUrl} />
@@ -70,7 +70,7 @@ export default function UserList(): JSX.Element {
 
                   <ListItemText primary={getUserName(x)} />
                 </ListItem>
-              </Navigate>
+              </NavLink>
             ))}
           </List>
         )}

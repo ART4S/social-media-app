@@ -1,6 +1,13 @@
-import { Action, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  Action,
+  createAction,
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import LoginVm from "model/login/loginVm";
 import { AppState } from "redux/store";
+
+const name = "login";
 
 interface LoginState {
   isSubmitting: boolean;
@@ -13,7 +20,7 @@ const initialState: LoginState = {
 };
 
 const slice = createSlice({
-  name: "login",
+  name,
   initialState,
   reducers: {
     login(state, action: PayloadAction<LoginVm>) {
@@ -27,11 +34,17 @@ const slice = createSlice({
       state.isSubmitting = false;
       state.errors = payload;
     },
-    logout(state, action: Action) {},
+    reset(state) {
+      state.isSubmitting = false;
+      state.errors = [];
+    },
   },
 });
 
-export const actions = slice.actions;
+export const actions = {
+  ...slice.actions,
+  logout: createAction(`${name}/logout`),
+};
 
 const getSelf = (state: AppState) => state.login;
 

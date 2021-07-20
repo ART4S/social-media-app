@@ -1,6 +1,6 @@
 import { put, call, takeLatest, select, all } from "@redux-saga/core/effects";
 import userProfileAPI from "api/userProfileAPI";
-import UserProfileInfoDto from "model/dto/userProfiles/UserProfileInfoDto";
+import UserProfileInfoDto from "model/dto/userProfile/UserProfileInfoDto";
 import { actions, getProfile } from "./profileEditorSlice";
 import { actions as commonActions } from "redux/commonSlice";
 

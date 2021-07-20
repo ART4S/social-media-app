@@ -1,12 +1,12 @@
-import UserDto from "model/dto/UserDto";
+import UserDto from "model/dto/user/UserDto";
 import users, { User } from "mock/data/users";
-import UserProfileDto from "model/dto/userProfiles/UserProfileDto";
+import UserProfileDto from "model/dto/userProfile/UserProfileDto";
 import { userProfilesByUserId } from "mock/data/userProfiles";
 import { currentUser } from "./authService";
 import followings, { Following } from "mock/data/followings";
-import FollowingDto from "model/dto/users/FollowingDto";
-import FollowerDto from "model/dto/users/FollowerDto";
-import FollowingCreateDto from "model/dto/users/FollowingCreateDto";
+import type FollowingDto from "model/dto/following/FollowingDto";
+import type FollowerDto from "model/dto/follower/FollowerDto";
+import type FollowingCreateDto from "model/dto/following/FollowingCreateDto";
 import { composeKey } from "mock/utils/entityUtils";
 
 // users/:id
@@ -42,6 +42,7 @@ function getProfile(userId: string): UserProfileDto {
     dateOfBirth,
     status,
     about,
+    isCurrentUserFollow: !!followings[composeKey(userId, currentUser!.id)],
   };
 }
 

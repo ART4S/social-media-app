@@ -1,6 +1,6 @@
 import { AnyAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import UserProfileInfoDto from "model/dto/userProfiles/UserProfileInfoDto";
-import UserProfileEditDto from "model/dto/userProfiles/UserProfileEditDto";
+import UserProfileInfoDto from "model/dto/userProfile/UserProfileInfoDto";
+import UserProfileEditDto from "model/dto/userProfile/UserProfileEditDto";
 import { AppState } from "redux/store";
 
 const name = "profileEditor";

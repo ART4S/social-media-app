@@ -8,7 +8,7 @@ import {
 } from "@redux-saga/core/effects";
 import { actions, getIsFollow } from "./followingsSectionSlice";
 import userAPI from "api/userAPI";
-import FollowingDto from "model/dto/users/FollowingDto";
+import type FollowingDto from "model/dto/following/FollowingDto";
 import { getProfile } from "pages/Profile/profileSlice";
 
 function* fetchFollowings(action: ReturnType<typeof actions.fetchFollowings>) {
@@ -26,12 +26,15 @@ function* watchFetchFollowings() {
 function* toggleFollow({
   payload: userId,
 }: ReturnType<typeof actions.toggleFollow>) {
-  yield delay(500);
+  yield delay(300);
 
   const isFollow = getIsFollow(yield select(), userId);
 
-  if (isFollow) yield call(userAPI.createFollowing, { userId });
-  else yield call(userAPI.deleteFollowing, userId);
+  if (isFollow) {
+    yield call(userAPI.createFollowing, { userId });
+  } else {
+    yield call(userAPI.deleteFollowing, userId);
+  }
 }
 
 function* watchToggleFollow() {

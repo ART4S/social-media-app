@@ -1,11 +1,11 @@
 import postService from "mock/services/postService";
-import { ImageCommentDto } from "model/dto/ImageCommentDto";
-import type PostCommentDto from "model/dto/PostCommentDto";
-import type PostDto from "model/dto/PostDto";
-import type PostImageDto from "model/dto/PostImageDto";
-import ImageCommentCreateDto from "model/dto/posts/ImageCommentCreateDto";
-import PostCommentCreateDto from "model/dto/posts/PostCommentCreateDto";
-import PostCreateDto from "model/dto/posts/PostCreateDto";
+import type ImageCommentDto from "model/dto/imageComment/ImageCommentDto";
+import type PostCommentDto from "model/dto/postComment/PostCommentDto";
+import type PostDto from "model/dto/post/PostDto";
+import type PostImageDto from "model/dto/postImage/PostImageDto";
+import type ImageCommentCreateDto from "model/dto/imageComment/ImageCommentCreateDto";
+import type PostCommentCreateDto from "model/dto/postComment/PostCommentCreateDto";
+import type PostCreateDto from "model/dto/post/PostCreateDto";
 import type PagedRequest from "model/pagination/PagedRequest";
 import type PagedResponse from "model/pagination/PagedResponse";
 

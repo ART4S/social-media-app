@@ -7,7 +7,7 @@ import {
   all,
 } from "@redux-saga/core/effects";
 import userAPI from "api/userAPI";
-import UserDto from "model/dto/UserDto";
+import UserDto from "model/dto/user/UserDto";
 import { actions, getSearchText } from "./userListSlice";
 
 function* changeSearchText({

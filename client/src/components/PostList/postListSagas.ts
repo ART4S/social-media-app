@@ -9,10 +9,10 @@ import {
 } from "@redux-saga/core/effects";
 import { PayloadAction } from "@reduxjs/toolkit";
 import postAPI from "api/postAPI";
-import { ImageCommentDto } from "model/dto/ImageCommentDto";
-import PostCommentDto from "model/dto/PostCommentDto";
-import PostDto from "model/dto/PostDto";
-import PostImageDto from "model/dto/PostImageDto";
+import type ImageCommentDto from "model/dto/imageComment/ImageCommentDto";
+import type PostCommentDto from "model/dto/postComment/PostCommentDto";
+import PostDto from "model/dto/post/PostDto";
+import PostImageDto from "model/dto/postImage/PostImageDto";
 import PagedResponse from "model/pagination/PagedResponse";
 import {
   actions,
@@ -75,8 +75,7 @@ function* watchFetchPostComments() {
 function* fetchMorePostComments({
   payload: postId,
 }: ReturnType<typeof actions.fetchMorePostComments>) {
-  yield put(actions.fetchMorePostCommentsStarted(postId));
-  yield put(actions.fetchPostComments(postId)); // TODO: найти другой способ вызова
+  yield put(actions.fetchPostComments(postId));
 }
 
 function* watchFetchMorePostComments() {
@@ -110,7 +109,6 @@ function* watchFetchImageComments() {
 function* fetchMoreImageComments({
   payload,
 }: ReturnType<typeof actions.fetchMoreImageComments>) {
-  yield put(actions.fetchMoreImageCommentsStarted(payload));
   yield put(actions.fetchImageComments(payload));
 }
 
@@ -216,8 +214,11 @@ function* togglePostLike({
 
   const { liked } = yield select(getPostInfo, postId);
 
-  if (liked) yield call(postAPI.addLike, postId);
-  else yield call(postAPI.removeLike, postId);
+  if (liked) {
+    yield call(postAPI.addLike, postId);
+  } else {
+    yield call(postAPI.removeLike, postId);
+  }
 }
 
 function* watchTogglePostLike() {
@@ -233,8 +234,11 @@ function* toggleImageLike(action: ReturnType<typeof actions.toggleImageLike>) {
 
   const { liked } = yield select(getImageInfo, postId, imageId);
 
-  if (liked) yield call(postAPI.addImageLike, imageId);
-  else yield call(postAPI.removeImageLike, imageId);
+  if (liked) {
+    yield call(postAPI.addImageLike, imageId);
+  } else {
+    yield call(postAPI.removeImageLike, imageId);
+  }
 }
 
 function* watchToggleImageLike() {

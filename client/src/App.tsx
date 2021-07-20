@@ -1,6 +1,6 @@
 import React from "react";
 import { CssBaseline } from "@material-ui/core";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import routes from "routes";
 import ProtectedRoute from "components/ProtectedRoute/ProtectedRoute";
 

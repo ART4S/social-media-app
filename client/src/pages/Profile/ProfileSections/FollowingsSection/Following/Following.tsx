@@ -1,15 +1,14 @@
 import React from "react";
-import { Box, Avatar, Typography, Grid, Link, Button } from "@material-ui/core";
+import { Box, Avatar, Typography, Grid, Link } from "@material-ui/core";
 import { getUserName } from "utils/userUtils";
 import useStyles from "./useStyles";
 import useAppSelector from "hooks/useAppSelector";
-import useAppDispatch from "hooks/useAppDispatch";
-import { actions, getFollowingInfo } from "../followingsSectionSlice";
+import { getFollowingInfo } from "../followingsSectionSlice";
 import { wrap } from "utils/stringUtils";
-import FollowingDto from "model/dto/users/FollowingDto";
+import type FollowingDto from "model/dto/following/FollowingDto";
 import { getIsCurrentUserProfile } from "pages/Profile/profileSlice";
 import FollowButton from "./FollowButton/FollowButton";
-import Navigate from "components/Navigate/Navigate";
+import NavLink from "components/NavLink/NavLink";
 
 interface FollowingProps {
   followingId: string;
@@ -19,8 +18,6 @@ export default function Following({
   followingId,
 }: FollowingProps): JSX.Element {
   const classes = useStyles();
-
-  const dispatch = useAppDispatch();
 
   const following: FollowingDto = useAppSelector((state) =>
     getFollowingInfo(state, followingId),
@@ -37,9 +34,9 @@ export default function Following({
       <Box ml={4}>
         <Grid container direction="column" spacing={1}>
           <Grid item xs>
-            <Navigate to={following.userId}>
+            <NavLink to={following.userId}>
               <Link>{getUserName(following)}</Link>
-            </Navigate>
+            </NavLink>
           </Grid>
 
           <Grid item xs>
@@ -49,12 +46,7 @@ export default function Following({
           </Grid>
 
           <Grid item xs>
-            {isCurrentUserProfile && (
-              <FollowButton
-                followingId={followingId}
-                onClick={() => dispatch(actions.toggleFollow(followingId))}
-              />
-            )}
+            {isCurrentUserProfile && <FollowButton followingId={followingId} />}
           </Grid>
         </Grid>
       </Box>

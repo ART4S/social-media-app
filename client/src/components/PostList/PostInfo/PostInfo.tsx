@@ -7,10 +7,10 @@ import { getUserName } from "utils/userUtils";
 import useStyles from "./useStyles";
 import DeleteButton from "components/Buttons/DeleteButton/DeleteButton";
 import Avatar from "components/Avatar/Avatar";
-import type PostDto from "model/dto/PostDto";
+import type PostDto from "model/dto/post/PostDto";
 import useAppSelector from "hooks/useAppSelector";
 import { actions, getIsCurrentUserPost, getPostInfo } from "../postListSlice";
-import Navigate from "components/Navigate/Navigate";
+import NavLink from "components/NavLink/NavLink";
 import useAppDispatch from "hooks/useAppDispatch";
 
 interface PostInfoProps {
@@ -43,11 +43,11 @@ export default function PostInfo({ postId }: PostInfoProps): JSX.Element {
         <Avatar className={classes.avatar} src={post.authorAvatarUrl} />
 
         <Box display="flex" flexDirection="column" ml={2}>
-          <Navigate to={post.authorId}>
+          <NavLink to={post.authorId}>
             <Link>
               <Typography>{userName}</Typography>
             </Link>
-          </Navigate>
+          </NavLink>
 
           <Typography variant="subtitle2">
             {moment(post.createDate).fromNow()}

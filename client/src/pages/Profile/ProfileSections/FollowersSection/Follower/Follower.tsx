@@ -6,10 +6,9 @@ import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
 import { actions, getFollowerInfo, getBlocked } from "../followersSectionSlice";
 import { wrap } from "utils/stringUtils";
-import FollowerDto from "model/dto/users/FollowerDto";
+import FollowerDto from "model/dto/follower/FollowerDto";
 import { getIsCurrentUserProfile } from "pages/Profile/profileSlice";
-import { getUser } from "redux/commonSlice";
-import Navigate from "components/Navigate/Navigate";
+import NavLink from "components/NavLink/NavLink";
 
 interface FollowingProps {
   followerId: string;
@@ -43,9 +42,9 @@ export default function Follower({ followerId }: FollowingProps): JSX.Element {
       <Box ml={4}>
         <Grid container direction="column" spacing={1}>
           <Grid item xs>
-            <Navigate to={follower.followerId}>
+            <NavLink to={follower.followerId}>
               <Link>{getUserName(follower)}</Link>
-            </Navigate>
+            </NavLink>
           </Grid>
 
           <Grid item xs>

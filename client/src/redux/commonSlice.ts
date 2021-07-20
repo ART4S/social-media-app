@@ -1,10 +1,5 @@
-import {
-  createSlice,
-  PayloadAction,
-  Action,
-  createAction,
-} from "@reduxjs/toolkit";
-import UserDto from "model/dto/UserDto";
+import { createSlice, PayloadAction, createAction } from "@reduxjs/toolkit";
+import UserDto from "model/dto/user/UserDto";
 import { AppState } from "redux/store";
 
 const name = "common";
@@ -25,12 +20,8 @@ const slice = createSlice({
   name,
   initialState,
   reducers: {
-    setUser(state, { payload }: PayloadAction<UserDto>) {
+    setUser(state, { payload }: PayloadAction<UserDto | null>) {
       state.auth.user = payload;
-    },
-
-    clearUser(state, action: Action) {
-      state.auth.user = null;
     },
   },
 });

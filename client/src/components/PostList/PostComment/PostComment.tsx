@@ -1,11 +1,10 @@
-import type PostCommentDto from "model/dto/PostCommentDto";
-import { IconButton, Typography, Box, Link } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
+import { Typography, Box, Link } from "@material-ui/core";
 
 import moment from "moment";
 
 import Avatar from "components/Avatar/Avatar";
 
+import type PostCommentDto from "model/dto/postComment/PostCommentDto";
 import { getUserName } from "utils/userUtils";
 import useAppDispatch from "hooks/useAppDispatch";
 import {
@@ -14,7 +13,7 @@ import {
   getPostCommentById,
 } from "../postListSlice";
 import useAppSelector from "hooks/useAppSelector";
-import Navigate from "components/Navigate/Navigate";
+import NavLink from "components/NavLink/NavLink";
 import DeleteButton from "components/Buttons/DeleteButton/DeleteButton";
 
 interface PostCommentProps {
@@ -48,9 +47,9 @@ export default function PostComment({
       <Avatar src={comment.avatarUrl} />
 
       <Box display="flex" flexDirection="column" ml={2}>
-        <Navigate to={comment.authorId}>
+        <NavLink to={comment.authorId}>
           <Link>{authorName}</Link>
-        </Navigate>
+        </NavLink>
 
         <Typography variant="body2">{comment.text}</Typography>
 

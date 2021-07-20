@@ -28,7 +28,7 @@ function* watchLogin() {
 
 function* logout() {
   yield call(authAPI.logout);
-  yield put(commonActions.clearUser());
+  yield put(commonActions.setUser(null));
 }
 
 function* watchLogout() {

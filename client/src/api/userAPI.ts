@@ -1,9 +1,9 @@
 import userService from "mock/services/userService";
-import UserDto from "model/dto/UserDto";
-import UserProfileDto from "model/dto/userProfiles/UserProfileDto";
-import FollowerDto from "model/dto/users/FollowerDto";
-import FollowingCreateDto from "model/dto/users/FollowingCreateDto";
-import FollowingDto from "model/dto/users/FollowingDto";
+import type UserDto from "model/dto/user/UserDto";
+import type UserProfileDto from "model/dto/userProfile/UserProfileDto";
+import type FollowerDto from "model/dto/follower/FollowerDto";
+import type FollowingCreateDto from "model/dto/following/FollowingCreateDto";
+import type FollowingDto from "model/dto/following/FollowingDto";
 
 import config from "./config";
 

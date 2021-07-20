@@ -3,7 +3,7 @@ import followingsSectionReducer from "./ProfileSections/FollowingsSection/follow
 import followersSectionReducer from "./ProfileSections/FollowersSection/followersSectionSlice";
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import UserProfileDto from "model/dto/userProfiles/UserProfileDto";
+import UserProfileDto from "model/dto/userProfile/UserProfileDto";
 import { getUser } from "redux/commonSlice";
 import { AppState } from "redux/store";
 
@@ -34,6 +34,11 @@ const slice = createSlice({
     fetchProfileSucceed(state, { payload }: PayloadAction<UserProfileDto>) {
       state.loaded = true;
       state.profile = payload;
+    },
+    toggleFollowProfile(state, action: Action) {
+      if (state.profile) {
+        state.profile.isCurrentUserFollow = !state.profile.isCurrentUserFollow;
+      }
     },
     reset(state, action: Action) {
       state.loaded = false;

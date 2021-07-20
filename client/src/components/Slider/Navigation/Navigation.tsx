@@ -3,8 +3,8 @@ import { ChevronLeftRounded, ChevronRightRounded } from "@material-ui/icons";
 import useStyles from "./useStyles";
 
 interface NavigationProps {
-  gotoPrev: () => void;
-  gotoNext: () => void;
+  gotoPrev(): void;
+  gotoNext(): void;
 }
 
 export default function Navigation({

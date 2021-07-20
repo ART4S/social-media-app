@@ -11,8 +11,8 @@ import {
   userProfilesByUserId,
 } from "mock/data/userProfiles";
 import users from "mock/data/users";
-import UserProfileEditDto from "model/dto/userProfiles/UserProfileEditDto";
-import UserProfileInfoDto from "model/dto/userProfiles/UserProfileInfoDto";
+import UserProfileEditDto from "model/dto/userProfile/UserProfileEditDto";
+import UserProfileInfoDto from "model/dto/userProfile/UserProfileInfoDto";
 import { currentUser } from "./authService";
 
 // userProfiles/:id
