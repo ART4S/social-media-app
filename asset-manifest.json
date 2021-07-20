@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/social-media-app/static/js/main.0b4d796a.chunk.js",
-    "main.js.map": "/social-media-app/static/js/main.0b4d796a.chunk.js.map",
+    "main.js": "/social-media-app/static/js/main.363af22f.chunk.js",
+    "main.js.map": "/social-media-app/static/js/main.363af22f.chunk.js.map",
     "runtime-main.js": "/social-media-app/static/js/runtime-main.c7b00c3b.js",
     "runtime-main.js.map": "/social-media-app/static/js/runtime-main.c7b00c3b.js.map",
     "static/js/2.019a7b2a.chunk.js": "/social-media-app/static/js/2.019a7b2a.chunk.js",
@@ -12,6 +12,6 @@
   "entrypoints": [
     "static/js/runtime-main.c7b00c3b.js",
     "static/js/2.019a7b2a.chunk.js",
-    "static/js/main.0b4d796a.chunk.js"
+    "static/js/main.363af22f.chunk.js"
   ]
 }
