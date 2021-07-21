@@ -6,6 +6,7 @@ import {
   EntityState,
   PayloadAction,
 } from "@reduxjs/toolkit";
+
 import type FollowingDto from "model/dto/following/FollowingDto";
 import { AppState } from "redux/store";
 
@@ -78,8 +79,7 @@ export const actions = {
 
 const getSelf = (state: AppState) => state.profile.followingsSection;
 
-export const getFollowingIds = (state: AppState) =>
-  getSelf(state).followings.ids as string[];
+export const getFollowingIds = (state: AppState) => getSelf(state).followings.ids as string[];
 
 const getFollowing = (state: AppState, followingId: string) =>
   getSelf(state).followings.entities[followingId]!;

@@ -1,22 +1,15 @@
-import {
-  put,
-  call,
-  takeLatest,
-  all,
-  select,
-  delay,
-} from "@redux-saga/core/effects";
-import followingsSectionSagas from "./ProfileSections/FollowingsSection/followingsSectionSagas";
-import followersSectionSagas from "./ProfileSections/FollowersSection/followersSectionSagas";
+import { put, call, takeLatest, all, select, delay } from "redux-saga/effects";
+
 import userAPI from "api/userAPI";
 import userProfileAPI from "api/userProfileAPI";
 import UserProfileDto from "model/dto/userProfile/UserProfileDto";
-import { actions, getProfile } from "./profileSlice";
 import { actions as commonActions } from "redux/commonSlice";
 
-function* fetchProfile({
-  payload: userId,
-}: ReturnType<typeof actions.fetchProfile>) {
+import { actions, getProfile } from "./profileSlice";
+import followersSectionSagas from "./ProfileSections/FollowersSection/followersSectionSagas";
+import followingsSectionSagas from "./ProfileSections/FollowingsSection/followingsSectionSagas";
+
+function* fetchProfile({ payload: userId }: ReturnType<typeof actions.fetchProfile>) {
   const profile: UserProfileDto = yield call(userAPI.getProfile, userId);
   yield put(actions.fetchProfileSucceed(profile));
 }

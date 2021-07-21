@@ -16,7 +16,7 @@ export default function ProtectedRoute({
     <Route
       {...routeProps}
       render={({ location }) =>
-        isLoggedIn ? (
+        (isLoggedIn ? (
           children
         ) : (
           <Redirect
@@ -27,8 +27,7 @@ export default function ProtectedRoute({
               },
             }}
           />
-        )
-      }
+        ))}
     />
   );
 }

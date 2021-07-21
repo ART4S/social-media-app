@@ -1,13 +1,14 @@
-import UserDto from "model/dto/user/UserDto";
+import type UserDto from "model/dto/user/UserDto";
 import users, { User } from "mock/data/users";
-import UserProfileDto from "model/dto/userProfile/UserProfileDto";
+import type UserProfileDto from "model/dto/userProfile/UserProfileDto";
 import { userProfilesByUserId } from "mock/data/userProfiles";
-import { currentUser } from "./authService";
 import followings, { Following } from "mock/data/followings";
 import type FollowingDto from "model/dto/following/FollowingDto";
 import type FollowerDto from "model/dto/follower/FollowerDto";
 import type FollowingCreateDto from "model/dto/following/FollowingCreateDto";
 import { composeKey } from "mock/utils/entityUtils";
+
+import { getCurrentUser } from "./authService";
 
 // users/:id
 function getById(id: string): UserDto {
@@ -42,7 +43,7 @@ function getProfile(userId: string): UserProfileDto {
     dateOfBirth,
     status,
     about,
-    isCurrentUserFollow: !!followings[composeKey(userId, currentUser!.id)],
+    isCurrentUserFollow: !!followings[composeKey(userId, getCurrentUser().id)],
   };
 }
 
@@ -52,8 +53,7 @@ function search(pattern: string): UserDto[] {
   return Object.values(users)
     .filter(
       (x) =>
-        regex.test(x.firstName.toLocaleLowerCase()) ||
-        regex.test(x.lastName.toLocaleLowerCase()),
+        regex.test(x.firstName.toLocaleLowerCase()) || regex.test(x.lastName.toLocaleLowerCase()),
     )
     .map(mapUser);
 }
@@ -64,9 +64,9 @@ function searchFollowings(id: string, pattern: string): FollowingDto[] {
   return Object.values(followings)
     .filter(
       (x) =>
-        x.followerId == id &&
-        (regex.test(users[x.userId].firstName.toLocaleLowerCase()) ||
-          regex.test(users[x.userId].lastName.toLocaleLowerCase())),
+        x.followerId === id
+        && (regex.test(users[x.userId].firstName.toLocaleLowerCase())
+          || regex.test(users[x.userId].lastName.toLocaleLowerCase())),
     )
     .map(mapFollowing);
 }
@@ -77,17 +77,17 @@ function searchFollowers(id: string, pattern: string): FollowerDto[] {
   return Object.values(followings)
     .filter(
       (x) =>
-        x.userId == id &&
-        (regex.test(users[x.followerId].firstName.toLocaleLowerCase()) ||
-          regex.test(users[x.followerId].lastName.toLocaleLowerCase())),
+        x.userId === id
+        && (regex.test(users[x.followerId].firstName.toLocaleLowerCase())
+          || regex.test(users[x.followerId].lastName.toLocaleLowerCase())),
     )
     .map(mapFollower);
 }
 
 // users/followings
 function createFollowing(following: FollowingCreateDto) {
-  const userId = following.userId;
-  const followerId = currentUser!.id;
+  const { userId } = following;
+  const followerId = getCurrentUser().id;
   followings[composeKey(userId, followerId)] = {
     userId,
     followerId,
@@ -96,12 +96,12 @@ function createFollowing(following: FollowingCreateDto) {
 
 // users/followings/:userId
 function deleteFollowing(userId: string) {
-  delete followings[composeKey(userId, currentUser!.id)];
+  delete followings[composeKey(userId, getCurrentUser().id)];
 }
 
 // users/followers/:followerId
 function deleteFollower(followerId: string) {
-  delete followings[composeKey(currentUser!.id, followerId)];
+  delete followings[composeKey(getCurrentUser().id, followerId)];
 }
 
 export default {

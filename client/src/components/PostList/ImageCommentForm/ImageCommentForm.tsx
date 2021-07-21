@@ -4,12 +4,14 @@ import { Formik, Form, FormikHelpers } from "formik";
 import * as yup from "yup";
 
 import Avatar from "components/Avatar/Avatar";
-import useStyles from "./useStyles";
-import { actions } from "../postListSlice";
 import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
-import ImageCommentCreateDto from "model/dto/imageComment/ImageCommentCreateDto";
+import type ImageCommentCreateDto from "model/dto/imageComment/ImageCommentCreateDto";
 import { getUser } from "redux/commonSlice";
+
+import { actions } from "../postListSlice";
+
+import useStyles from "./useStyles";
 
 const initialValues: ImageCommentCreateDto = {
   text: "",
@@ -19,15 +21,12 @@ const validationSchema = yup.object({
   text: yup.string().trim().required("Required"),
 });
 
-interface ImageCommentFormProps {
+type ImageCommentFormProps = {
   postId: string;
   imageId: string;
-}
+};
 
-export default function ImageCommentForm({
-  postId,
-  imageId,
-}: ImageCommentFormProps): JSX.Element {
+export default function ImageCommentForm({ postId, imageId }: ImageCommentFormProps): JSX.Element {
   const classes = useStyles();
 
   const dispatch = useAppDispatch();
@@ -40,13 +39,13 @@ export default function ImageCommentForm({
 
   function handleSubmit(
     comment: ImageCommentCreateDto,
-    formik: FormikHelpers<ImageCommentCreateDto>,
+    { resetForm, setSubmitting }: FormikHelpers<ImageCommentCreateDto>,
   ) {
     inputRef.current?.blur();
     dispatch(actions.createImageComment({ postId, imageId, comment }));
     setIsButtonsVisible(false);
-    formik.resetForm();
-    formik.setSubmitting(false);
+    resetForm();
+    setSubmitting(false);
   }
 
   return (
@@ -89,12 +88,7 @@ export default function ImageCommentForm({
                 </Button>
 
                 <Box ml={2}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    disabled={isSubmitting}
-                  >
+                  <Button type="submit" variant="contained" color="primary" disabled={isSubmitting}>
                     add
                   </Button>
                 </Box>

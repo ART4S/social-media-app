@@ -1,15 +1,10 @@
-import {
-  put,
-  call,
-  takeLatest,
-  select,
-  all,
-  delay,
-} from "@redux-saga/core/effects";
-import { actions, getIsFollow } from "./followingsSectionSlice";
+import { put, call, takeLatest, select, all, delay } from "redux-saga/effects";
+
 import userAPI from "api/userAPI";
 import type FollowingDto from "model/dto/following/FollowingDto";
 import { getProfile } from "pages/Profile/profileSlice";
+
+import { actions, getIsFollow } from "./followingsSectionSlice";
 
 function* fetchFollowings(action: ReturnType<typeof actions.fetchFollowings>) {
   const { userId } = getProfile(yield select());
@@ -23,9 +18,7 @@ function* watchFetchFollowings() {
   yield takeLatest(actions.fetchFollowings.type, fetchFollowings);
 }
 
-function* toggleFollow({
-  payload: userId,
-}: ReturnType<typeof actions.toggleFollow>) {
+function* toggleFollow({ payload: userId }: ReturnType<typeof actions.toggleFollow>) {
   yield delay(300);
 
   const isFollow = getIsFollow(yield select(), userId);
@@ -41,9 +34,7 @@ function* watchToggleFollow() {
   yield takeLatest(actions.toggleFollow.type, toggleFollow);
 }
 
-function* changeSearchText({
-  payload,
-}: ReturnType<typeof actions.changeSearchText>) {
+function* changeSearchText({ payload }: ReturnType<typeof actions.changeSearchText>) {
   yield put(actions.setSearchText(payload));
 
   yield delay(500);
@@ -52,11 +43,7 @@ function* changeSearchText({
 
   const { userId } = getProfile(yield select());
 
-  const followings: FollowingDto[] = yield call(
-    userAPI.searchFollowings,
-    userId,
-    payload,
-  );
+  const followings: FollowingDto[] = yield call(userAPI.searchFollowings, userId, payload);
 
   yield put(actions.searchFollowingsSucceed(followings));
 }
@@ -66,9 +53,5 @@ function* watchChangeSearchText() {
 }
 
 export default function* followingsSectionSaga() {
-  yield all([
-    watchFetchFollowings(),
-    watchToggleFollow(),
-    watchChangeSearchText(),
-  ]);
+  yield all([watchFetchFollowings(), watchToggleFollow(), watchChangeSearchText()]);
 }

@@ -1,13 +1,15 @@
 import React from "react";
 import { Box } from "@material-ui/core";
-import useStyles from "./useStyles";
+
 import DeleteButton from "components/Buttons/DeleteButton/DeleteButton";
 
-interface UploadImageProps {
+import useStyles from "./useStyles";
+
+type UploadImageProps = {
   url: string;
   deleteDisabled: boolean;
-  onDelete(): void;
-}
+  onDelete: () => void;
+};
 
 export default function UploadImage({
   url,

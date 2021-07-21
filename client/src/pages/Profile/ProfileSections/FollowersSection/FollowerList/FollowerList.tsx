@@ -1,9 +1,11 @@
 import React from "react";
 import { Grid } from "@material-ui/core";
+
 import useAppSelector from "hooks/useAppSelector";
+import useAppDispatch from "hooks/useAppDispatch";
+
 import { actions, getFollowerIds } from "../followersSectionSlice";
 import Follower from "../Follower/Follower";
-import useAppDispatch from "hooks/useAppDispatch";
 
 export default function FollowerList(): JSX.Element {
   const dispatch = useAppDispatch();

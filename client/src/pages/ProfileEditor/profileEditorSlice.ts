@@ -1,7 +1,8 @@
 import { AnyAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import UserProfileInfoDto from "model/dto/userProfile/UserProfileInfoDto";
-import UserProfileEditDto from "model/dto/userProfile/UserProfileEditDto";
-import { AppState } from "redux/store";
+
+import type UserProfileInfoDto from "model/dto/userProfile/UserProfileInfoDto";
+import type UserProfileEditDto from "model/dto/userProfile/UserProfileEditDto";
+import type { AppState } from "redux/store";
 
 const name = "profileEditor";
 
@@ -43,7 +44,7 @@ const slice = createSlice({
   },
 });
 
-export const actions = slice.actions;
+export const { actions } = slice;
 
 const getSelf = (state: AppState) => state.profileEditor;
 

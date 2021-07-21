@@ -1,10 +1,6 @@
-import {
-  Action,
-  createAction,
-  createSlice,
-  PayloadAction,
-} from "@reduxjs/toolkit";
-import UserDto from "model/dto/user/UserDto";
+import { Action, createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+import type UserDto from "model/dto/user/UserDto";
 import { AppState } from "redux/store";
 
 const name = "home/userList";

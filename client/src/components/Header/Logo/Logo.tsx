@@ -1,3 +1,5 @@
+import React from "react";
+
 import logo from "assets/logo.png";
 import NavLink from "components/NavLink/NavLink";
 
@@ -8,7 +10,7 @@ export default function Logo(): JSX.Element {
 
   return (
     <NavLink to="/">
-      <img className={classes.logo} src={logo} />
+      <img className={classes.logo} src={logo} alt="logo" />
     </NavLink>
   );
 }

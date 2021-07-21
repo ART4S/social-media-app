@@ -1,5 +1,7 @@
 import faker from "faker";
+
 import { normalize } from "utils/dataUtils";
+
 import { users } from "./users";
 import { posts } from "./posts";
 
@@ -56,9 +58,6 @@ export const postComments: PostComment[] = [
   },
 ];
 
-const entities: { [id: string]: PostComment } = normalize(
-  postComments,
-  (x) => x.id,
-);
+const entities: { [id: string]: PostComment } = normalize(postComments, (x) => x.id);
 
 export default entities;

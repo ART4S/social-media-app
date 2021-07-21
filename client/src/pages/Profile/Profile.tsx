@@ -1,29 +1,23 @@
 import React from "react";
-import {
-  Container,
-  Box,
-  Paper,
-  Divider,
-  Link,
-  Collapse,
-} from "@material-ui/core";
+import { Container, Box, Paper, Divider, Link, Collapse } from "@material-ui/core";
+import { useHistory, useParams } from "react-router-dom";
 
 import Header from "components/Header/Header";
-import AdditionalInfo from "./AdditionalInfo/AdditionalInfo";
 import useAppSelector from "hooks/useAppSelector";
-import { actions, getLoaded as getLoaded } from "./profileSlice";
 import useAppDispatch from "hooks/useAppDispatch";
 import PageProgress from "components/PageProgress/PageProgress";
+
+import { actions, getLoaded } from "./profileSlice";
+import AdditionalInfo from "./AdditionalInfo/AdditionalInfo";
 import MainInfo from "./MainInfo/MainInfo";
 import Status from "./Status/Status";
 import ProfileSections from "./ProfileSections/ProfileSections";
-import { useHistory, useParams } from "react-router-dom";
 
-interface ProfileParams {
+type ProfileParams = {
   userId: string;
-}
+};
 
-export default function Profile() {
+export default function Profile(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const history = useHistory();
@@ -64,11 +58,10 @@ function PageContent(): JSX.Element {
               <Status />
 
               <Box my={1}>
-                <Link
-                  style={{ cursor: "pointer" }}
-                  onClick={() => setShowInfo(!showInfo)}
-                >
-                  {showInfo ? "Hide" : "Show"} more information
+                <Link style={{ cursor: "pointer" }} onClick={() => setShowInfo(!showInfo)}>
+                  {showInfo ? "Hide" : "Show"}
+                  {' '}
+                  more information
                 </Link>
               </Box>
 

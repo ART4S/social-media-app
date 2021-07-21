@@ -1,11 +1,17 @@
-import { Action, combineReducers, createAction } from "@reduxjs/toolkit";
-import followingsSectionReducer from "./ProfileSections/FollowingsSection/followingsSectionSlice";
-import followersSectionReducer from "./ProfileSections/FollowersSection/followersSectionSlice";
+import {
+  Action,
+  combineReducers,
+  createAction,
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import UserProfileDto from "model/dto/userProfile/UserProfileDto";
+import type UserProfileDto from "model/dto/userProfile/UserProfileDto";
 import { getUser } from "redux/commonSlice";
 import { AppState } from "redux/store";
+
+import followersSectionReducer from "./ProfileSections/FollowersSection/followersSectionSlice";
+import followingsSectionReducer from "./ProfileSections/FollowingsSection/followingsSectionSlice";
 
 const name = "profile";
 
@@ -23,7 +29,7 @@ const slice = createSlice({
   initialState,
   reducers: {
     setStatus(state, { payload }: PayloadAction<string>) {
-      const profile = state.profile;
+      const { profile } = state;
       if (profile) {
         profile.status = payload;
       }
@@ -58,7 +64,7 @@ export const getLoaded = (state: AppState) => getSelf(state).loaded;
 export const getProfile = (state: AppState) => getSelf(state).profile!;
 
 export const getIsCurrentUserProfile = (state: AppState) =>
-  getProfile(state).userId == getUser(state)?.id;
+  getProfile(state).userId === getUser(state)?.id;
 
 const reducer = combineReducers({
   common: slice.reducer,

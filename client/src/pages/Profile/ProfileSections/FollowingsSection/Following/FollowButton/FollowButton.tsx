@@ -1,21 +1,19 @@
 import React from "react";
 import { Button } from "@material-ui/core";
+
 import useAppSelector from "hooks/useAppSelector";
-import { actions, getIsFollow } from "../../followingsSectionSlice";
 import useAppDispatch from "hooks/useAppDispatch";
 
-interface FollowButtonProps {
-  followingId: string;
-}
+import { actions, getIsFollow } from "../../followingsSectionSlice";
 
-export default function FollowButton({
-  followingId,
-}: FollowButtonProps): JSX.Element {
+type FollowButtonProps = {
+  followingId: string;
+};
+
+export default function FollowButton({ followingId }: FollowButtonProps): JSX.Element {
   const dispatch = useAppDispatch();
 
-  const isFollow: boolean = useAppSelector((state) =>
-    getIsFollow(state, followingId),
-  );
+  const isFollow: boolean = useAppSelector((state) => getIsFollow(state, followingId));
 
   return (
     <Button

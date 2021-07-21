@@ -37,4 +37,9 @@ function deleteProfile(id: string): Promise<void> {
   );
 }
 
-export default { getById, updateProfile, updateStatus, deleteProfile };
+export default {
+  getById,
+  updateProfile,
+  updateStatus,
+  deleteProfile,
+};

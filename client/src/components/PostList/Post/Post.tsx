@@ -1,26 +1,24 @@
 import React from "react";
-import { Typography } from "@material-ui/core";
-import { Paper, Box } from "@material-ui/core";
-
-import PostInfo from "../PostInfo/PostInfo";
-import useStyles from "./useStyles";
+import { Typography, Paper, Box } from "@material-ui/core";
 
 import useAppSelector from "hooks/useAppSelector";
+
+import PostInfo from "../PostInfo/PostInfo";
 import { getPostInfo } from "../postListSlice";
 import { PostActivities } from "../PostActivities/PostActivities";
 import { PostCommentList } from "../PostCommentList/PostCommentList";
 import PostAttachments from "../PostAttachments/PostAttachments";
 
-interface PostProps {
+import useStyles from "./useStyles";
+
+type PostProps = {
   postId: string;
-}
+};
 
 export default function Post({ postId }: PostProps): JSX.Element {
   const classes = useStyles();
 
-  const body: string = useAppSelector(
-    (state) => getPostInfo(state, postId).body,
-  );
+  const body: string = useAppSelector((state) => getPostInfo(state, postId).body);
 
   return (
     <Paper elevation={3}>

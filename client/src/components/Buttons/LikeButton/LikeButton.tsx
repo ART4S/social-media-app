@@ -10,11 +10,7 @@ type LikeButtonProps = {
   onClick: () => void;
 };
 
-export default function LikeButton({
-  active,
-  likeCount,
-  onClick,
-}: LikeButtonProps) {
+export default function LikeButton({ active, likeCount, onClick }: LikeButtonProps): JSX.Element {
   const classes = useStyles();
 
   return (

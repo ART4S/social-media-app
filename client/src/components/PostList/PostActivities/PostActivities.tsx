@@ -3,17 +3,17 @@ import { Box } from "@material-ui/core";
 
 import LikeButton from "components/Buttons/LikeButton/LikeButton";
 import ShareButton from "components/Buttons/ShareButton/ShareButton";
-
 import useAppSelector from "hooks/useAppSelector";
-import { actions, getPostInfo } from "../postListSlice";
 import useAppDispatch from "hooks/useAppDispatch";
-import PostDto from "model/dto/post/PostDto";
+import type PostDto from "model/dto/post/PostDto";
 
-interface PostActivitiesProps {
+import { actions, getPostInfo } from "../postListSlice";
+
+type PostActivitiesProps = {
   postId: string;
-}
+};
 
-export function PostActivities({ postId }: PostActivitiesProps) {
+export function PostActivities({ postId }: PostActivitiesProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const post: PostDto = useAppSelector((state) => getPostInfo(state, postId));

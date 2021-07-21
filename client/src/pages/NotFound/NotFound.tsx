@@ -1,5 +1,7 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import { Box, Typography } from "@material-ui/core";
+
 import useStyles from "./useStyles";
 
 export default function NotFound(): JSX.Element {

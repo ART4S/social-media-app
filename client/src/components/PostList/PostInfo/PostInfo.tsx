@@ -1,21 +1,22 @@
 import React from "react";
-import { Typography, Link } from "@material-ui/core";
-import { Box } from "@material-ui/core";
+import { Typography, Link, Box } from "@material-ui/core";
 import moment from "moment";
 
 import { getUserName } from "utils/userUtils";
-import useStyles from "./useStyles";
 import DeleteButton from "components/Buttons/DeleteButton/DeleteButton";
 import Avatar from "components/Avatar/Avatar";
-import type PostDto from "model/dto/post/PostDto";
 import useAppSelector from "hooks/useAppSelector";
-import { actions, getIsCurrentUserPost, getPostInfo } from "../postListSlice";
 import NavLink from "components/NavLink/NavLink";
 import useAppDispatch from "hooks/useAppDispatch";
+import type PostDto from "model/dto/post/PostDto";
 
-interface PostInfoProps {
+import { actions, getIsCurrentUserPost, getPostInfo } from "../postListSlice";
+
+import useStyles from "./useStyles";
+
+type PostInfoProps = {
   postId: string;
-}
+};
 
 export default function PostInfo({ postId }: PostInfoProps): JSX.Element {
   const classes = useStyles();
@@ -24,13 +25,7 @@ export default function PostInfo({ postId }: PostInfoProps): JSX.Element {
 
   const post: PostDto = useAppSelector((state) => getPostInfo(state, postId));
 
-  const isCurrentUserPost: boolean = useAppSelector((state) =>
-    getIsCurrentUserPost(state, postId),
-  );
-
-  function handleDelete() {
-    dispatch(actions.deletePost(postId));
-  }
+  const isCurrentUserPost: boolean = useAppSelector((state) => getIsCurrentUserPost(state, postId));
 
   const userName = getUserName({
     firstName: post.authorFirstName,
@@ -49,13 +44,11 @@ export default function PostInfo({ postId }: PostInfoProps): JSX.Element {
             </Link>
           </NavLink>
 
-          <Typography variant="subtitle2">
-            {moment(post.createDate).fromNow()}
-          </Typography>
+          <Typography variant="subtitle2">{moment(post.createDate).fromNow()}</Typography>
         </Box>
       </Box>
 
-      {isCurrentUserPost && <DeleteButton onClick={handleDelete} />}
+      {isCurrentUserPost && <DeleteButton onClick={() => dispatch(actions.deletePost(postId))} />}
     </Box>
   );
 }

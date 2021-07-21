@@ -1,12 +1,13 @@
 import React from "react";
 import { Box, TextField, Button } from "@material-ui/core";
+
 import useAppSelector from "hooks/useAppSelector";
 import { actions, getProfile } from "pages/Profile/profileSlice";
 import useAppDispatch from "hooks/useAppDispatch";
 
-interface EditStatusProps {
-  onClose(): void;
-}
+type EditStatusProps = {
+  onClose: () => void;
+};
 
 export default function EditStatus({ onClose }: EditStatusProps): JSX.Element {
   const dispatch = useAppDispatch();

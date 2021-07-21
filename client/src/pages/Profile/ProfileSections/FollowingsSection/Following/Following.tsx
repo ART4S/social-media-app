@@ -1,27 +1,26 @@
 import React from "react";
 import { Box, Avatar, Typography, Grid, Link } from "@material-ui/core";
+
 import { getUserName } from "utils/userUtils";
-import useStyles from "./useStyles";
 import useAppSelector from "hooks/useAppSelector";
-import { getFollowingInfo } from "../followingsSectionSlice";
 import { wrap } from "utils/stringUtils";
 import type FollowingDto from "model/dto/following/FollowingDto";
 import { getIsCurrentUserProfile } from "pages/Profile/profileSlice";
-import FollowButton from "./FollowButton/FollowButton";
 import NavLink from "components/NavLink/NavLink";
 
-interface FollowingProps {
-  followingId: string;
-}
+import { getFollowingInfo } from "../followingsSectionSlice";
 
-export default function Following({
-  followingId,
-}: FollowingProps): JSX.Element {
+import FollowButton from "./FollowButton/FollowButton";
+import useStyles from "./useStyles";
+
+type FollowingProps = {
+  followingId: string;
+};
+
+export default function Following({ followingId }: FollowingProps): JSX.Element {
   const classes = useStyles();
 
-  const following: FollowingDto = useAppSelector((state) =>
-    getFollowingInfo(state, followingId),
-  );
+  const following: FollowingDto = useAppSelector((state) => getFollowingInfo(state, followingId));
 
   const isCurrentUserProfile = useAppSelector(getIsCurrentUserProfile);
 

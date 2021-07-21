@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import React from "react";
 import {
   Container,
@@ -12,18 +13,19 @@ import {
 import { LockOutlined } from "@material-ui/icons";
 import { Formik, Form } from "formik";
 import Alert from "@material-ui/lab/Alert";
+import * as yup from "yup";
+import { useHistory, useLocation } from "react-router-dom";
 
 import Copyright from "components/Copyright/Copyright";
 import PasswordField from "components/PasswordField/PasswordField";
-import Links from "./Links/Links";
-import useStyles from "./useStyles";
 import useAppSelector from "hooks/useAppSelector";
-import { actions, getErrors, getIsSubmitting } from "./loginSlice";
-import * as yup from "yup";
-import LoginVm from "model/login/loginVm";
+import type LoginVm from "model/login/loginVm";
 import useAppDispatch from "hooks/useAppDispatch";
-import { useHistory, useLocation } from "react-router-dom";
 import { getUser } from "redux/commonSlice";
+
+import { actions, getErrors, getIsSubmitting } from "./loginSlice";
+import useStyles from "./useStyles";
+import Links from "./Links/Links";
 
 const SPACING = 2;
 
@@ -42,9 +44,9 @@ const validationSchema = yup.object({
   password: yup.string().trim().required("Required"),
 });
 
-interface LoginLocationState {
+type LoginLocationState = {
   from?: Location;
-}
+};
 
 export default function Login(): JSX.Element {
   const classes = useStyles();
@@ -56,6 +58,7 @@ export default function Login(): JSX.Element {
   const isLoggedIn = useAppSelector((state) => !!getUser(state));
   const errors = useAppSelector(getErrors);
 
+  // eslint-disable-next-line consistent-return
   React.useEffect(() => {
     if (isLoggedIn) {
       history.replace(location.state?.from ?? "/");
@@ -88,8 +91,8 @@ export default function Login(): JSX.Element {
 
         {!!errors.length && (
           <Box mt={SPACING}>
-            {errors.map((error) => (
-              <Alert severity="error" style={{ width: "100%" }}>
+            {errors.map((error, index) => (
+              <Alert key={index} severity="error" style={{ width: "100%" }}>
                 {error}
               </Alert>
             ))}

@@ -2,9 +2,9 @@ import React from "react";
 import { IconButton, TextField } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 
-export default function PasswordField(
-  props: React.ComponentProps<typeof TextField>,
-) {
+type PasswordFieldProps = React.ComponentProps<typeof TextField>;
+
+export default function PasswordField(props: PasswordFieldProps): JSX.Element {
   const [showPassword, setShowPassword] = React.useState(false);
 
   return (
@@ -14,6 +14,7 @@ export default function PasswordField(
       {...props}
       type={showPassword ? "text" : "password"}
       InputProps={{
+        // eslint-disable-next-line react/destructuring-assignment
         ...props.InputProps,
         endAdornment: (
           <IconButton edge="end" onClick={() => setShowPassword(!showPassword)}>

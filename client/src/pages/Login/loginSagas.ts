@@ -1,15 +1,14 @@
-import { put, call, takeLatest, select, all } from "@redux-saga/core/effects";
+import { put, call, takeLatest, all } from "redux-saga/effects";
+
 import authAPI from "api/authAPI";
-import LoginErrorResponse from "model/login/LoginErrorResponse";
-import LoginSuccessReponse from "model/login/LoginSuccessResponse";
-import { actions } from "./loginSlice";
+import type LoginErrorResponse from "model/login/LoginErrorResponse";
+import type LoginSuccessReponse from "model/login/LoginSuccessResponse";
 import { actions as commonActions } from "redux/commonSlice";
 
+import { actions } from "./loginSlice";
+
 function* login({ payload: vm }: ReturnType<typeof actions.login>) {
-  const response: LoginSuccessReponse | LoginErrorResponse = yield call(
-    authAPI.login,
-    vm,
-  );
+  const response: LoginSuccessReponse | LoginErrorResponse = yield call(authAPI.login, vm);
 
   if (isSuccess(response)) {
     yield put(commonActions.fetchUser(response.userId));

@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
-import useStyles from "./useStyles";
 import SwipeableViews from "react-swipeable-views";
 import { virtualize, bindKeyboard } from "react-swipeable-views-utils";
+
+import useStyles from "./useStyles";
 import Navigation from "./Navigation/Navigation";
 
 const VirtualizeSwipeableViews = bindKeyboard(virtualize(SwipeableViews));
@@ -18,8 +20,12 @@ export default function Slider({
   selectedIndex,
   renderSlide,
   onSlideChange,
-}: SliderProps) {
+}: SliderProps): JSX.Element {
   const classes = useStyles();
+
+  function mod(index: number) {
+    return (slideCount + (index % slideCount)) % slideCount;
+  }
 
   function gotoPrev() {
     onSlideChange(mod(selectedIndex - 1));
@@ -35,10 +41,6 @@ export default function Slider({
 
   function slideRenderer({ index, key }: { index: number; key: number }) {
     return renderSlide(mod(index), key);
-  }
-
-  function mod(index: number) {
-    return (slideCount + (index % slideCount)) % slideCount;
   }
 
   return (

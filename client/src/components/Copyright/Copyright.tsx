@@ -1,23 +1,7 @@
 import React from "react";
-import {
-  Container,
-  Box,
-  Paper,
-  Button,
-  Avatar,
-  Divider,
-  IconButton,
-  FormControlLabel,
-  Checkbox,
-  TextField,
-  Typography,
-  Collapse,
-  Tabs,
-  Link,
-  Tab,
-} from "@material-ui/core";
+import { Link, Typography } from "@material-ui/core";
 
-export default function Copyright() {
+export default function Copyright(): JSX.Element {
   return (
     <Typography variant="body2" color="textSecondary">
       {"Copyright © "}

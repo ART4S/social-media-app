@@ -5,6 +5,7 @@ import RegistrationErrorResponse from "model/registration/RegistrationErrorRespo
 import RegistrationSuccessResponse from "model/registration/RegistrationSuccessResponse";
 import LoginVm from "model/login/loginVm";
 import RegistrationVm from "model/registration/registrationVm";
+
 import config from "./config";
 
 function registerUser(

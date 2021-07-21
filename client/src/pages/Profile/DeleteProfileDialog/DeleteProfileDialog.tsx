@@ -8,19 +8,21 @@ import {
   TextField,
   Button,
 } from "@material-ui/core";
+
 import useAppSelector from "hooks/useAppSelector";
-import { actions, getProfile } from "../profileSlice";
 import useAppDispatch from "hooks/useAppDispatch";
+
+import { actions, getProfile } from "../profileSlice";
 
 type DialogProps = React.ComponentProps<typeof Dialog>;
 
 type DeleteProfileDialogProps = Omit<DialogProps, "onClose"> & {
-  onClose(): void;
+  onClose: () => void;
 };
 
-export default function DeleteProfileDialog(
-  props: DeleteProfileDialogProps,
-): JSX.Element {
+export default function DeleteProfileDialog(props: DeleteProfileDialogProps): JSX.Element {
+  const { onClose } = props;
+
   const dispatch = useAppDispatch();
 
   const email = useAppSelector((state) => getProfile(state).email);
@@ -53,7 +55,7 @@ export default function DeleteProfileDialog(
       </DialogContent>
 
       <DialogActions>
-        <Button variant="outlined" color="primary" onClick={props.onClose}>
+        <Button variant="outlined" color="primary" onClick={onClose}>
           Cancel
         </Button>
 

@@ -1,5 +1,7 @@
 import faker from "faker";
+
 import { normalize } from "utils/dataUtils";
+
 import { posts } from "./posts";
 
 export interface PostImage {
@@ -48,9 +50,6 @@ export const postImages: PostImage[] = [
   },
 ];
 
-const entities: { [id: string]: PostImage } = normalize(
-  postImages,
-  (x) => x.id,
-);
+const entities: { [id: string]: PostImage } = normalize(postImages, (x) => x.id);
 
 export default entities;

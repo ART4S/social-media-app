@@ -1,9 +1,11 @@
+import React from "react";
 import { Box, Typography, Link } from "@material-ui/core";
+
 import NavLink from "components/NavLink/NavLink";
 
 import useStyles from "./useStyles";
 
-export default function Links() {
+export default function Links(): JSX.Element {
   const classes = useStyles();
 
   return (

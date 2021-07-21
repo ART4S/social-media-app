@@ -1,16 +1,18 @@
+import React from "react";
 import { CssBaseline } from "@material-ui/core";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
+
 import routes from "routes";
 import ProtectedRoute from "components/ProtectedRoute/ProtectedRoute";
 
-function App(): JSX.Element {
+export default function App(): JSX.Element {
   return (
     <Router>
       <CssBaseline />
 
       <Switch>
         {routes.map((route, i) =>
-          route.protected ? (
+          (route.protected ? (
             <ProtectedRoute key={i} path={route.path} exact={route.exact}>
               <route.component />
             </ProtectedRoute>
@@ -18,11 +20,9 @@ function App(): JSX.Element {
             <Route key={i} path={route.path} exact={route.exact}>
               <route.component />
             </Route>
-          ),
+          )),
         )}
       </Switch>
     </Router>
   );
 }
-
-export default App;

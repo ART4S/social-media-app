@@ -1,18 +1,11 @@
-import {
-  put,
-  call,
-  select,
-  delay,
-  takeLatest,
-  all,
-} from "@redux-saga/core/effects";
+import { put, call, select, delay, takeLatest, all } from "redux-saga/effects";
+
 import userAPI from "api/userAPI";
-import UserDto from "model/dto/user/UserDto";
+import type UserDto from "model/dto/user/UserDto";
+
 import { actions, getSearchText } from "./userListSlice";
 
-function* changeSearchText({
-  payload: searchText,
-}: ReturnType<typeof actions.changeSearchText>) {
+function* changeSearchText({ payload: searchText }: ReturnType<typeof actions.changeSearchText>) {
   yield put(actions.setSearchText(searchText));
 
   yield delay(500);

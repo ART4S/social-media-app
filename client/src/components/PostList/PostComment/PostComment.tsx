@@ -1,30 +1,23 @@
+import React from "react";
 import { Typography, Box, Link } from "@material-ui/core";
-
 import moment from "moment";
 
 import Avatar from "components/Avatar/Avatar";
-
 import type PostCommentDto from "model/dto/postComment/PostCommentDto";
 import { getUserName } from "utils/userUtils";
 import useAppDispatch from "hooks/useAppDispatch";
-import {
-  actions,
-  getIsCurrentUserComment,
-  getPostCommentById,
-} from "../postListSlice";
 import useAppSelector from "hooks/useAppSelector";
 import NavLink from "components/NavLink/NavLink";
 import DeleteButton from "components/Buttons/DeleteButton/DeleteButton";
 
-interface PostCommentProps {
+import { actions, getIsCurrentUserComment, getPostCommentById } from "../postListSlice";
+
+type PostCommentProps = {
   postId: string;
   commentId: string;
-}
+};
 
-export default function PostComment({
-  postId,
-  commentId,
-}: PostCommentProps): JSX.Element {
+export default function PostComment({ postId, commentId }: PostCommentProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const comment: PostCommentDto = useAppSelector((state) =>
@@ -38,10 +31,6 @@ export default function PostComment({
     lastName: comment.authorLastName,
   });
 
-  function handleDelete() {
-    dispatch(actions.deletePostComment({ postId, commentId }));
-  }
-
   return (
     <Box display="flex">
       <Avatar src={comment.avatarUrl} />
@@ -54,12 +43,13 @@ export default function PostComment({
         <Typography variant="body2">{comment.text}</Typography>
 
         <Box display="flex" alignItems="center">
-          <Typography variant="caption">
-            {moment(comment.createDate).fromNow()}
-          </Typography>
+          <Typography variant="caption">{moment(comment.createDate).fromNow()}</Typography>
 
           {isCurrentUserComment && (
-            <DeleteButton size="small" onClick={handleDelete} />
+            <DeleteButton
+              size="small"
+              onClick={() => dispatch(actions.deletePostComment({ postId, commentId }))}
+            />
           )}
         </Box>
       </Box>

@@ -1,4 +1,5 @@
-import { all } from "@redux-saga/core/effects";
+import { all } from "redux-saga/effects";
+
 import homeSagas from "pages/Home/homeSagas";
 import profileSagas from "pages/Profile/profileSagas";
 import profileEditorSagas from "pages/ProfileEditor/profileEditorSagas";

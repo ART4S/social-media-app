@@ -4,24 +4,23 @@ import {
   EntityState,
   PayloadAction,
   createAction,
-  Action,
 } from "@reduxjs/toolkit";
-import PostDto from "model/dto/post/PostDto";
-import { AppState } from "redux/store";
-import PostImageDto from "model/dto/postImage/PostImageDto";
-import PostCommentDto from "model/dto/postComment/PostCommentDto";
-import PagedResponse from "model/pagination/PagedResponse";
-import ImageCommentDto from "model/dto/imageComment/ImageCommentDto";
-import PostCommentCreateDto from "model/dto/postComment/PostCommentCreateDto";
-import ImageCommentCreateDto from "model/dto/imageComment/ImageCommentCreateDto";
+
+import type { AppState } from "redux/store";
+import type PostDto from "model/dto/post/PostDto";
+import type PostImageDto from "model/dto/postImage/PostImageDto";
+import type PostCommentDto from "model/dto/postComment/PostCommentDto";
+import type PagedResponse from "model/pagination/PagedResponse";
+import type ImageCommentDto from "model/dto/imageComment/ImageCommentDto";
+import type PostCommentCreateDto from "model/dto/postComment/PostCommentCreateDto";
+import type ImageCommentCreateDto from "model/dto/imageComment/ImageCommentCreateDto";
 import { getUser } from "redux/commonSlice";
 
-const sliceName = "components/postList";
+const name = "components/postList";
 
 const postAdapter = createEntityAdapter<Post>({
   selectId: (post) => post.info.id,
-  sortComparer: (a, b) =>
-    new Date(a.info.createDate) < new Date(b.info.createDate) ? 1 : -1,
+  sortComparer: (a, b) => (new Date(a.info.createDate) < new Date(b.info.createDate) ? 1 : -1),
 });
 
 const imageAdapter = createEntityAdapter<PostImage>({
@@ -97,7 +96,7 @@ function initPost(info: PostDto) {
 }
 
 const slice = createSlice({
-  name: sliceName,
+  name,
   initialState,
   reducers: {
     addPost(state, { payload: post }: PayloadAction<PostDto>) {
@@ -115,14 +114,10 @@ const slice = createSlice({
         }
       }
     },
-    shareImage(
-      state,
-      action: PayloadAction<{ postId: string; imageId: string }>,
-    ) {
+    shareImage(state, action: PayloadAction<{ postId: string; imageId: string }>) {
       const { postId, imageId } = action.payload;
 
-      const image =
-        state.posts.entities[postId]?.images.entities[imageId]?.info;
+      const image = state.posts.entities[postId]?.images.entities[imageId]?.info;
 
       if (image) {
         image.shared = !image.shared;
@@ -132,7 +127,6 @@ const slice = createSlice({
         } else {
           image.shareCount--;
         }
-        image;
       }
     },
     togglePostLikeStarted(state, { payload: postId }: PayloadAction<string>) {
@@ -147,14 +141,10 @@ const slice = createSlice({
         }
       }
     },
-    toggleImageLikeStarted(
-      state,
-      action: PayloadAction<{ postId: string; imageId: string }>,
-    ) {
+    toggleImageLikeStarted(state, action: PayloadAction<{ postId: string; imageId: string }>) {
       const { postId, imageId } = action.payload;
 
-      const image =
-        state.posts.entities[postId]?.images.entities[imageId]?.info;
+      const image = state.posts.entities[postId]?.images.entities[imageId]?.info;
 
       if (image) {
         image.liked = !image.liked;
@@ -166,10 +156,7 @@ const slice = createSlice({
         }
       }
     },
-    setSelectedImage(
-      state,
-      action: PayloadAction<{ postId: string; index: number | null }>,
-    ) {
+    setSelectedImage(state, action: PayloadAction<{ postId: string; index: number | null }>) {
       const { postId, index } = action.payload;
       const post = state.posts.entities[postId];
       if (post) {
@@ -179,10 +166,7 @@ const slice = createSlice({
     fetchPosts(state, action: PayloadAction<string>) {
       state.loaded = false;
     },
-    fetchPostsSucceed(
-      state,
-      { payload: response }: PayloadAction<PagedResponse<PostDto>>,
-    ) {
+    fetchPostsSucceed(state, { payload: response }: PayloadAction<PagedResponse<PostDto>>) {
       state.loaded = true;
 
       const { posts } = state;
@@ -195,10 +179,7 @@ const slice = createSlice({
         ...pagination,
       };
     },
-    fetchPostImagesSucceed(
-      state,
-      action: PayloadAction<{ postId: string; data: PostImageDto[] }>,
-    ) {
+    fetchPostImagesSucceed(state, action: PayloadAction<{ postId: string; data: PostImageDto[] }>) {
       const { postId, data } = action.payload;
       const images = state.posts.entities[postId]?.images;
       if (images) {
@@ -230,27 +211,22 @@ const slice = createSlice({
     ) {
       const { postId, imageId, response } = action.payload;
 
-      const comments =
-        state.posts.entities[postId]?.images.entities[imageId]?.comments;
+      const comments = state.posts.entities[postId]?.images.entities[imageId]?.comments;
 
       if (comments) {
         const { data, ...pagination } = response;
-        imageCommentAdapter.setAll(comments, response.data);
+        imageCommentAdapter.setAll(comments, data);
         comments.pagination = {
           ...comments.pagination,
           ...pagination,
         };
       }
     },
-    fetchMoreImageComments(
-      state,
-      action: PayloadAction<{ postId: string; imageId: string }>,
-    ) {
+    fetchMoreImageComments(state, action: PayloadAction<{ postId: string; imageId: string }>) {
       const { postId, imageId } = action.payload;
 
-      const pagination =
-        state.posts.entities[postId]?.images.entities[imageId]?.comments
-          .pagination;
+      // eslint-disable-next-line max-len
+      const pagination = state.posts.entities[postId]?.images.entities[imageId]?.comments.pagination;
 
       if (pagination) {
         pagination.itemsPerPage += 3;
@@ -312,8 +288,7 @@ const slice = createSlice({
     ) {
       const { postId, imageId, response } = action.payload;
 
-      const comments =
-        state.posts.entities[postId]!.images.entities[imageId]?.comments;
+      const comments = state.posts.entities[postId]?.images.entities[imageId]?.comments;
 
       if (comments) {
         const { data, ...pagination } = response;
@@ -330,7 +305,7 @@ const slice = createSlice({
     deletePostSucceed(state, { payload: postId }: PayloadAction<string>) {
       postAdapter.removeOne(state.posts, postId);
     },
-    reset(state, action: Action) {
+    reset(state) {
       state.loaded = false;
       state.posts = initialState.posts;
     },
@@ -340,70 +315,63 @@ const slice = createSlice({
 export const actions = {
   ...slice.actions,
 
-  fetchPostImages: createAction<string>(`${sliceName}/fetchPostImages`),
+  fetchPostImages: createAction<string>(`${name}/fetchPostImages`),
 
-  fetchPostComments: createAction<string>(`${sliceName}/fetchPostComments`),
+  fetchPostComments: createAction<string>(`${name}/fetchPostComments`),
 
-  fetchMorePostComments: createAction<string>(
-    `${sliceName}/fetchMorePostComments`,
-  ),
+  fetchMorePostComments: createAction<string>(`${name}/fetchMorePostComments`),
 
   fetchImageComments: createAction<{
     postId: string;
     imageId: string;
-  }>(`${sliceName}/fetchImageComments`),
+  }>(`${name}/fetchImageComments`),
 
   fetchMoreImageComments: createAction<{
     postId: string;
     imageId: string;
-  }>(`${sliceName}/fetchMoreImageComments`),
+  }>(`${name}/fetchMoreImageComments`),
 
   createPostComment: createAction<{
     postId: string;
     comment: PostCommentCreateDto;
-  }>(`${sliceName}/createPostComment`),
+  }>(`${name}/createPostComment`),
 
   deletePostComment: createAction<{
     postId: string;
     commentId: string;
-  }>(`${sliceName}/deletePostComment`),
+  }>(`${name}/deletePostComment`),
 
   createImageComment: createAction<{
     postId: string;
     imageId: string;
     comment: ImageCommentCreateDto;
-  }>(`${sliceName}/createImageComment`),
+  }>(`${name}/createImageComment`),
 
   deleteImageComment: createAction<{
     postId: string;
     imageId: string;
     commentId: string;
-  }>(`${sliceName}/deleteImageComment`),
+  }>(`${name}/deleteImageComment`),
 
-  deletePost: createAction<string>(`${sliceName}/deletePost`),
+  deletePost: createAction<string>(`${name}/deletePost`),
 
-  togglePostLike: createAction<string>(`${sliceName}/togglePostLike`),
+  togglePostLike: createAction<string>(`${name}/togglePostLike`),
 
-  toggleImageLike: createAction<{ postId: string; imageId: string }>(
-    `${sliceName}/togglePostImageLike`,
-  ),
+  toggleImageLike: createAction<{ postId: string; imageId: string }>(`${name}/togglePostImageLike`),
 };
 
 const getSelf = (state: AppState) => state.postList;
 
 export const getPostsLoading = (state: AppState) => getSelf(state).loaded;
 
-export const getPostIds = (state: AppState) =>
-  getSelf(state).posts.ids as string[];
+export const getPostIds = (state: AppState) => getSelf(state).posts.ids as string[];
 
-export const getPostsPagination = (state: AppState) =>
-  getSelf(state).posts.pagination;
+export const getPostsPagination = (state: AppState) => getSelf(state).posts.pagination;
 
 export const getPostById = (state: AppState, postId: string) =>
   getSelf(state).posts.entities[postId]!;
 
-export const getPostInfo = (state: AppState, postId: string) =>
-  getPostById(state, postId).info;
+export const getPostInfo = (state: AppState, postId: string) => getPostById(state, postId).info;
 
 export const getSelectedImageIndex = (state: AppState, postId: string) =>
   getPostById(state, postId).selectedImageIndex;
@@ -411,17 +379,10 @@ export const getSelectedImageIndex = (state: AppState, postId: string) =>
 const getPostCommentsState = (state: AppState, postId: string) =>
   getPostById(state, postId).comments;
 
-export const getPostCommentById = (
-  state: AppState,
-  postId: string,
-  commentId: string,
-) => getPostCommentsState(state, postId).entities[commentId]!;
+export const getPostCommentById = (state: AppState, postId: string, commentId: string) =>
+  getPostCommentsState(state, postId).entities[commentId]!;
 
-export const getIsCurrentUserComment = (
-  state: AppState,
-  postId: string,
-  commentId: string,
-) =>
+export const getIsCurrentUserComment = (state: AppState, postId: string, commentId: string) =>
   getPostCommentById(state, postId, commentId).authorId === getUser(state).id;
 
 export const getPostCommentIds = (state: AppState, postId: string) =>
@@ -430,29 +391,19 @@ export const getPostCommentIds = (state: AppState, postId: string) =>
 export const getPostCommentsPagination = (state: AppState, postId: string) =>
   getPostCommentsState(state, postId).pagination;
 
-const getImagesState = (state: AppState, postId: string) =>
-  getPostById(state, postId).images;
+const getImagesState = (state: AppState, postId: string) => getPostById(state, postId).images;
 
-export const getImageById = (
-  state: AppState,
-  postId: string,
-  imageId: string,
-) => getImagesState(state, postId).entities[imageId]!;
+export const getImageById = (state: AppState, postId: string, imageId: string) =>
+  getImagesState(state, postId).entities[imageId]!;
 
 export const getImages = (state: AppState, postId: string) =>
   Object.values(getImagesState(state, postId).entities).map((x) => x!.info);
 
-export const getImageInfo = (
-  state: AppState,
-  postId: string,
-  imageId: string,
-) => getImageById(state, postId, imageId).info;
+export const getImageInfo = (state: AppState, postId: string, imageId: string) =>
+  getImageById(state, postId, imageId).info;
 
-const getImageCommentsState = (
-  state: AppState,
-  postId: string,
-  imageId: string,
-) => getImageById(state, postId, imageId).comments;
+const getImageCommentsState = (state: AppState, postId: string, imageId: string) =>
+  getImageById(state, postId, imageId).comments;
 
 export const getImageCommentById = (
   state: AppState,
@@ -466,27 +417,16 @@ export const getIsCurrentUserImageComment = (
   postId: string,
   imageId: string,
   commentId: string,
-) =>
-  getImageCommentById(state, postId, imageId, commentId).authorId ===
-  getUser(state).id;
+) => getImageCommentById(state, postId, imageId, commentId).authorId === getUser(state).id;
 
-export const getImageCommentIds = (
-  state: AppState,
-  postId: string,
-  imageId: string,
-) => [...getImageCommentsState(state, postId, imageId).ids] as string[];
+export const getImageCommentIds = (state: AppState, postId: string, imageId: string) =>
+  [...getImageCommentsState(state, postId, imageId).ids] as string[];
 
-export const getImageCommentsPagination = (
-  state: AppState,
-  postId: string,
-  imageId: string,
-) => getImageCommentsState(state, postId, imageId).pagination;
+export const getImageCommentsPagination = (state: AppState, postId: string, imageId: string) =>
+  getImageCommentsState(state, postId, imageId).pagination;
 
-export const getImageCommentsCount = (
-  state: AppState,
-  postId: string,
-  imageId: string,
-) => getImageCommentsState(state, postId, imageId).ids.length;
+export const getImageCommentsCount = (state: AppState, postId: string, imageId: string) =>
+  getImageCommentsState(state, postId, imageId).ids.length;
 
 export const getIsCurrentUserPost = (state: AppState, postId: string) =>
   getPostInfo(state, postId).authorId === getUser(state).id;

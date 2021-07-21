@@ -1,10 +1,6 @@
-import {
-  Action,
-  createAction,
-  createSlice,
-  PayloadAction,
-} from "@reduxjs/toolkit";
-import LoginVm from "model/login/loginVm";
+import { Action, createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+import type LoginVm from "model/login/loginVm";
 import { AppState } from "redux/store";
 
 const name = "login";

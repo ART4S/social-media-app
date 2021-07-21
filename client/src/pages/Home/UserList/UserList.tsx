@@ -9,14 +9,15 @@ import {
   ListItemText,
   Typography,
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
+
 import useAppDispatch from "hooks/useAppDispatch";
-import { actions, getLoading, getSearchText, getUsers } from "./userListSlice";
 import useAppSelector from "hooks/useAppSelector";
 import Progress from "components/Progress/Progress";
 import { getUserName } from "utils/userUtils";
 import Avatar from "components/Avatar/Avatar";
 import NavLink from "components/NavLink/NavLink";
+
+import { actions, getLoading, getSearchText, getUsers } from "./userListSlice";
 
 export default function UserList(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -47,12 +48,7 @@ export default function UserList(): JSX.Element {
         />
 
         {!users.length && !loading && (
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            mt={2}
-          >
+          <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
             <Typography color="textSecondary" align="center">
               No matching users...
             </Typography>

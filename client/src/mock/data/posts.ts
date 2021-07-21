@@ -1,5 +1,7 @@
 import faker from "faker";
+
 import { normalize } from "utils/dataUtils";
+
 import { users } from "./users";
 
 export interface Post {

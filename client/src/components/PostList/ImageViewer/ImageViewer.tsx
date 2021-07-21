@@ -1,34 +1,29 @@
 import React from "react";
-import { Grid, Box, Divider, Modal, Link } from "@material-ui/core";
+import { Grid, Box, Divider, Modal } from "@material-ui/core";
 
-import ImageInfo from "../ImageInfo/ImageInfo";
-import Activities from "../ImageActivities/ImageActivities";
-import useStyles from "./useStyles";
-import PostImageDto from "model/dto/postImage/PostImageDto";
+import type PostImageDto from "model/dto/postImage/PostImageDto";
 import ImageSlider from "components/Slider/Slider";
-import {
-  actions,
-  getImages,
-  getSelectedImageIndex,
-  getImageCommentsCount,
-} from "../postListSlice";
 import useAppDispatch from "hooks/useAppDispatch";
 import useAppSelector from "hooks/useAppSelector";
+
+import { actions, getImages, getSelectedImageIndex, getImageCommentsCount } from "../postListSlice";
+import Activities from "../ImageActivities/ImageActivities";
+import ImageInfo from "../ImageInfo/ImageInfo";
 import ImageCommentList from "../ImageCommentList/ImageCommentList";
 import ImageCommentForm from "../ImageCommentForm/ImageCommentForm";
 
-interface ImageViewerProps {
+import useStyles from "./useStyles";
+
+type ImageViewerProps = {
   postId: string;
-}
+};
 
 export default function ImageViewer({ postId }: ImageViewerProps): JSX.Element {
   const classes = useStyles();
 
   const dispatch = useAppDispatch();
 
-  const images: PostImageDto[] = useAppSelector((state) =>
-    getImages(state, postId),
-  );
+  const images: PostImageDto[] = useAppSelector((state) => getImages(state, postId));
 
   const selectedImageIndex: number = useAppSelector(
     (state) => getSelectedImageIndex(state, postId)!,
@@ -50,22 +45,13 @@ export default function ImageViewer({ postId }: ImageViewerProps): JSX.Element {
 
   return (
     <Modal className={classes.modal} onClose={handleClose} open disablePortal>
-      <Box
-        className={classes.content}
-        display="flex"
-        justifyContent="center"
-        height="80vh"
-      >
+      <Box className={classes.content} display="flex" justifyContent="center" height="80vh">
         <Box width="66%">
           <ImageSlider
             slideCount={images.length}
             selectedIndex={selectedImageIndex}
             renderSlide={(index: number, key: number) => (
-              <img
-                key={key}
-                className={classes.image}
-                src={images[index].url}
-              />
+              <img key={key} className={classes.image} src={images[index].url} />
             )}
             onSlideChange={handleSlideChange}
           />

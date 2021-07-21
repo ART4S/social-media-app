@@ -3,13 +3,15 @@ import { Paper, Box, TextField, Button, IconButton } from "@material-ui/core";
 import { AddAPhoto, PlayCircleOutline } from "@material-ui/icons";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import UploadImage from "./UploadImage/UploadImage";
-import useStyles from "./useStyles";
+
 import ImageGrid from "components/ImageGrid/ImageGrid";
 import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
+import type PostCreateDto from "model/dto/post/PostCreateDto";
+
 import { actions, getIsSubmitting } from "./postFormSlice";
-import PostCreateDto from "model/dto/post/PostCreateDto";
+import useStyles from "./useStyles";
+import UploadImage from "./UploadImage/UploadImage";
 import UserInfo from "./UserInfo/UserInfo";
 
 const initialValues: PostCreateDto = {
@@ -49,10 +51,7 @@ export default function PostForm(): JSX.Element {
     const file: File | undefined = event.target.files?.[0];
 
     if (file && file.type.match("image.*")) {
-      formik.setFieldValue("images", [
-        ...values.images,
-        URL.createObjectURL(file),
-      ]);
+      formik.setFieldValue("images", [...values.images, URL.createObjectURL(file)]);
     }
 
     event.target.value = "";
@@ -72,11 +71,7 @@ export default function PostForm(): JSX.Element {
         </Box>
       </div>
 
-      <form
-        autoComplete="off"
-        onSubmit={formik.handleSubmit}
-        onReset={formik.handleReset}
-      >
+      <form autoComplete="off" onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
         <div className={classes.body}>
           <Box px={3} pt={3}>
             <TextField
@@ -105,11 +100,7 @@ export default function PostForm(): JSX.Element {
               disabled={uploadDisabled}
             />
             <label htmlFor="addImage">
-              <IconButton
-                component="span"
-                color="secondary"
-                disabled={uploadDisabled}
-              >
+              <IconButton component="span" color="secondary" disabled={uploadDisabled}>
                 <AddAPhoto color="inherit" />
               </IconButton>
             </label>
@@ -137,12 +128,7 @@ export default function PostForm(): JSX.Element {
 
         <div className={classes.footer}>
           <Box display="flex" justifyContent="flex-end" p={2}>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              disabled={isSubmitting}
-            >
+            <Button type="submit" variant="contained" color="primary" disabled={isSubmitting}>
               post
             </Button>
           </Box>

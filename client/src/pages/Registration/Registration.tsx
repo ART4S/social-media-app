@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import React from "react";
 import {
   Container,
@@ -12,20 +13,20 @@ import {
 import { LockOutlined } from "@material-ui/icons";
 import Alert from "@material-ui/lab/Alert";
 import { Formik, Form } from "formik";
+import moment from "moment";
+import * as yup from "yup";
+import { useHistory } from "react-router-dom";
 
 import Copyright from "components/Copyright/Copyright";
 import PasswordField from "components/PasswordField/PasswordField";
-import useStyles from "./useStyles";
-import moment from "moment";
-
-import * as yup from "yup";
 import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
-import { actions, getErrors, getIsSubmitting } from "./registrationSlice";
-import RegistrationVm from "model/registration/registrationVm";
+import type RegistrationVm from "model/registration/registrationVm";
 import NavLink from "components/NavLink/NavLink";
 import { getUser } from "redux/commonSlice";
-import { useHistory } from "react-router-dom";
+
+import { actions, getErrors, getIsSubmitting } from "./registrationSlice";
+import useStyles from "./useStyles";
 
 const SPACING = 2;
 
@@ -66,6 +67,7 @@ export default function Registration(): JSX.Element {
   const isLoggedIn = useAppSelector((state) => !!getUser(state));
   const errors = useAppSelector(getErrors);
 
+  // eslint-disable-next-line consistent-return
   React.useEffect(() => {
     if (isLoggedIn) {
       history.push("/");
@@ -96,8 +98,8 @@ export default function Registration(): JSX.Element {
 
         {!!errors.length && (
           <Box mt={SPACING}>
-            {errors.map((error) => (
-              <Alert severity="error" style={{ width: "100%" }}>
+            {errors.map((error, index) => (
+              <Alert key={index} severity="error" style={{ width: "100%" }}>
                 {error}
               </Alert>
             ))}
@@ -197,9 +199,7 @@ export default function Registration(): JSX.Element {
                     label="Repeat password"
                     variant="outlined"
                     value={values.passwordConfirm}
-                    helperText={
-                      touched.passwordConfirm && errors.passwordConfirm
-                    }
+                    helperText={touched.passwordConfirm && errors.passwordConfirm}
                     error={touched.passwordConfirm && !!errors.passwordConfirm}
                     disabled={isSubmitting}
                     onChange={handleChange}
@@ -227,9 +227,7 @@ export default function Registration(): JSX.Element {
         <Box display="flex" justifyContent="flex-end" mt={SPACING}>
           <NavLink to="/login">
             <Link className={classes.link}>
-              <Typography variant="body2">
-                Already have an account? Sign in
-              </Typography>
+              <Typography variant="body2">Already have an account? Sign in</Typography>
             </Link>
           </NavLink>
         </Box>

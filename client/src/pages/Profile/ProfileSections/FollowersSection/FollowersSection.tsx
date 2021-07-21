@@ -1,5 +1,6 @@
 import React from "react";
 import { Box } from "@material-ui/core";
+
 import FollowerList from "./FollowerList/FollowerList";
 import FollowersSearch from "./FollowersSearch/FollowersSearch";
 

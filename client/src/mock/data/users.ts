@@ -1,4 +1,5 @@
 import faker from "faker";
+
 import { normalize } from "utils/dataUtils";
 
 export interface User {

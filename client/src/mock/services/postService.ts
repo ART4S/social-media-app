@@ -1,4 +1,5 @@
 import faker from "faker";
+
 import posts, { Post } from "mock/data/posts";
 import users from "mock/data/users";
 import postLikes from "mock/data/postLikes";
@@ -13,17 +14,15 @@ import type PagedRequest from "model/pagination/PagedRequest";
 import type PagedResponse from "model/pagination/PagedResponse";
 import type PostCommentCreateDto from "model/dto/postComment/PostCommentCreateDto";
 import { composeKey } from "mock/utils/entityUtils";
+import type ImageCommentDto from "model/dto/imageComment/ImageCommentDto";
+import type ImageCommentCreateDto from "model/dto/imageComment/ImageCommentCreateDto";
+import type PostCreateDto from "model/dto/post/PostCreateDto";
+import { getCurrentUser } from "mock/services/authService";
+
 import { toPagedResponse } from "../utils/paginationUtils";
-import ImageCommentDto from "model/dto/imageComment/ImageCommentDto";
-import ImageCommentCreateDto from "model/dto/imageComment/ImageCommentCreateDto";
-import PostCreateDto from "model/dto/post/PostCreateDto";
-import { currentUser } from "mock/services/authService";
 
 // posts
-function getAll(
-  authorId: string,
-  pagination: PagedRequest,
-): PagedResponse<PostDto> {
+function getAll(authorId: string, pagination: PagedRequest): PagedResponse<PostDto> {
   const data: PostDto[] = Object.values(posts)
     .filter((x) => x.authorId === authorId)
     .sort((a, b) => (new Date(a.createDate) < new Date(b.createDate) ? 1 : -1))
@@ -45,10 +44,7 @@ function getImages(id: string): PostImageDto[] {
 }
 
 // posts/:id/comments
-function getComments(
-  id: string,
-  pagination: PagedRequest,
-): PagedResponse<PostCommentDto> {
+function getComments(id: string, pagination: PagedRequest): PagedResponse<PostCommentDto> {
   const data: PostCommentDto[] = Object.values(postComments)
     .filter((x) => x.postId === id)
     .sort((a, b) => (new Date(a.createDate) > new Date(b.createDate) ? 1 : -1))
@@ -63,7 +59,7 @@ function createPost(post: PostCreateDto) {
 
   posts[postId] = {
     id: postId,
-    authorId: currentUser!.id,
+    authorId: getCurrentUser().id,
     body: post.body,
     createDate: new Date().toISOString(),
   };
@@ -89,7 +85,7 @@ function createComment(id: string, comment: PostCommentCreateDto): string {
     ...comment,
     id: commentId,
     postId: id,
-    authorId: currentUser!.id,
+    authorId: getCurrentUser().id,
     createDate: new Date().toISOString(),
   };
 
@@ -116,40 +112,37 @@ function getImageComments(
 
 // posts/:id/like
 function addLike(id: string) {
-  const userId = currentUser!.id;
+  const userId = getCurrentUser().id;
   postLikes[composeKey(id, userId)] = { postId: id, userId };
 }
 
 // posts/:id/like
 function removeLike(id: string) {
-  const userId = currentUser!.id;
+  const userId = getCurrentUser().id;
   delete postLikes[composeKey(id, userId)];
 }
 
 // posts/images/:imageId
 function addImageLike(imageId: string) {
-  const userId = currentUser!.id;
+  const userId = getCurrentUser().id;
   postImageLikes[composeKey(imageId, userId)] = { imageId, userId };
 }
 
 // posts/images/:imageId
 function removeImageLike(imageId: string) {
-  const userId = currentUser!.id;
+  const userId = getCurrentUser().id;
   delete postImageLikes[composeKey(imageId, userId)];
 }
 
 // posts/images/:imageId/comments
-function createImageComment(
-  imageId: string,
-  comment: ImageCommentCreateDto,
-): string {
+function createImageComment(imageId: string, comment: ImageCommentCreateDto): string {
   const id = faker.datatype.uuid();
 
   imageComments[id] = {
     ...comment,
     id,
     imageId,
-    authorId: currentUser!.id,
+    authorId: getCurrentUser().id,
     createDate: new Date().toISOString(),
   };
 
@@ -193,9 +186,8 @@ function mapPost(post: Post): PostDto {
     authorAvatarUrl: users[post.authorId].avatarUrl,
     body: post.body,
     createDate: post.createDate,
-    liked: !!postLikes[composeKey(post.id, currentUser!.id)],
-    likeCount: Object.values(postLikes).filter((l) => l.postId == post.id)
-      .length,
+    liked: !!postLikes[composeKey(post.id, getCurrentUser().id)],
+    likeCount: Object.values(postLikes).filter((l) => l.postId === post.id).length,
     shareCount: 0,
     shared: false,
   };
@@ -234,9 +226,7 @@ function mapImage(image: PostImage): PostImageDto {
     url: image.url,
     createDate: image.createDate,
     liked: !!postImageLikes[composeKey(image.id, posts[image.postId].authorId)],
-    likeCount: Object.values(postImageLikes).filter(
-      (l) => l.imageId === image.id,
-    ).length,
+    likeCount: Object.values(postImageLikes).filter((l) => l.imageId === image.id).length,
     shared: false,
     shareCount: 0,
   };

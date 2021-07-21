@@ -1,12 +1,12 @@
-import { put, call, takeLatest, select, all } from "@redux-saga/core/effects";
+import { put, call, takeLatest, select, all } from "redux-saga/effects";
+
 import userProfileAPI from "api/userProfileAPI";
-import UserProfileInfoDto from "model/dto/userProfile/UserProfileInfoDto";
-import { actions, getProfile } from "./profileEditorSlice";
+import type UserProfileInfoDto from "model/dto/userProfile/UserProfileInfoDto";
 import { actions as commonActions } from "redux/commonSlice";
 
-function* fetchProfile({
-  payload: id,
-}: ReturnType<typeof actions.fetchProfile>) {
+import { actions, getProfile } from "./profileEditorSlice";
+
+function* fetchProfile({ payload: id }: ReturnType<typeof actions.fetchProfile>) {
   const profile: UserProfileInfoDto = yield call(userProfileAPI.getById, id);
   yield put(actions.fetchProfileSucceed(profile));
 }
@@ -15,9 +15,7 @@ function* watchProfile() {
   yield takeLatest(actions.fetchProfile.type, fetchProfile);
 }
 
-function* saveProfile({
-  payload: profile,
-}: ReturnType<typeof actions.saveProfile>) {
+function* saveProfile({ payload: profile }: ReturnType<typeof actions.saveProfile>) {
   const { id, userId } = yield select(getProfile);
 
   yield call(userProfileAPI.updateProfile, id, profile);

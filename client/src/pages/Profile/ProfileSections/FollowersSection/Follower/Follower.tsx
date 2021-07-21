@@ -1,31 +1,30 @@
 import React from "react";
 import { Box, Avatar, Typography, Grid, Link, Button } from "@material-ui/core";
+
 import { getUserName } from "utils/userUtils";
-import useStyles from "./useStyles";
 import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
-import { actions, getFollowerInfo, getBlocked } from "../followersSectionSlice";
 import { wrap } from "utils/stringUtils";
-import FollowerDto from "model/dto/follower/FollowerDto";
+import type FollowerDto from "model/dto/follower/FollowerDto";
 import { getIsCurrentUserProfile } from "pages/Profile/profileSlice";
 import NavLink from "components/NavLink/NavLink";
 
-interface FollowingProps {
+import { actions, getFollowerInfo, getBlocked } from "../followersSectionSlice";
+
+import useStyles from "./useStyles";
+
+type FollowingProps = {
   followerId: string;
-}
+};
 
 export default function Follower({ followerId }: FollowingProps): JSX.Element {
   const classes = useStyles();
 
   const dispatch = useAppDispatch();
 
-  const follower: FollowerDto = useAppSelector((state) =>
-    getFollowerInfo(state, followerId),
-  );
+  const follower: FollowerDto = useAppSelector((state) => getFollowerInfo(state, followerId));
 
-  const blocked: boolean = useAppSelector((state) =>
-    getBlocked(state, followerId),
-  );
+  const blocked: boolean = useAppSelector((state) => getBlocked(state, followerId));
 
   const isCurrentUserProfile = useAppSelector(getIsCurrentUserProfile);
 
@@ -54,8 +53,8 @@ export default function Follower({ followerId }: FollowingProps): JSX.Element {
           </Grid>
 
           <Grid item xs>
-            {isCurrentUserProfile &&
-              (blocked ? (
+            {isCurrentUserProfile
+              && (blocked ? (
                 <Typography variant="body2" color="textSecondary">
                   user was blocked
                 </Typography>

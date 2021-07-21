@@ -2,14 +2,16 @@ import React from "react";
 import { Box, Avatar, Typography } from "@material-ui/core";
 
 import { getUserName } from "utils/userUtils";
-import useStyles from "./useStyles";
 import useAppSelector from "hooks/useAppSelector";
 import DeleteButton from "components/Buttons/DeleteButton/DeleteButton";
 import EditButton from "components/Buttons/EditButton/EditButton";
-import UserProfileDto from "model/dto/userProfile/UserProfileDto";
+import type UserProfileDto from "model/dto/userProfile/UserProfileDto";
+import NavLink from "components/NavLink/NavLink";
+
 import DeleteProfileDialog from "../DeleteProfileDialog/DeleteProfileDialog";
 import { getIsCurrentUserProfile, getProfile } from "../profileSlice";
-import NavLink from "components/NavLink/NavLink";
+
+import useStyles from "./useStyles";
 import FollowButton from "./FollowButton/FollowButton";
 
 export default function MainInfo(): JSX.Element {

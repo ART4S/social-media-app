@@ -1,22 +1,20 @@
 import React from "react";
+
 import ImageGrid from "components/ImageGrid/ImageGrid";
 import ImageViewer from "components/PostList/ImageViewer/ImageViewer";
-import { Box } from "@material-ui/core";
-
 import type PostImageDto from "model/dto/postImage/PostImageDto";
-
 import useAppSelector from "hooks/useAppSelector";
-import { actions, getImages, getSelectedImageIndex } from "../postListSlice";
 import useAppDispatch from "hooks/useAppDispatch";
+
+import { actions, getImages, getSelectedImageIndex } from "../postListSlice";
+
 import useStyles from "./useStyles";
 
-interface PostAttachmentsProps {
+type PostAttachmentsProps = {
   postId: string;
-}
+};
 
-export default function PostAttachments({
-  postId,
-}: PostAttachmentsProps): JSX.Element {
+export default function PostAttachments({ postId }: PostAttachmentsProps): JSX.Element {
   const classes = useStyles();
 
   const dispatch = useAppDispatch();
@@ -25,9 +23,7 @@ export default function PostAttachments({
     dispatch(actions.fetchPostImages(postId));
   }, [postId]);
 
-  const images: PostImageDto[] = useAppSelector((state) =>
-    getImages(state, postId),
-  );
+  const images: PostImageDto[] = useAppSelector((state) => getImages(state, postId));
 
   const isImageSelected: boolean = useAppSelector(
     (state) => getSelectedImageIndex(state, postId) != null,
@@ -41,9 +37,7 @@ export default function PostAttachments({
           <img
             className={classes.image}
             src={images[index].url}
-            onClick={() =>
-              dispatch(actions.setSelectedImage({ postId, index }))
-            }
+            onClick={() => dispatch(actions.setSelectedImage({ postId, index }))}
           />
         )}
       />

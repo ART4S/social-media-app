@@ -1,17 +1,10 @@
-import {
-  put,
-  call,
-  takeLatest,
-  select,
-  all,
-  takeEvery,
-  delay,
-} from "@redux-saga/core/effects";
-import { actions } from "./followersSectionSlice";
+import { put, call, takeLatest, select, all, takeEvery, delay } from "redux-saga/effects";
+
 import userAPI from "api/userAPI";
-import FollowerDto from "model/dto/follower/FollowerDto";
-import { getUser } from "redux/commonSlice";
+import type FollowerDto from "model/dto/follower/FollowerDto";
 import { getProfile } from "pages/Profile/profileSlice";
+
+import { actions } from "./followersSectionSlice";
 
 function* fetchFollowers(action: ReturnType<typeof actions.fetchFollowers>) {
   const { userId } = getProfile(yield select());
@@ -25,9 +18,7 @@ function* watchFetchFollowers() {
   yield takeLatest(actions.fetchFollowers.type, fetchFollowers);
 }
 
-function* changeSearchText({
-  payload,
-}: ReturnType<typeof actions.changeSearchText>) {
+function* changeSearchText({ payload }: ReturnType<typeof actions.changeSearchText>) {
   yield put(actions.setSearchText(payload));
 
   yield delay(500);
@@ -36,11 +27,7 @@ function* changeSearchText({
 
   const { userId } = getProfile(yield select());
 
-  const followings: FollowerDto[] = yield call(
-    userAPI.searchFollowers,
-    userId,
-    payload,
-  );
+  const followings: FollowerDto[] = yield call(userAPI.searchFollowers, userId, payload);
 
   yield put(actions.searchFollowersSucceed(followings));
 }
@@ -49,9 +36,7 @@ function* watchChangeSearchText() {
   yield takeLatest(actions.changeSearchText.type, changeSearchText);
 }
 
-function* blockFollower({
-  payload: followerId,
-}: ReturnType<typeof actions.blockFollower>) {
+function* blockFollower({ payload: followerId }: ReturnType<typeof actions.blockFollower>) {
   yield call(userAPI.deleteFollower, followerId);
 }
 
@@ -60,9 +45,5 @@ function* watchBlockFollower() {
 }
 
 export default function* followersSectionSagas() {
-  yield all([
-    watchFetchFollowers(),
-    watchChangeSearchText(),
-    watchBlockFollower(),
-  ]);
+  yield all([watchFetchFollowers(), watchChangeSearchText(), watchBlockFollower()]);
 }

@@ -1,7 +1,7 @@
 import { normalize } from "utils/dataUtils";
-import { users } from "./users";
-import faker from "faker";
 import { composeKey } from "mock/utils/entityUtils";
+
+import { users } from "./users";
 
 export interface Following {
   userId: string;
@@ -47,9 +47,8 @@ export const followings: Following[] = [
   },
 ];
 
-const entities: { [compositeKey: string]: Following } = normalize(
-  followings,
-  (x) => composeKey(x.userId, x.followerId),
+const entities: { [compositeKey: string]: Following } = normalize(followings, (x) =>
+  composeKey(x.userId, x.followerId),
 );
 
 export default entities;

@@ -1,4 +1,5 @@
 import faker from "faker";
+
 import { normalize } from "utils/dataUtils";
 import { users } from "mock/data/users";
 
@@ -20,14 +21,11 @@ function createProfile(userId: string): UserProfile {
   };
 }
 
-export const userProfiles: UserProfile[] = users.map(({ id }) =>
-  createProfile(id),
-);
+export const userProfiles: UserProfile[] = users.map(({ id }) => createProfile(id));
 
-export const userProfilesById: { [id: string]: UserProfile } = normalize(
+export const userProfilesById: { [id: string]: UserProfile } = normalize(userProfiles, (x) => x.id);
+
+export const userProfilesByUserId: { [userId: string]: UserProfile } = normalize(
   userProfiles,
-  (x) => x.id,
+  (x) => x.userId,
 );
-
-export const userProfilesByUserId: { [userId: string]: UserProfile } =
-  normalize(userProfiles, (x) => x.userId);

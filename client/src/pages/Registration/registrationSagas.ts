@@ -1,13 +1,17 @@
-import { put, call, takeLatest, select, all } from "@redux-saga/core/effects";
+import { put, call, takeLatest, select, all } from "redux-saga/effects";
+
 import authAPI from "api/authAPI";
-import RegistrationErrorResponse from "model/registration/RegistrationErrorResponse";
-import RegistrationSuccessResponse from "model/registration/RegistrationSuccessResponse";
-import { actions } from "./registrationSlice";
+import type RegistrationErrorResponse from "model/registration/RegistrationErrorResponse";
+import type RegistrationSuccessResponse from "model/registration/RegistrationSuccessResponse";
 import { actions as commonActions } from "redux/commonSlice";
 
+import { actions } from "./registrationSlice";
+
 function* registerUser({ payload }: ReturnType<typeof actions.registerUser>) {
-  const response: RegistrationSuccessResponse | RegistrationErrorResponse =
-    yield call(authAPI.registerUser, payload);
+  const response: RegistrationSuccessResponse | RegistrationErrorResponse = yield call(
+    authAPI.registerUser,
+    payload,
+  );
 
   if (isSuccess(response)) {
     yield put(commonActions.fetchUser(response.userId));

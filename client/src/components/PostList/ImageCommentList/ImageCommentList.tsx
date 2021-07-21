@@ -1,23 +1,18 @@
 import React from "react";
 import { Grid, Box, Divider, Link } from "@material-ui/core";
+
 import ImageComment from "components/PostList/ImageComment/ImageComment";
-import {
-  actions,
-  getImageCommentIds,
-  getImageCommentsPagination,
-} from "../postListSlice";
 import useAppDispatch from "hooks/useAppDispatch";
 import useAppSelector from "hooks/useAppSelector";
 
-interface ImageCommentListProps {
+import { actions, getImageCommentIds, getImageCommentsPagination } from "../postListSlice";
+
+type ImageCommentListProps = {
   postId: string;
   imageId: string;
-}
+};
 
-export default function ImageCommentList({
-  postId,
-  imageId,
-}: ImageCommentListProps): JSX.Element {
+export default function ImageCommentList({ postId, imageId }: ImageCommentListProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const commentIds: string[] = useAppSelector((state) =>
@@ -25,17 +20,13 @@ export default function ImageCommentList({
   );
 
   const canFetchMoreComments = useAppSelector((state) => {
-    const { currentPage, totalPages } = getImageCommentsPagination(
-      state,
-      postId,
-      imageId,
-    );
+    const { currentPage, totalPages } = getImageCommentsPagination(state, postId, imageId);
     return currentPage < totalPages;
   });
 
   React.useEffect(() => {
     dispatch(actions.fetchImageComments({ postId, imageId }));
-  }, [postId, imageId]);
+  }, [postId, imageId, dispatch]);
 
   return (
     <Grid container direction="column">
@@ -45,10 +36,9 @@ export default function ImageCommentList({
 
           <Box display="flex" justifyContent="center" my={1}>
             <Link
+              component="button"
               style={{ cursor: "pointer" }}
-              onClick={() =>
-                dispatch(actions.fetchMoreImageComments({ postId, imageId }))
-              }
+              onClick={() => dispatch(actions.fetchMoreImageComments({ postId, imageId }))}
             >
               Show previous comments
             </Link>
@@ -61,11 +51,7 @@ export default function ImageCommentList({
           <Divider />
 
           <Box p={1}>
-            <ImageComment
-              postId={postId}
-              imageId={imageId}
-              commentId={commentId}
-            />
+            <ImageComment postId={postId} imageId={imageId} commentId={commentId} />
           </Box>
         </Grid>
       ))}

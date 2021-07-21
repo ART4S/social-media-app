@@ -1,28 +1,21 @@
 import React from "react";
-import { Link } from "@material-ui/core";
-import { Box } from "@material-ui/core";
+import { Link, Box } from "@material-ui/core";
 
 import PostComment from "components/PostList/PostComment/PostComment";
-
-import {
-  actions,
-  getPostCommentIds,
-  getPostCommentsPagination,
-} from "../postListSlice";
+import PostCommentForm from "components/PostList/PostCommentForm/PostCommentForm";
 import useAppDispatch from "hooks/useAppDispatch";
 import useAppSelector from "hooks/useAppSelector";
-import PostCommentForm from "../PostCommentForm/PostCommentForm";
 
-interface PostCommentListType {
+import { actions, getPostCommentIds, getPostCommentsPagination } from "../postListSlice";
+
+type PostCommentListType = {
   postId: string;
-}
+};
 
-export function PostCommentList({ postId }: PostCommentListType) {
+export function PostCommentList({ postId }: PostCommentListType): JSX.Element {
   const dispatch = useAppDispatch();
 
-  const commentIds: string[] = useAppSelector((state) =>
-    getPostCommentIds(state, postId),
-  );
+  const commentIds: string[] = useAppSelector((state) => getPostCommentIds(state, postId));
 
   const { fromEnd, currentPage, totalPages } = useAppSelector((state) =>
     getPostCommentsPagination(state, postId),

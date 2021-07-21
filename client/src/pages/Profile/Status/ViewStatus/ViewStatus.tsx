@@ -1,15 +1,13 @@
 import React from "react";
 import { Box, Typography } from "@material-ui/core";
+
 import EditButton from "components/Buttons/EditButton/EditButton";
 import useAppSelector from "hooks/useAppSelector";
-import {
-  getIsCurrentUserProfile,
-  getProfile,
-} from "pages/Profile/profileSlice";
+import { getIsCurrentUserProfile, getProfile } from "pages/Profile/profileSlice";
 
-interface ViewStatusProps {
-  onEdit(): void;
-}
+type ViewStatusProps = {
+  onEdit: () => void;
+};
 
 export default function ViewStatus({ onEdit }: ViewStatusProps): JSX.Element {
   const status = useAppSelector((state) => getProfile(state).status);
@@ -29,8 +27,6 @@ export default function ViewStatus({ onEdit }: ViewStatusProps): JSX.Element {
           )
         )}
       </Box>
-
-      {/* <Box flexGrow="1" /> */}
 
       {isCurrentUserProfile && <EditButton onClick={onEdit} />}
     </Box>

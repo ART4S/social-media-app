@@ -2,13 +2,14 @@ import React from "react";
 import { Box, Paper, Tabs, Tab } from "@material-ui/core";
 
 import TabPanel from "components/TabPanel/TabPanel";
+
 import FollowingsSection from "./FollowingsSection/FollowingsSection";
 import FollowersSection from "./FollowersSection/FollowersSection";
 import PostsSection from "./PostsSection/PostsSection";
 
 const tabs = ["POSTS", "FOLLOWINGS", "FOLLOWERS"];
 
-export default function ProfileSections() {
+export default function ProfileSections(): JSX.Element {
   const [currentTab, setCurrentTab] = React.useState(0);
 
   return (

@@ -1,6 +1,5 @@
 import React from "react";
-import { Box } from "@material-ui/core";
-import { Typography } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 
 import Avatar from "components/Avatar/Avatar";
 import useAppSelector from "hooks/useAppSelector";

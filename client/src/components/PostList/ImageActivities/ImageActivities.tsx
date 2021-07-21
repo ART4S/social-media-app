@@ -1,26 +1,23 @@
 import React from "react";
 import { Box } from "@material-ui/core";
-import { actions, getImageInfo } from "../postListSlice";
+
 import LikeButton from "components/Buttons/LikeButton/LikeButton";
 import ShareButton from "components/Buttons/ShareButton/ShareButton";
 import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
-import PostImageDto from "model/dto/postImage/PostImageDto";
+import type PostImageDto from "model/dto/postImage/PostImageDto";
 
-interface ImageActivitiesProps {
+import { actions, getImageInfo } from "../postListSlice";
+
+type ImageActivitiesProps = {
   postId: string;
   imageId: string;
-}
+};
 
-export default function ImageActivities({
-  postId,
-  imageId,
-}: ImageActivitiesProps) {
+export default function ImageActivities({ postId, imageId }: ImageActivitiesProps): JSX.Element {
   const dispatch = useAppDispatch();
 
-  const image: PostImageDto = useAppSelector((state) =>
-    getImageInfo(state, postId, imageId),
-  );
+  const image: PostImageDto = useAppSelector((state) => getImageInfo(state, postId, imageId));
 
   return (
     <Box display="flex">

@@ -1,14 +1,18 @@
 import React from "react";
 import { Grid, Box } from "@material-ui/core";
+
 import Header from "components/Header/Header";
-import PostList from "../../components/PostList/PostList";
-import PostForm from "./PostForm/PostForm";
-import UserList from "./UserList/UserList";
+import PostList, { usePostList } from "components/PostList/PostList";
 import useAppSelector from "hooks/useAppSelector";
 import { getUser } from "redux/commonSlice";
 
+import PostForm from "./PostForm/PostForm";
+import UserList from "./UserList/UserList";
+
 export default function Home(): JSX.Element {
   const userId = useAppSelector((state) => getUser(state).id);
+
+  const _ = usePostList(userId);
 
   return (
     <div>
@@ -22,7 +26,7 @@ export default function Home(): JSX.Element {
             </Grid>
 
             <Grid item xs>
-              <PostList userId={userId} />
+              <PostList />
             </Grid>
           </Grid>
 

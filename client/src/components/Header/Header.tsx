@@ -1,3 +1,4 @@
+import React from "react";
 import {
   AppBar,
   Toolbar,
@@ -9,19 +10,19 @@ import {
   useScrollTrigger,
 } from "@material-ui/core";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+
 import NavLink from "components/NavLink/NavLink";
 import useAppDispatch from "hooks/useAppDispatch";
 import useAppSelector from "hooks/useAppSelector";
 import Avatar from "components/Avatar/Avatar";
 import { getUser } from "redux/commonSlice";
 import { getUserName } from "utils/userUtils";
-import Logo from "./Logo/Logo";
-
 import { actions as loginActions } from "pages/Login/loginSlice";
 
+import Logo from "./Logo/Logo";
 import useStyles from "./useStyles";
 
-function HideOnScroll({ children }: { children: React.ReactElement }) {
+function HideOnScroll({ children }: { children: React.ReactElement }): JSX.Element {
   const trigger = useScrollTrigger();
 
   return (
@@ -49,9 +50,9 @@ export default function Header(): JSX.Element {
               <Box display="flex" alignItems="center">
                 <Typography>{getUserName(user)}</Typography>
 
-                <IconButton>
+                <Box ml={1}>
                   <Avatar src={user.avatarUrl} />
-                </IconButton>
+                </Box>
               </Box>
             </NavLink>
 

@@ -5,15 +5,12 @@ import postImageLikes from "mock/data/postImageLikes";
 import postImages from "mock/data/postImages";
 import postLikes from "mock/data/postLikes";
 import posts from "mock/data/posts";
-import {
-  UserProfile,
-  userProfilesById,
-  userProfilesByUserId,
-} from "mock/data/userProfiles";
+import { UserProfile, userProfilesById, userProfilesByUserId } from "mock/data/userProfiles";
 import users from "mock/data/users";
-import UserProfileEditDto from "model/dto/userProfile/UserProfileEditDto";
-import UserProfileInfoDto from "model/dto/userProfile/UserProfileInfoDto";
-import { currentUser } from "./authService";
+import type UserProfileEditDto from "model/dto/userProfile/UserProfileEditDto";
+import type UserProfileInfoDto from "model/dto/userProfile/UserProfileInfoDto";
+
+import { getCurrentUser } from "./authService";
 
 // userProfiles/:id
 function getById(id: string): UserProfileInfoDto {
@@ -24,7 +21,7 @@ function getById(id: string): UserProfileInfoDto {
 function updateProfile(id: string, dto: UserProfileEditDto) {
   const profile = userProfilesById[id];
 
-  if (profile.userId === currentUser!.id) {
+  if (profile.userId === getCurrentUser().id) {
     profile.dateOfBirth = dto.dateOfBirth;
     profile.about = dto.about;
 
@@ -44,7 +41,7 @@ function updateStatus(id: string, text: string) {
 // userProfiles/:id
 function deleteProfile(id: string) {
   const { userId } = userProfilesById[id];
-  if (userId === currentUser!.id) {
+  if (userId === getCurrentUser().id) {
     delete users[userId];
     delete userProfilesById[id];
     delete userProfilesByUserId[userId];
@@ -93,7 +90,12 @@ function deleteProfile(id: string) {
   }
 }
 
-export default { getById, updateProfile, updateStatus, deleteProfile };
+export default {
+  getById,
+  updateProfile,
+  updateStatus,
+  deleteProfile,
+};
 
 function mapProfile(profile: UserProfile): UserProfileInfoDto {
   const { id, userId, dateOfBirth, about } = profile;

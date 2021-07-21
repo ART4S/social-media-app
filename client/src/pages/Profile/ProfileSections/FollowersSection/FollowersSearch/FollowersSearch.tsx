@@ -1,13 +1,13 @@
 import React from "react";
 import { TextField } from "@material-ui/core";
+
 import useAppSelector from "hooks/useAppSelector";
-import { actions, getLoading, getSearchText } from "../followersSectionSlice";
 import useAppDispatch from "hooks/useAppDispatch";
 import Progress from "components/Progress/Progress";
 
-interface FollowersSearchProps {}
+import { actions, getLoading, getSearchText } from "../followersSectionSlice";
 
-export default function FollowersSearch(props: FollowersSearchProps) {
+export default function FollowersSearch(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const searchText = useAppSelector(getSearchText);

@@ -1,18 +1,17 @@
 import React from "react";
-import {
-  Container,
-  Box,
-  Paper,
-  Button,
-  TextField,
-  Avatar,
-} from "@material-ui/core";
-import { CloudUpload } from "@material-ui/icons";
+import { Container, Box, Paper, Button, TextField, Avatar } from "@material-ui/core";
+import { CloudUpload, PhotoCameraOutlined } from "@material-ui/icons";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { Redirect, useHistory, useLocation } from "react-router-dom";
+import moment from "moment";
 
 import Header from "components/Header/Header";
-import { useFormik } from "formik";
-import useStyles from "./useStyles";
-import Title from "./Title/Title";
+import useAppSelector from "hooks/useAppSelector";
+import PageProgress from "components/PageProgress/PageProgress";
+import useAppDispatch from "hooks/useAppDispatch";
+import type UserProfileEditDto from "model/dto/userProfile/UserProfileEditDto";
+
 import {
   actions,
   getIsSubmitting,
@@ -20,20 +19,14 @@ import {
   getLoaded,
   getProfile,
 } from "./profileEditorSlice";
-import useAppSelector from "hooks/useAppSelector";
-import PageProgress from "components/PageProgress/PageProgress";
-import useAppDispatch from "hooks/useAppDispatch";
-import UserProfileEditDto from "model/dto/userProfile/UserProfileEditDto";
-import * as yup from "yup";
-import { Redirect, useHistory, useLocation } from "react-router-dom";
-import { PhotoCameraOutlined } from "@material-ui/icons";
-import moment from "moment";
+import Title from "./Title/Title";
+import useStyles from "./useStyles";
 
 const SPACING = 2;
 
-interface ProfileEditorLocationState {
+type ProfileEditorLocationState = {
   profileId: string;
-}
+};
 
 const today = format();
 
@@ -50,21 +43,23 @@ const validationSchema = yup.object({
 });
 
 export default function ProfileEditor(): JSX.Element {
-  const { state } = useLocation<ProfileEditorLocationState>();
-
-  if (!state) {
-    return <Redirect to="*" />;
-  }
-
-  const { profileId } = state;
-
   const dispatch = useAppDispatch();
+
+  const { state } = useLocation<ProfileEditorLocationState | undefined>();
+
+  const profileId = state?.profileId;
 
   const loaded = useAppSelector(getLoaded);
 
   React.useEffect(() => {
-    dispatch(actions.fetchProfile(profileId));
+    if (profileId) {
+      dispatch(actions.fetchProfile(profileId));
+    }
   }, [profileId]);
+
+  if (!profileId) {
+    return <Redirect to="*" />;
+  }
 
   return loaded ? <PageContent /> : <PageProgress />;
 }
@@ -97,7 +92,7 @@ function PageContent(): JSX.Element {
   const { values, touched, errors, dirty, isValid, ...formik } = useFormik({
     initialValues,
     validationSchema,
-    onSubmit() {
+    onSubmit: () => {
       dispatch(actions.saveProfile(values));
     },
   });

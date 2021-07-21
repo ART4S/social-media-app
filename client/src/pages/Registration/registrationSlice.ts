@@ -1,5 +1,6 @@
 import { Action, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import RegistrationVm from "model/registration/registrationVm";
+
+import type RegistrationVm from "model/registration/registrationVm";
 import { AppState } from "redux/store";
 
 const name = "registration";
@@ -32,7 +33,7 @@ const slice = createSlice({
   },
 });
 
-export const actions = slice.actions;
+export const { actions } = slice;
 
 const getSelf = (state: AppState) => state.registration;
 

@@ -1,21 +1,32 @@
 import React from "react";
 import { Grid } from "@material-ui/core";
-import Post from "./Post/Post";
+import { useHistory } from "react-router";
+
 import useAppSelector from "hooks/useAppSelector";
 import useAppDispatch from "hooks/useAppDispatch";
-import { actions, getLoaded, getPostIds } from "./postListSlice";
-import { useHistory } from "react-router-dom";
+import { actions, getLoaded, getPostIds } from "components/PostList/postListSlice";
 
-interface PostListProps {
-  userId: string;
+import Post from "./Post/Post";
+
+export default function PostList(): JSX.Element {
+  const postIds = useAppSelector(getPostIds);
+
+  return (
+    <Grid container spacing={2} direction="column">
+      {postIds.map((id) => (
+        <Grid key={id} item>
+          <Post postId={id} />
+        </Grid>
+      ))}
+    </Grid>
+  );
 }
 
-export default function PostList({ userId }: PostListProps): JSX.Element {
+export function usePostList(userId: string) {
   const dispatch = useAppDispatch();
   const history = useHistory();
-
   const loaded = useAppSelector(getLoaded);
-  const postIds = useAppSelector(getPostIds);
+  const hasAnyPosts = useAppSelector((state) => !!getPostIds(state).length);
 
   React.useEffect(() => {
     if (!loaded) {
@@ -26,17 +37,5 @@ export default function PostList({ userId }: PostListProps): JSX.Element {
   // TODO: not fires when using backward/forward arrows inside browser window
   React.useEffect(() => history.listen(() => dispatch(actions.reset())), []);
 
-  return (
-    <>
-      {loaded && (
-        <Grid container spacing={2} direction="column">
-          {postIds.map((id) => (
-            <Grid key={id} item>
-              <Post postId={id} />
-            </Grid>
-          ))}
-        </Grid>
-      )}
-    </>
-  );
+  return [loaded, hasAnyPosts] as const;
 }

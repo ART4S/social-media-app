@@ -1,18 +1,22 @@
-import LoginVm from "model/login/loginVm";
-import users, { User } from "mock/data/users";
-import RegistrationVm from "model/registration/registrationVm";
-import { userProfilesById, userProfilesByUserId } from "mock/data/userProfiles";
+/* eslint-disable import/no-named-as-default */
 import faker from "faker";
-import RegistrationSuccessResponse from "model/registration/RegistrationSuccessResponse";
-import RegistrationErrorResponse from "model/registration/RegistrationErrorResponse";
-import LoginSuccessReponse from "model/login/LoginSuccessResponse";
-import LoginErrorResponse from "model/login/LoginErrorResponse";
 
-export let currentUser: User | null = null;
+import type LoginVm from "model/login/loginVm";
+import users, { User } from "mock/data/users";
+import type RegistrationVm from "model/registration/registrationVm";
+import { userProfilesById, userProfilesByUserId } from "mock/data/userProfiles";
+import type RegistrationSuccessResponse from "model/registration/RegistrationSuccessResponse";
+import type RegistrationErrorResponse from "model/registration/RegistrationErrorResponse";
+import type LoginSuccessReponse from "model/login/LoginSuccessResponse";
+import type LoginErrorResponse from "model/login/LoginErrorResponse";
 
-function registerUser(
-  vm: RegistrationVm,
-): RegistrationSuccessResponse | RegistrationErrorResponse {
+let currentUser: User | null = null;
+
+export function getCurrentUser(): User {
+  return currentUser!;
+}
+
+function registerUser(vm: RegistrationVm): RegistrationSuccessResponse | RegistrationErrorResponse {
   if (Object.values(users).some((x) => x.email === vm.email)) {
     return { errors: ["Email already exists"] };
   }
@@ -41,9 +45,7 @@ function registerUser(
 }
 
 function login(vm: LoginVm): LoginSuccessReponse | LoginErrorResponse {
-  const user = Object.values(users).find(
-    (x) => x.email === vm.email && x.password === vm.password,
-  );
+  const user = Object.values(users).find((x) => x.email === vm.email && x.password === vm.password);
 
   if (!user) {
     return { errors: ["Wrong email or password"] };
@@ -54,7 +56,7 @@ function login(vm: LoginVm): LoginSuccessReponse | LoginErrorResponse {
   return { userId: user.id };
 }
 
-function logout() {
+function logout(): void {
   currentUser = null;
 }
 

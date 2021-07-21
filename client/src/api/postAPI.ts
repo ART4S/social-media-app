@@ -11,15 +11,9 @@ import type PagedResponse from "model/pagination/PagedResponse";
 
 import config from "./config";
 
-function getAll(
-  authorId: string,
-  pagination: PagedRequest,
-): Promise<PagedResponse<PostDto>> {
+function getAll(authorId: string, pagination: PagedRequest): Promise<PagedResponse<PostDto>> {
   return new Promise<PagedResponse<PostDto>>((resolve) =>
-    setTimeout(
-      () => resolve(postService.getAll(authorId, pagination)),
-      config.delayMs,
-    ),
+    setTimeout(() => resolve(postService.getAll(authorId, pagination)), config.delayMs),
   );
 }
 
@@ -34,10 +28,7 @@ function getComments(
   pagination: PagedRequest,
 ): Promise<PagedResponse<PostCommentDto>> {
   return new Promise<PagedResponse<PostCommentDto>>((resolve) =>
-    setTimeout(
-      () => resolve(postService.getComments(postId, pagination)),
-      config.delayMs,
-    ),
+    setTimeout(() => resolve(postService.getComments(postId, pagination)), config.delayMs),
   );
 }
 
@@ -46,10 +37,7 @@ function getImageComments(
   pagination: PagedRequest,
 ): Promise<PagedResponse<ImageCommentDto>> {
   return new Promise<PagedResponse<ImageCommentDto>>((resolve) =>
-    setTimeout(
-      () => resolve(postService.getImageComments(imageId, pagination)),
-      config.delayMs,
-    ),
+    setTimeout(() => resolve(postService.getImageComments(imageId, pagination)), config.delayMs),
   );
 }
 
@@ -71,10 +59,7 @@ function removeLike(postId: string): Promise<void> {
   );
 }
 
-function createComment(
-  postId: string,
-  comment: PostCommentCreateDto,
-): Promise<string> {
+function createComment(postId: string, comment: PostCommentCreateDto): Promise<string> {
   return new Promise<string>((resolve) =>
     setTimeout(() => {
       resolve(postService.createComment(postId, comment));
@@ -109,10 +94,7 @@ function removeImageLike(imageId: string): Promise<void> {
   );
 }
 
-function createImageComment(
-  imageId: string,
-  comment: ImageCommentCreateDto,
-): Promise<string> {
+function createImageComment(imageId: string, comment: ImageCommentCreateDto): Promise<string> {
   return new Promise<string>((resolve) =>
     setTimeout(() => {
       resolve(postService.createImageComment(imageId, comment));

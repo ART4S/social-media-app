@@ -1,8 +1,10 @@
-import { put, call, takeEvery, all } from "@redux-saga/core/effects";
+import { put, call, takeEvery, all } from "redux-saga/effects";
+
 import postAPI from "api/postAPI";
-import PostDto from "model/dto/post/PostDto";
+import type PostDto from "model/dto/post/PostDto";
+import { actions as postListActions } from "components/PostList/postListSlice";
+
 import { actions } from "./postFormSlice";
-import { actions as postListActions } from "../../../components/PostList/postListSlice";
 
 function* createPost({ payload: post }: ReturnType<typeof actions.createPost>) {
   const id: string = yield call(postAPI.createPost, post);

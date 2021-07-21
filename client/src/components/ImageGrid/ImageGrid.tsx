@@ -1,16 +1,15 @@
+/* eslint-disable no-unused-vars */
+import React from "react";
 import { Grid, GridSpacing } from "@material-ui/core";
 
 const SPACING: GridSpacing = 1;
 
-interface ImageGridProps {
+type ImageGridProps = {
   imagesCount: number;
   renderImage: (index: number) => JSX.Element;
-}
+};
 
-export default function ImageGrid({
-  imagesCount,
-  renderImage,
-}: ImageGridProps): JSX.Element {
+export default function ImageGrid({ imagesCount, renderImage }: ImageGridProps): JSX.Element {
   let elements: JSX.Element[] = [];
 
   const indexes = Array.from(Array(imagesCount)).map((_, index) => index);
@@ -32,7 +31,7 @@ export default function ImageGrid({
           {renderImage(0)}
         </Grid>,
 
-        <Grid item xs={4} container direction="column" spacing={SPACING}>
+        <Grid key={1} item xs={4} container direction="column" spacing={SPACING}>
           {indexes.slice(1).map((index) => (
             <Grid key={index} item xs>
               {renderImage(index)}
@@ -97,11 +96,18 @@ export default function ImageGrid({
         )),
       ];
       break;
+
+    default:
+      break;
   }
 
   return (
-    <Grid container spacing={SPACING}>
-      {elements}
-    </Grid>
+    <>
+      {!!elements.length && (
+        <Grid container spacing={SPACING}>
+          {elements}
+        </Grid>
+      )}
+    </>
   );
 }

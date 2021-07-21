@@ -1,13 +1,9 @@
-import {
-  Action,
-  createAction,
-  createSlice,
-  PayloadAction,
-} from "@reduxjs/toolkit";
-import PostCreateDto from "model/dto/post/PostCreateDto";
+import { Action, createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+import type PostCreateDto from "model/dto/post/PostCreateDto";
 import { AppState } from "redux/store";
 
-const sliceName = "home/postForm";
+const name = "home/postForm";
 
 interface PostFormState {
   isSubmitting: boolean;
@@ -18,7 +14,7 @@ const initialState: PostFormState = {
 };
 
 const slice = createSlice({
-  name: sliceName,
+  name,
   initialState,
   reducers: {
     createPost(state, action: PayloadAction<PostCreateDto>) {
@@ -30,7 +26,7 @@ const slice = createSlice({
   },
 });
 
-export const actions = slice.actions;
+export const { actions } = slice;
 
 const getSelf = (state: AppState) => state.home.postForm;
 
