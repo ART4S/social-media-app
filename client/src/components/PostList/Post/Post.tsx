@@ -9,22 +9,18 @@ import { PostActivities } from "../PostActivities/PostActivities";
 import { PostCommentList } from "../PostCommentList/PostCommentList";
 import PostAttachments from "../PostAttachments/PostAttachments";
 
-import useStyles from "./useStyles";
-
 type PostProps = {
   postId: string;
 };
 
 export default function Post({ postId }: PostProps): JSX.Element {
-  const classes = useStyles();
-
   const body: string = useAppSelector((state) => getPostInfo(state, postId).body);
 
   return (
     <Paper elevation={3}>
-      <div className={classes.header}>
+      <Box bgcolor="grey.300" px={3} py={1} width="100%">
         <PostInfo postId={postId} />
-      </div>
+      </Box>
 
       <Box p={2}>
         <Typography variant="body1">{body}</Typography>
@@ -38,9 +34,9 @@ export default function Post({ postId }: PostProps): JSX.Element {
         <PostActivities postId={postId} />
       </Box>
 
-      <div className={classes.footer}>
+      <Box bgcolor="grey.300" px={3} py={2}>
         <PostCommentList postId={postId} />
-      </div>
+      </Box>
     </Paper>
   );
 }

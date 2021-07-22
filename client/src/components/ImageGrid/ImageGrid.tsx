@@ -31,7 +31,7 @@ export default function ImageGrid({ imagesCount, renderImage }: ImageGridProps):
           {renderImage(0)}
         </Grid>,
 
-        <Grid key={1} item xs={4} container direction="column" spacing={SPACING}>
+        <Grid key={1} container item direction="column" xs={4} spacing={SPACING}>
           {indexes.slice(1).map((index) => (
             <Grid key={index} item xs>
               {renderImage(index)}

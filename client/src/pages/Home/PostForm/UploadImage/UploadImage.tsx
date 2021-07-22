@@ -19,7 +19,7 @@ export default function UploadImage({
   const classes = useStyles();
 
   return (
-    <Box position="relative">
+    <Box position="relative" width="100%" height="100%">
       <img className={classes.image} src={url} />
 
       {!deleteDisabled && (

@@ -1,7 +1,7 @@
 import { Action, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import type PostCreateDto from "model/dto/post/PostCreateDto";
-import { AppState } from "redux/store";
+import type { AppState } from "redux/store";
 
 const name = "home/postForm";
 

@@ -10,7 +10,6 @@ import useAppDispatch from "hooks/useAppDispatch";
 import type PostCreateDto from "model/dto/post/PostCreateDto";
 
 import { actions, getIsSubmitting } from "./postFormSlice";
-import useStyles from "./useStyles";
 import UploadImage from "./UploadImage/UploadImage";
 import UserInfo from "./UserInfo/UserInfo";
 
@@ -24,8 +23,6 @@ const validationSchema = yup.object({
 });
 
 export default function PostForm(): JSX.Element {
-  const classes = useStyles();
-
   const dispatch = useAppDispatch();
 
   const isSubmitting = useAppSelector(getIsSubmitting);
@@ -65,51 +62,47 @@ export default function PostForm(): JSX.Element {
 
   return (
     <Paper elevation={4}>
-      <div className={classes.header}>
-        <Box px={2} py={1}>
-          <UserInfo />
-        </Box>
-      </div>
+      <Box px={2} py={1} bgcolor="grey.300">
+        <UserInfo />
+      </Box>
 
       <form autoComplete="off" onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
-        <div className={classes.body}>
-          <Box px={3} pt={3}>
-            <TextField
-              id="body"
-              name="body"
-              placeholder="What's new?"
-              variant="outlined"
-              rows={4}
-              rowsMax={5}
-              value={values.body}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              disabled={isSubmitting}
-              multiline
-              fullWidth
-            />
-          </Box>
+        <Box px={3} pt={3} bgcolor="background.paper">
+          <TextField
+            id="body"
+            name="body"
+            placeholder="What's new?"
+            variant="outlined"
+            rows={4}
+            rowsMax={5}
+            value={values.body}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            disabled={isSubmitting}
+            multiline
+            fullWidth
+          />
+        </Box>
 
-          <Box display="flex" justifyContent="flex-start" p={2}>
-            <input
-              id="addImage"
-              type="file"
-              accept="image/*"
-              onChange={handleAddImage}
-              hidden
-              disabled={uploadDisabled}
-            />
-            <label htmlFor="addImage">
-              <IconButton component="span" color="secondary" disabled={uploadDisabled}>
-                <AddAPhoto color="inherit" />
-              </IconButton>
-            </label>
-
-            <IconButton color="secondary" disabled={isSubmitting}>
-              <PlayCircleOutline color="inherit" />
+        <Box display="flex" justifyContent="flex-start" p={2}>
+          <input
+            id="addImage"
+            type="file"
+            accept="image/*"
+            onChange={handleAddImage}
+            hidden
+            disabled={uploadDisabled}
+          />
+          <label htmlFor="addImage">
+            <IconButton component="span" color="secondary" disabled={uploadDisabled}>
+              <AddAPhoto color="inherit" />
             </IconButton>
-          </Box>
-        </div>
+          </label>
+
+          <IconButton color="secondary" disabled={isSubmitting}>
+            <PlayCircleOutline color="inherit" />
+          </IconButton>
+        </Box>
 
         {!!values.images.length && (
           <Box px={3} pb={3}>
@@ -126,13 +119,11 @@ export default function PostForm(): JSX.Element {
           </Box>
         )}
 
-        <div className={classes.footer}>
-          <Box display="flex" justifyContent="flex-end" p={2}>
-            <Button type="submit" variant="contained" color="primary" disabled={isSubmitting}>
-              post
-            </Button>
-          </Box>
-        </div>
+        <Box display="flex" justifyContent="flex-end" p={2} bgcolor="grey.300">
+          <Button type="submit" variant="contained" color="primary" disabled={isSubmitting}>
+            post
+          </Button>
+        </Box>
       </form>
     </Paper>
   );

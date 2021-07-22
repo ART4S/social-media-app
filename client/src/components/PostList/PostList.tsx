@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { useHistory } from "react-router";
 
 import useAppSelector from "hooks/useAppSelector";
@@ -12,13 +12,13 @@ export default function PostList(): JSX.Element {
   const postIds = useAppSelector(getPostIds);
 
   return (
-    <Grid container spacing={2} direction="column">
-      {postIds.map((id) => (
-        <Grid key={id} item>
+    <Box display="flex" flexDirection="column" width="100%">
+      {postIds.map((id, index) => (
+        <Box key={id} mt={index && 2}>
           <Post postId={id} />
-        </Grid>
+        </Box>
       ))}
-    </Grid>
+    </Box>
   );
 }
 
