@@ -99,6 +99,12 @@ export default function Login(): JSX.Element {
           </Box>
         )}
 
+        <Box display="flex" mt={SPACING}>
+          <Typography variant="body2" color="textSecondary">
+            admin admin | user user
+          </Typography>
+        </Box>
+
         <Box mt={SPACING}>
           <Formik
             initialValues={initialValues}
@@ -112,7 +118,7 @@ export default function Login(): JSX.Element {
                   label="Email"
                   variant="outlined"
                   value={values.email}
-                  helperText={touched.email && !!errors.email}
+                  helperText={touched.email && errors.email}
                   error={touched.email && !!errors.email}
                   disabled={isSubmitting}
                   onChange={handleChange}
@@ -125,7 +131,7 @@ export default function Login(): JSX.Element {
                     id="password"
                     label="Password"
                     value={values.password}
-                    helperText={touched.password && !!errors.password}
+                    helperText={touched.password && errors.password}
                     error={touched.password && !!errors.password}
                     disabled={isSubmitting}
                     onChange={handleChange}
